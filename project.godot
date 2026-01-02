@@ -1,0 +1,30 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=5
+
+[application]
+
+config/name="MurmelGame"
+run/main_scene="uid://bwlhts28yc1r0"
+config/features=PackedStringArray("4.5", "Mobile")
+config/icon="res://icon.svg"
+
+[autoload]
+
+GlobalGameState="*res://global_game_state.gd"
+GameManager="*res://game_manager.gd"
+
+[physics]
+
+common/physics_ticks_per_second=120
+3d/solver/contact_max_separation=0.001
+
+[rendering]
+
+renderer/rendering_method="mobile"

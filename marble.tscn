@@ -1,0 +1,42 @@
+[gd_scene load_steps=8 format=3 uid="uid://marble12345"]
+
+[ext_resource type="Script" path="res://marble.gd" id="1_marble"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_marble"]
+bounce = 0.2
+friction = 0.1
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_marble"]
+radius = 0.5
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_marble"]
+frequency = 0.02
+fractal_type = 0
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_marble"]
+noise = SubResource("FastNoiseLite_marble")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_steel"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+albedo_texture = SubResource("NoiseTexture2D_marble")
+metallic = 1.0
+roughness = 0.05
+
+[sub_resource type="SphereMesh" id="SphereMesh_marble"]
+material = SubResource("StandardMaterial3D_steel")
+radius = 0.5
+height = 1.0
+
+[node name="Marble" type="RigidBody3D"]
+mass = 5.0
+physics_material_override = SubResource("PhysicsMaterial_marble")
+continuous_cd = true
+contact_monitor = true
+max_contacts_reported = 3
+script = ExtResource("1_marble")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_marble")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_marble")

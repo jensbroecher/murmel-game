@@ -1,0 +1,99 @@
+[gd_scene load_steps=4 format=3 uid="uid://ripple12345"]
+
+[ext_resource type="Script" path="res://ripple_effect.gd" id="1_script"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ripple"]
+noise_type = 3
+frequency = 0.02
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ripple"]
+noise = SubResource("FastNoiseLite_ripple")
+seamless = true
+
+[sub_resource type="Shader" id="Shader_ripple"]
+code = "shader_type spatial;
+
+uniform sampler2D noise_tex;
+uniform float distortion_strength = 0.2;
+uniform vec4 color : source_color = vec4(1.0, 1.0, 1.0, 0.5);
+uniform float emission_strength = 0.0;
+uniform float roughness = 0.1;
+uniform float metallic = 0.0;
+
+void vertex() {
+	float noise = texture(noise_tex, UV + vec2(TIME * 0.05)).r;
+	VERTEX += NORMAL * noise * distortion_strength;
+}
+
+void fragment() {
+	ALBEDO = color.rgb;
+	ALPHA = color.a;
+	EMISSION = color.rgb * emission_strength;
+	ROUGHNESS = roughness;
+	METALLIC = metallic;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ripple"]
+render_priority = 0
+shader = SubResource("Shader_ripple")
+shader_parameter/distortion_strength = 0.5
+shader_parameter/color = Color(0, 0.2, 0.4, 0.8)
+shader_parameter/emission_strength = 0.0
+shader_parameter/roughness = 0.05
+shader_parameter/metallic = 0.0
+shader_parameter/noise_tex = SubResource("NoiseTexture2D_ripple")
+
+[sub_resource type="TorusMesh" id="TorusMesh_ripple"]
+inner_radius = 0.95
+outer_radius = 1.0
+
+[sub_resource type="Gradient" id="Gradient_mist"]
+offsets = PackedFloat32Array(0, 0.2, 0.8, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_mist"]
+gradient = SubResource("Gradient_mist")
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(0.5, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 1, 1, 0.4)
+albedo_texture = SubResource("GradientTexture2D_mist")
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_particles"]
+material = SubResource("StandardMaterial3D_particles")
+size = Vector2(0.5, 0.5)
+
+[sub_resource type="Curve" id="Curve_particles"]
+_data = [Vector2(0, 0.5), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[node name="Ripple" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("TorusMesh_ripple")
+surface_material_override/0 = SubResource("ShaderMaterial_ripple")
+
+[node name="SplashParticles" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 50
+lifetime = 1.0
+one_shot = true
+explosiveness = 0.95
+mesh = SubResource("QuadMesh_particles")
+direction = Vector3(0, 1, 0)
+spread = 20.0
+gravity = Vector3(0, -5, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+scale_amount_curve = SubResource("Curve_particles")

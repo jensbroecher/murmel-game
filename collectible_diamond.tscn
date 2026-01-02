@@ -1,0 +1,50 @@
+[gd_scene load_steps=5 format=3 uid="uid://8tvcwvkjyyg0"]
+
+[ext_resource type="Script" path="res://collectible_diamond.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://boyp7np7wjxv8" path="res://diamond_gltf/scene.gltf" id="2_model"]
+[ext_resource type="AudioStream" path="res://scale-c7-106132.mp3" id="3_sound"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_collection"]
+radius = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particle"]
+emission_enabled = true
+emission = Color(0.5, 1, 1, 1)
+emission_energy_multiplier = 2.0
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_particle"]
+material = SubResource("StandardMaterial3D_particle")
+size = Vector2(0.1, 0.1)
+
+[node name="CollectibleDiamond" type="Area3D"]
+script = ExtResource("1_script")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("SphereShape3D_collection")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_sound")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("QuadMesh_particle")
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+scale_amount_min = 0.5
+scale_amount_max = 1.5
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

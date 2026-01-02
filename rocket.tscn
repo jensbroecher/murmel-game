@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://rocket12345"]
+
+[ext_resource type="Script" path="res://rocket.gd" id="1_rocket"]
+[ext_resource type="PackedScene" path="res://toy_rocket_4k_free_3d_model_gltf/scene.gltf" id="2_model"]
+[ext_resource type="AudioStream" path="res://065110_seamless-rocket-booster-roar-amp-crackle-42487.mp3" id="3_sound"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire"]
+transparency = 1
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(1, 0.5, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_fire"]
+material = SubResource("StandardMaterial3D_fire")
+radius = 0.5
+height = 1.0
+radial_segments = 8
+rings = 4
+
+[node name="Rocket" type="Node3D"]
+script = ExtResource("1_rocket")
+
+[node name="Model" parent="." instance=ExtResource("2_model")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_sound")
+unit_size = 15.0
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+emitting = false
+amount = 100
+lifetime = 1.5
+mesh = SubResource("SphereMesh_fire")
+direction = Vector3(0, -1, 0)
+spread = 20.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 5.0
+initial_velocity_max = 10.0
+scale_amount_min = 0.5
+scale_amount_max = 2.0
+color = Color(1, 0.6, 0.2, 1)
