@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://rocket12345"]
 
-[ext_resource type="Script" path="res://rocket.gd" id="1_rocket"]
-[ext_resource type="PackedScene" path="res://toy_rocket_4k_free_3d_model_gltf/scene.gltf" id="2_model"]
-[ext_resource type="AudioStream" path="res://065110_seamless-rocket-booster-roar-amp-crackle-42487.mp3" id="3_sound"]
+[ext_resource type="Script" uid="uid://ct3axo3ramjwn" path="res://rocket.gd" id="1_rocket"]
+[ext_resource type="PackedScene" uid="uid://bv0h5ymfugbpv" path="res://toy_rocket_4k_free_3d_model_gltf/scene.gltf" id="2_model"]
+[ext_resource type="AudioStream" path="res://sounds/065110_seamless-rocket-booster-roar-amp-crackle-42487.mp3" id="3_sound"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire"]
 transparency = 1
@@ -26,7 +26,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_sound")
-unit_size = 15.0
+unit_size = 10.0
 
 [node name="CPUParticles3D" type="CPUParticles3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)

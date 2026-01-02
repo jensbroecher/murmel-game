@@ -4,6 +4,7 @@ extends Node3D
 @export var ripple_scene: PackedScene
 
 const ScreenFaderScene = preload("res://screen_fader.tscn")
+const PauseMenuScene = preload("res://pause_menu.tscn")
 
 @onready var win_label = $HUD/WinLabel
 @onready var lives_label = $HUD/LivesLabel
@@ -21,6 +22,11 @@ var collected_diamonds: int = 0
 func _ready():
 	randomize()
 	
+	# Start timer if this is the first load of the level (start time is 0)
+	# If start time is not 0, it means we respawned (reload scene), so timer continues
+	if GlobalGameState.level_start_time == 0:
+		GlobalGameState.start_level_timer()
+	
 	call_deferred("count_diamonds")
 	
 	# Update count based on already collected
@@ -33,6 +39,13 @@ func _ready():
 		# Start with fade in (White -> Transparent)
 		screen_fader.fade_in(2.0)
 	
+	# Instantiate Pause Menu
+	if PauseMenuScene:
+		var pause_menu = PauseMenuScene.instantiate()
+		add_child(pause_menu)
+		# Ensure mouse is captured for gameplay
+		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+
 	if win_label:
 		win_label.visible = false
 	
@@ -42,7 +55,10 @@ func _ready():
 
 func update_lives_display():
 	if lives_label:
-		lives_label.text = "Lives: %d" % GlobalGameState.lives
+		if GlobalGameState.difficulty == GlobalGameState.Difficulty.EASY:
+			lives_label.text = "Lives: Unlimited"
+		else:
+			lives_label.text = "Lives: %d" % GlobalGameState.lives
 
 func spawn_marble():
 	# Pre-position camera
@@ -189,9 +205,11 @@ func _on_finish_trigger_body_entered(body):
 			return
 
 		win_label.visible = true
+		win_label.text = "YOU WIN!\nTime: " + GlobalGameState.get_elapsed_time()
 		if sound_gen:
 			sound_gen.play_win()
 		print("You Won!")
+		GlobalGameState.complete_level(GlobalGameState.current_level_index, GlobalGameState.get_elapsed_time(), GlobalGameState.lives)
 		
 		# Launch Rocket
 		var rocket = level_pivot.get_node_or_null("Rocket")
@@ -200,6 +218,13 @@ func _on_finish_trigger_body_entered(body):
 		
 		# Despawn Effect
 		_play_despawn_effect(body)
+		
+		# Return to Menu after delay
+		await get_tree().create_timer(4.0).timeout
+		GlobalGameState.reset_lives()
+		GlobalGameState.clear_collected()
+		GlobalGameState.show_level_selection_on_load = true
+		get_tree().change_scene_to_file("res://main_menu.tscn")
 
 func _on_water_entered(body):
 	if body.name == "Marble":
@@ -239,6 +264,10 @@ func _on_water_entered(body):
 			handle_respawn()
 
 func handle_respawn():
+	# In Hard Mode, diamonds reset on respawn
+	if GlobalGameState.difficulty == GlobalGameState.Difficulty.HARD:
+		GlobalGameState.clear_collected()
+
 	if GlobalGameState.lose_life():
 		# Still have lives
 		get_tree().reload_current_scene()
@@ -256,7 +285,8 @@ func show_game_over():
 	await get_tree().create_timer(5.0).timeout
 	GlobalGameState.reset_lives()
 	GlobalGameState.clear_collected()
-	get_tree().reload_current_scene()
+	GlobalGameState.show_level_selection_on_load = true
+	get_tree().change_scene_to_file("res://main_menu.tscn")
 
 func _play_despawn_effect(marble):
 	# Disable physics

@@ -27,20 +27,20 @@ func _ready():
 	add_child(splash_player)
 	
 	# Generate sounds
-	var spawn_sound = load("res://teleport-whoosh-453276.mp3")
+	var spawn_sound = load("res://sounds/teleport-whoosh-453276.mp3")
 	if spawn_sound:
 		spawn_player.stream = spawn_sound
 	else:
 		spawn_player.stream = generate_sine_sweep(400, 1000, 1.0)
 	
-	win_player.stream = load("res://success-videogame-sfx-423626.mp3")
+	win_player.stream = load("res://sounds/success-videogame-sfx-423626.mp3")
 	if not win_player.stream:
 		win_player.stream = generate_win_sound()
 		
 	roll_player.stream = generate_noise_loop()
 	hit_player.stream = generate_hit_sound()
 	
-	splash_player.stream = load("res://water-splash-02-352021.mp3")
+	splash_player.stream = load("res://sounds/water-splash-02-352021.mp3")
 	
 	# Start rolling sound (muted initially)
 	roll_player.volume_db = -80.0
@@ -66,7 +66,8 @@ func _process(delta):
 			target_pitch = 0.5 # Lower pitch for muffled effect
 		elif speed > 0.1:
 			# Map speed 0-10 to volume -10 to 0 dB (Louder, earlier)
-			target_vol = clamp(linear_to_db(speed / 10.0), -40.0, 0.0)
+			# Reducing general loudness by capping max volume at -10.0 dB instead of 0.0
+			target_vol = clamp(linear_to_db(speed / 10.0), -40.0, -10.0)
 			target_pitch = clamp(0.5 + (speed / 10.0), 0.5, 1.5)
 		
 		roll_player.volume_db = lerp(roll_player.volume_db, target_vol, delta * 10.0)

@@ -92,7 +92,10 @@ func _input(event):
 		_target_rotation_z = clamp(_target_rotation_z, -max_rad, max_rad)
 
 	if Input.is_key_pressed(KEY_R):
-		GameManager.respawn_marble()
+		# GameManager is the parent node (Root of the scene)
+		var game_manager = get_parent()
+		if game_manager.has_method("respawn_marble"):
+			game_manager.respawn_marble()
 
 func _on_loop_boost_body_entered(body: Node3D) -> void:
 	if body is RigidBody3D:

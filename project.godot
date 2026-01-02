@@ -11,14 +11,13 @@ config_version=5
 [application]
 
 config/name="MurmelGame"
-run/main_scene="uid://bwlhts28yc1r0"
+run/main_scene="uid://mainmenu12345"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
 
 GlobalGameState="*res://global_game_state.gd"
-GameManager="*res://game_manager.gd"
 
 [physics]
 

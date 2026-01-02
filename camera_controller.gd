@@ -29,11 +29,6 @@ func _input(event):
 	pass
 
 func _process(delta):
-	if Input.is_key_pressed(KEY_ESCAPE):
-		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-	elif Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
-		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	
 	# Keyboard Camera Control
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		var cam_rot_speed = 2.0

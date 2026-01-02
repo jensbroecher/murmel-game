@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://8tvcwvkjyyg0"]
 
-[ext_resource type="Script" path="res://collectible_diamond.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://dhcuwbsipoe1c" path="res://collectible_diamond.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://boyp7np7wjxv8" path="res://diamond_gltf/scene.gltf" id="2_model"]
-[ext_resource type="AudioStream" path="res://scale-c7-106132.mp3" id="3_sound"]
+[ext_resource type="AudioStream" path="res://sounds/scale-c7-106132.mp3" id="3_sound"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_collection"]
 radius = 1.0
@@ -32,6 +32,7 @@ shape = SubResource("SphereShape3D_collection")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_sound")
+max_db = 6.0
 
 [node name="CPUParticles3D" type="CPUParticles3D" parent="."]
 emitting = false

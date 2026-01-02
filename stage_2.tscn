@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwlhts28yc1r0"]
+[gd_scene load_steps=27 format=3 uid="uid://d1axp4ir03jdy"]
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
@@ -7,9 +7,9 @@
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="5_game"]
 [ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="6_sound"]
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="7_ripple"]
-[ext_resource type="PackedScene" uid="uid://cannon12345" path="res://cannon.tscn" id="8_cannon"]
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="11_diamond"]
-[ext_resource type="PackedScene" path="res://rocket.tscn" id="13_rocket"]
+[ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="13_rocket"]
+[ext_resource type="PackedScene" path="res://bumper.tscn" id="14_bumper"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("3_hdr")
@@ -24,34 +24,17 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
-albedo_color = Color(0.2, 0.5, 0.8, 1)
+albedo_color = Color(0.8, 0.3, 0.3, 1)
 metallic = 0.7
 roughness = 0.2
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ramp"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_34wnn"]
 albedo_color = Color(1, 0.5, 0, 1)
 metallic = 0.5
 roughness = 0.5
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_boost"]
-size = Vector3(4, 4, 2)
-
-[sub_resource type="Curve3D" id="Curve3D_loop"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, -1.656, -1, 0, 6, 0, 0, 1.656, 0, 0, -1.656, -1, 0, 0, -0.175, -1.656, 0, 0.175, 1.656, 0, -0.5, 3, -3, -0.175, 0, -1.656, 0.175, 0, 1.656, 0, 6, 0, -0.175, 1.656, 0, 0.175, -1.656, 0, 0.5, 3, 3, 0, 0, 1.656, 0, 0, -1.656, 1, 0, 0, 0, 0, 1.656, 0, 0, 0, 1, 0, -6),
-"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0)
-}
-point_count = 7
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(4, 2, 4)
-
-[sub_resource type="Curve3D" id="Curve3D_ramp"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 2, -2.5, 0, 0, 0, 0, 0, 2.5, 0, 0, -2.5, 0, 3, -5, 0, 2, 2.5, 0, 0, 0, 0, 0, -10),
-"tilts": PackedFloat32Array(0, 0, 0)
-}
-point_count = 3
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 size = Vector2(2000, 2000)
@@ -191,169 +174,79 @@ transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="EdgeGuard" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.015393671, 0, 0.5945916, -17.815275)
-size = Vector3(24, 1.217041, 24)
-material = SubResource("StandardMaterial3D_floor")
-
 [node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.93225, 0.023406982, 8.725693)
+transform = Transform3D(5.427, 0, 0, 0, 1.5, 0, 0, 0, 1.641, -5.202637, 0.023406982, -0.9812031)
 operation = 2
-size = Vector3(2, 2, 16)
+size = Vector3(3.0058594, 2, 16)
 
 [node name="Groove6" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.927301, 0, 11.322189)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -14.875, 0, -5)
 operation = 2
-size = Vector3(2, 2, 16)
+size = Vector3(3.8950195, 2, 16)
+
+[node name="Groove8" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -2.8776832, 0, 14.158872)
+operation = 2
+size = Vector3(3.8950195, 2, 7.4366455)
 
 [node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3083496, 0, 8)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.890961, 0, 5.658105)
 operation = 2
-size = Vector3(13.383301, 2, 2)
+size = Vector3(6.59021, 2, 2)
 
 [node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.597122, 0, 15.729052)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.254326, 0, 15.296307)
 operation = 2
-size = Vector3(13.383301, 2, 2)
+size = Vector3(10.533936, 2, 2)
 
 [node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0327244, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.19343, 0, -3.288103)
 operation = 2
 size = Vector3(2, 2, 16)
 
 [node name="Groove4" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(0.93671495, -0.35009295, 0, 0.35009295, 0.93671495, 0, 0, 0, 0.33785796, 5.1746025, 0.8677814, -4.153061)
+transform = Transform3D(0.93671495, -0.35009295, 0, 0.35009295, 0.93671495, 0, 0, 0, 0.33785796, 11.373256, 0.8677814, -9.8060465)
 operation = 2
 size = Vector3(5.3654785, 2, 8.829956)
-
-[node name="StartArea" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.137207, 0, 5.29183)
-operation = 2
-size = Vector3(4, 2, 4)
 
 [node name="Ramp" type="CSGPolygon3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(-1.2789634e-07, 0, -1.0401152, 0, 1.2583469, 0, 2.9259272, 0, -4.546488e-08, -5.231432, 0.12349653, -0.5162134)
+transform = Transform3D(1.309702, 0, 0, 0, 0.79184085, 0, 0, 0, 1.0401152, -2.2944202, -1.5835817, 0.5740347)
 polygon = PackedVector2Array(0, 0, 4, 2, 4, 0)
 depth = 4.0
-material = SubResource("StandardMaterial3D_ramp")
-
-[node name="Groove5" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1.2378472, 0, 0, 0, 2.3053436, 0, 0, 0, 0.4934314, 7.0772924, -0.17113853, 0.40193462)
-operation = 2
-size = Vector3(5.3654785, 2, 8.829956)
-
-[node name="HalfPipe" type="CSGCombiner3D" parent="LevelPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.369038, -0.48743057, 6.942352)
-use_collision = true
-
-[node name="Base" type="CSGBox3D" parent="LevelPivot/HalfPipe"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-size = Vector3(4, 3, 10)
-material = SubResource("StandardMaterial3D_ramp")
-
-[node name="Cutout" type="CSGCylinder3D" parent="LevelPivot/HalfPipe"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.5, 0)
-operation = 2
-radius = 2.0
-height = 10.0
-sides = 32
-
-[node name="CurvedHalfPipe" type="CSGCombiner3D" parent="LevelPivot"]
-transform = Transform3D(0.9999001, 0, -0.014136683, 0, 1, 0, 0.014136683, 0, 0.9999001, 9.374516, -0.4842236, 1.9320288)
-use_collision = true
-
-[node name="Base" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe"]
-polygon = PackedVector2Array(4, -1, 8, -1, 8, 2, 4, 2)
-mode = 1
-spin_degrees = 90.0
-spin_sides = 32
-material = SubResource("StandardMaterial3D_ramp")
-
-[node name="Cutout" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe"]
-transform = Transform3D(0.999847, 0, -0.0174524, 0, 1, 0, 0.0174524, 0, 0.999847, 0, 0, 0)
-operation = 2
-polygon = PackedVector2Array(8, 2.5, 7.9616, 2.8902, 7.8478, 3.2654, 7.6629, 3.6111, 7.4142, 3.9142, 7.1111, 4.1629, 6.7654, 4.3478, 6.3902, 4.4616, 6, 4.5, 5.6098, 4.4616, 5.2346, 4.3478, 4.8889, 4.1629, 4.5858, 3.9142, 4.3371, 3.6111, 4.1522, 3.2654, 4.0384, 2.8902, 4, 2.5, 4.0384, 2.1098, 4.1522, 1.7346, 4.3371, 1.3889, 4.5858, 1.0858, 4.8889, 0.8371, 5.2346, 0.6522, 5.6098, 0.5384, 6, 0.5, 6.3902, 0.5384, 6.7654, 0.6522, 7.1111, 0.8371, 7.4142, 1.0858, 7.6629, 1.3889, 7.8478, 1.7346, 7.9616, 2.1098)
-mode = 1
-spin_degrees = 92.0
-spin_sides = 32
-
-[node name="LoopDeLoop" type="CSGPolygon3D" parent="LevelPivot"]
-transform = Transform3D(-0.9998638, 0, 0.01651001, 0, 1, 0, -0.01651001, 0, -0.9998638, -13.337531, 0.7723458, -1.3302188)
-use_collision = true
-polygon = PackedVector2Array(-1, -0.2, 1, -0.2, 1, 0.5, 0.8, 0.5, 0.8, 0, -0.8, 0, -0.8, 0.5, -1, 0.5)
-mode = 2
-path_node = NodePath("Path3D")
-path_interval_type = 0
-path_interval = 1.0
-path_simplify_angle = 0.0
-path_rotation = 2
-path_rotation_accurate = false
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-material = SubResource("StandardMaterial3D_ramp")
-
-[node name="LoopBoost" type="Area3D" parent="LevelPivot/LoopDeLoop"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 3)
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/LoopDeLoop/LoopBoost"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("BoxShape3D_boost")
-
-[node name="Path3D" type="Path3D" parent="LevelPivot/LoopDeLoop"]
-curve = SubResource("Curve3D_loop")
+material = SubResource("StandardMaterial3D_34wnn")
 
 [node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -13.083199)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -1.5558624)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
 shape = SubResource("BoxShape3D_trigger")
 
-[node name="RampHump" type="CSGPolygon3D" parent="LevelPivot"]
-transform = Transform3D(1, 0, 0, 0, 0.6569306, 0, 0, 0, 1.8913118, 7.31339, 0, 7.341564)
-use_collision = true
-polygon = PackedVector2Array(-1, -0.2, 1, -0.2, 1, 0.5, 0.8, 0.5, 0.8, 0, -0.8, 0, -0.8, 0.5, -1, 0.5)
-mode = 2
-path_node = NodePath("Path3D")
-path_interval_type = 0
-path_interval = 0.5
-path_simplify_angle = 0.0
-path_rotation = 2
-path_rotation_accurate = false
-path_local = true
-path_continuous_u = true
-path_u_distance = 1.0
-path_joined = false
-smooth_faces = true
-material = SubResource("StandardMaterial3D_ramp")
-
-[node name="Path3D" type="Path3D" parent="LevelPivot/RampHump"]
-curve = SubResource("Curve3D_ramp")
-
 [node name="Diamond1" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 1, -13.49066)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 0.06312299, -4.9262695)
 
 [node name="Diamond2" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.059209, 1.6450925, 2.9810872)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.186, -0.2, -12.04)
 
 [node name="Diamond4" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.301655, 0.085258484, 15.726624)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.807542, 0.085258484, 15.089773)
 
 [node name="Diamond6" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.220215, 1.1515226, 2.0191078)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.568556, -0.11659622, 6.8145294)
 
 [node name="Diamond5" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.365658, 3.3134956, -0.9571953)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.02866, 0.5415249, 5.3344116)
 
-[node name="Cannon" parent="LevelPivot" instance=ExtResource("8_cannon")]
-transform = Transform3D(1, 0, 0, 0, 0.86014616, -0.5100476, 0, 0.5100476, 0.86014616, 2.0314484, 1.3882742, -8.1819)
+[node name="Bumper" parent="LevelPivot" instance=ExtResource("14_bumper")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, -0.5, 7)
 
-[node name="Cannon2" parent="LevelPivot" instance=ExtResource("8_cannon")]
-transform = Transform3D(-0.9999254, -1.18757434e-11, -0.012216893, 0.0011758187, 0.99535763, -0.09623814, 0.012160176, -0.09624534, -0.99528337, -12.242179, 1.2972696, -11.142807)
+[node name="Bumper2" parent="LevelPivot" instance=ExtResource("14_bumper")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -10.004, -0.5, 0.003)
+
+[node name="Bumper3" parent="LevelPivot" instance=ExtResource("14_bumper")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -1.6383576, -0.5, -9.252398)
 
 [node name="Rocket" parent="LevelPivot" instance=ExtResource("13_rocket")]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -13.393795)
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -1.6941223)
 
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("2_camera")
@@ -377,7 +270,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_water")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.194156, 7.682711, 10.20436)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.926768, 7.682711, -4.4528756)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
 emitting = false
@@ -394,6 +287,5 @@ damping_max = 5.0
 scale_amount_curve = SubResource("Curve_particles")
 color_ramp = SubResource("Gradient_particles")
 
-[connection signal="body_entered" from="LevelPivot/LoopDeLoop/LoopBoost" to="." method="_on_loop_boost_body_entered"]
 [connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]
 [connection signal="body_entered" from="WaterPlane/WaterArea" to="." method="_on_water_entered"]

@@ -1,0 +1,47 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" uid="uid://e8enukbt3x44" path="res://bumper.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://sounds/bumper.mp3" id="2_sound"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_physics"]
+height = 0.5
+radius = 0.8
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_area"]
+height = 0.5
+radius = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bumper"]
+albedo_color = Color(1, 0.2, 0.2, 1)
+metallic = 0.5
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.8, 0, 0, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bumper"]
+material = SubResource("StandardMaterial3D_bumper")
+top_radius = 0.8
+bottom_radius = 0.8
+height = 0.5
+
+[node name="Bumper" type="StaticBody3D"]
+script = ExtResource("1_script")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CylinderShape3D_physics")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_bumper")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_area")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_sound")
+unit_size = 20.0
+max_db = 6.0
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
