@@ -15,7 +15,8 @@ var show_level_selection_on_load: bool = false
 var level_progress: Dictionary = {}
 var levels: Dictionary = {
 	1: { "name": "Rolling Start", "path": "res://stage_1.tscn" },
-	2: { "name": "Sky High", "path": "res://stage_2.tscn" }
+	2: { "name": "Sky High", "path": "res://stage_2.tscn" },
+	3: { "name": "Mechanisms", "path": "res://stage_3.tscn" }
 }
 
 func _ready():
