@@ -3,6 +3,8 @@ extends Node3D
 @export var tilt_speed: float = 3.0
 @export var max_tilt_degrees: float = 10.0
 @export var accel_force: float = 80.0
+@export var gamepad_tilt_speed: float = 1.2
+@export var gamepad_deadzone: float = 0.2
 
 var input_enabled: bool = true
 var marble: RigidBody3D
@@ -25,16 +27,35 @@ func set_input_enabled(enabled: bool) -> void:
 		pass
 
 func _physics_process(delta: float) -> void:
-	# Apply rotation smoothly in physics process to avoid tunneling
-	# Using lerp also smooths out the mouse input
+	if input_enabled:
+		var joypads = Input.get_connected_joypads()
+		if joypads.size() > 0:
+			var id = joypads[0]
+			var use_left = GlobalGameState.tilt_uses_left_stick
+			var ax_x_axis = 0 if use_left else 2
+			var ax_y_axis = 1 if use_left else 3
+			var ax_x = Input.get_joy_axis(id, ax_x_axis)
+			var ax_y = Input.get_joy_axis(id, ax_y_axis)
+			var vec_len = Vector2(ax_x, ax_y).length()
+			if vec_len > gamepad_deadzone:
+				var relative_x = ax_x
+				var relative_y = ax_y
+				if camera_rig and "pivot" in camera_rig:
+					var cam_y_rot = camera_rig.pivot.rotation.y
+					var rotated_x = relative_x * cos(cam_y_rot) - relative_y * sin(cam_y_rot)
+					var rotated_y = relative_x * sin(cam_y_rot) + relative_y * cos(cam_y_rot)
+					relative_x = rotated_x
+					relative_y = rotated_y
+				if GlobalGameState.tilt_inverted:
+					relative_x = -relative_x
+					relative_y = -relative_y
+				_target_rotation_x -= relative_y * gamepad_tilt_speed * delta
+				_target_rotation_z -= relative_x * gamepad_tilt_speed * delta
 	
-	# Clamp targets again just to be safe
 	var max_rad = deg_to_rad(max_tilt_degrees)
 	_target_rotation_x = clamp(_target_rotation_x, -max_rad, max_rad)
 	_target_rotation_z = clamp(_target_rotation_z, -max_rad, max_rad)
 	
-	# Interpolate current rotation towards target
-	# Lower smooth_speed creates a "heavy" feel and prevents rapid physics glitches
 	var smooth_speed = 2.0 
 	
 	rotation.x = lerp_angle(rotation.x, _target_rotation_x, smooth_speed * delta)

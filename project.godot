@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="MurmelGame"
+config/name="HardTilt - Marble Challenge"
 run/main_scene="uid://mainmenu12345"
 config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"

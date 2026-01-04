@@ -3,6 +3,8 @@ extends Node3D
 @export var target_path: NodePath
 @export var follow_speed: float = 10.0
 @export var mouse_sensitivity: float = 0.005
+@export var gamepad_cam_speed: float = 2.0
+@export var gamepad_deadzone: float = 0.2
 
 @onready var pivot = $CameraPivot
 @onready var camera = $CameraPivot/Camera3D
@@ -31,6 +33,18 @@ func _input(event):
 func _process(delta):
 	# Keyboard Camera Control
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
+		var joypads = Input.get_connected_joypads()
+		if joypads.size() > 0:
+			var id = joypads[0]
+			var use_left = GlobalGameState.tilt_uses_left_stick
+			var rx_axis = 2 if use_left else 0
+			var ry_axis = 3 if use_left else 1
+			var rx = Input.get_joy_axis(id, rx_axis)
+			var ry = Input.get_joy_axis(id, ry_axis)
+			if abs(rx) > gamepad_deadzone:
+				_rotation_y -= rx * gamepad_cam_speed * delta
+			if abs(ry) > gamepad_deadzone:
+				_rotation_x -= ry * gamepad_cam_speed * delta
 		var cam_rot_speed = 2.0
 		if Input.is_key_pressed(KEY_LEFT) or Input.is_key_pressed(KEY_A):
 			_rotation_y += cam_rot_speed * delta

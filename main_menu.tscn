@@ -38,7 +38,7 @@ theme_override_constants/separation = 20
 [node name="Title" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 64
-text = "Murmel Game"
+text = "HardTilt - Marble Challenge"
 horizontal_alignment = 1
 
 [node name="Spacer" type="Control" parent="VBoxContainer"]
@@ -76,6 +76,23 @@ text = "Normal"
 custom_minimum_size = Vector2(40, 0)
 layout_mode = 2
 text = "Change"
+
+[node name="ControlsContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TiltLabel" type="Label" parent="VBoxContainer/ControlsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Tilting Stick:"
+
+[node name="TiltStickOption" type="OptionButton" parent="VBoxContainer/ControlsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
+
+[node name="InvertTiltCheck" type="CheckBox" parent="VBoxContainer/ControlsContainer"]
+layout_mode = 2
+text = "Invert Tilt"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
@@ -121,5 +138,7 @@ text = "Back"
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/LevelsButton" to="." method="_on_levels_pressed"]
 [connection signal="pressed" from="VBoxContainer/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
+[connection signal="item_selected" from="VBoxContainer/ControlsContainer/TiltStickOption" to="." method="_on_tilt_stick_selected"]
+[connection signal="toggled" from="VBoxContainer/ControlsContainer/InvertTiltCheck" to="." method="_on_invert_tilt_toggled"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="LevelSelectContainer/BackButton" to="." method="_on_back_pressed"]

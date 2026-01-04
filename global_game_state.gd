@@ -7,6 +7,8 @@ const SAVE_FILE_PATH = "user://savegame.save"
 var difficulty: Difficulty = Difficulty.NORMAL
 var collected_diamond_ids: Array = []
 var lives: int = 7
+var tilt_uses_left_stick: bool = true
+var tilt_inverted: bool = false
 
 # Level Management
 var current_level_index: int = 1
@@ -54,6 +56,12 @@ func get_elapsed_time() -> String:
 
 func set_difficulty(new_difficulty: Difficulty):
 	difficulty = new_difficulty
+	save_game()
+func set_tilt_stick(use_left: bool):
+	tilt_uses_left_stick = use_left
+	save_game()
+func set_tilt_inverted(inverted: bool):
+	tilt_inverted = inverted
 	save_game()
 
 func get_difficulty_name() -> String:
@@ -131,7 +139,9 @@ func get_difficulty_label(diff: int) -> String:
 func save_game():
 	var save_data = {
 		"difficulty": difficulty,
-		"level_progress": level_progress
+		"level_progress": level_progress,
+		"tilt_uses_left_stick": tilt_uses_left_stick,
+		"tilt_inverted": tilt_inverted
 	}
 	
 	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
@@ -175,6 +185,10 @@ func load_game():
 						for diff_key in stats:
 							level_progress[level_id][int(diff_key)] = stats[diff_key]
 			
+			if data.has("tilt_uses_left_stick"):
+				tilt_uses_left_stick = bool(data["tilt_uses_left_stick"])
+			if data.has("tilt_inverted"):
+				tilt_inverted = bool(data["tilt_inverted"])
 			print("Game loaded.")
 		else:
 			print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())

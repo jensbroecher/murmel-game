@@ -4,11 +4,14 @@ extends Control
 @onready var main_menu = $VBoxContainer
 @onready var level_select = $LevelSelectContainer
 @onready var level_grid = $LevelSelectContainer/LevelGrid
+@onready var tilt_stick_option = $VBoxContainer/ControlsContainer/TiltStickOption
+@onready var invert_tilt_check = $VBoxContainer/ControlsContainer/InvertTiltCheck
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	update_difficulty_display()
 	setup_level_buttons()
+	setup_controls_menu()
 	
 	if GlobalGameState.show_level_selection_on_load:
 		_on_levels_pressed()
@@ -84,6 +87,22 @@ func setup_level_buttons():
 			btn.pressed.connect(func(): start_level(level_id))
 			
 		level_grid.add_child(btn)
+
+func setup_controls_menu():
+	if tilt_stick_option:
+		tilt_stick_option.clear()
+		tilt_stick_option.add_item("Left Stick", 0)
+		tilt_stick_option.add_item("Right Stick", 1)
+		tilt_stick_option.selected = 0 if GlobalGameState.tilt_uses_left_stick else 1
+	if invert_tilt_check:
+		invert_tilt_check.button_pressed = GlobalGameState.tilt_inverted
+
+func _on_tilt_stick_selected(index):
+	var use_left = index == 0
+	GlobalGameState.set_tilt_stick(use_left)
+
+func _on_invert_tilt_toggled(pressed):
+	GlobalGameState.set_tilt_inverted(pressed)
 
 func start_level(level_id: int):
 	GlobalGameState.current_level_index = level_id
