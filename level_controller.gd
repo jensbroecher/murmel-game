@@ -79,6 +79,28 @@ func _input(event):
 	if not input_enabled:
 		return
 		
+	if event is InputEventScreenDrag:
+		var viewport_size = get_viewport().get_visible_rect().size
+		# Right side of screen for Tilt
+		if event.position.x >= viewport_size.x / 2:
+			var sensitivity = 0.005
+			var relative_x = event.relative.x
+			var relative_y = event.relative.y
+			
+			if camera_rig and "pivot" in camera_rig:
+				var cam_y_rot = camera_rig.pivot.rotation.y
+				var rotated_x = relative_x * cos(cam_y_rot) - relative_y * sin(cam_y_rot)
+				var rotated_y = relative_x * sin(cam_y_rot) + relative_y * cos(cam_y_rot)
+				relative_x = rotated_x
+				relative_y = rotated_y
+			
+			_target_rotation_x -= relative_y * sensitivity
+			_target_rotation_z -= relative_x * sensitivity
+			
+			var max_rad = deg_to_rad(max_tilt_degrees)
+			_target_rotation_x = clamp(_target_rotation_x, -max_rad, max_rad)
+			_target_rotation_z = clamp(_target_rotation_z, -max_rad, max_rad)
+
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 		# Map mouse movement to tilt target
 		# Sensitivity factor

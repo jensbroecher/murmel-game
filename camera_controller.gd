@@ -27,8 +27,12 @@ func _ready():
 			global_position = target_node.global_position
 
 func _input(event):
-	# Removed mouse camera control
-	pass
+	if event is InputEventScreenDrag:
+		var viewport_size = get_viewport().get_visible_rect().size
+		# Left side of screen for Camera Rotation
+		if event.position.x < viewport_size.x / 2:
+			_rotation_y -= event.relative.x * mouse_sensitivity
+			_rotation_x -= event.relative.y * mouse_sensitivity
 
 func _process(delta):
 	# Keyboard Camera Control
@@ -55,10 +59,10 @@ func _process(delta):
 		if Input.is_key_pressed(KEY_DOWN) or Input.is_key_pressed(KEY_S):
 			_rotation_x -= cam_rot_speed * delta
 			
-		_rotation_x = clamp(_rotation_x, deg_to_rad(-60.0), deg_to_rad(-20.0))
-		
-		pivot.rotation.x = _rotation_x
-		pivot.rotation.y = _rotation_y
+	_rotation_x = clamp(_rotation_x, deg_to_rad(-60.0), deg_to_rad(-20.0))
+	
+	pivot.rotation.x = _rotation_x
+	pivot.rotation.y = _rotation_y
 
 	if target_node:
 		# Smooth follow
