@@ -1,6 +1,7 @@
 extends Path3D
 
 @export var magnet_strength: float = 80.0
+@export var strength_curve: Curve
 @export var damping: float = 10.0
 @export var max_distance: float = 3.0
 @export var enabled: bool = true
@@ -25,6 +26,11 @@ func _physics_process(delta):
 			continue
 			
 		var target_local = curve.sample_baked(closest_offset)
+		
+		var current_strength = magnet_strength
+		if strength_curve:
+			var t = closest_offset / curve_len
+			current_strength *= strength_curve.sample(t)
 		
 		# Check if marble is hanging underneath
 		# Get the up vector at this point on the curve
@@ -66,6 +72,6 @@ func _physics_process(delta):
 			# 1. Spring force: Pull towards the line
 			# 2. Damping force: Resist perpendicular velocity
 			
-			var force = (diff * magnet_strength) - (v_perpendicular * damping)
+			var force = (diff * current_strength) - (v_perpendicular * damping)
 			
 			marble.apply_central_force(force)

@@ -46,6 +46,11 @@ custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
 text = "RESUME"
 
+[node name="RestartButton" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+text = "RESTART"
+
 [node name="MenuButton" type="Button" parent="Control/CenterContainer/VBoxContainer"]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2

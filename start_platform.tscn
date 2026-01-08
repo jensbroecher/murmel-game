@@ -1,0 +1,53 @@
+[gd_scene load_steps=2 format=3 uid="uid://cvtgevofbu6n1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
+albedo_color = Color(1, 0.5, 0, 1)
+
+[node name="StartPlatform" type="Node3D"]
+
+[node name="OrangePlatform" type="CSGCombiner3D" parent="."]
+use_collision = true
+
+[node name="FloorCylinder" type="CSGCylinder3D" parent="OrangePlatform"]
+radius = 2.5
+height = 0.5
+sides = 32
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="FloorBox" type="CSGBox3D" parent="OrangePlatform"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.25)
+size = Vector3(5, 0.5, 2.5)
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="BackWallOuter" type="CSGCylinder3D" parent="OrangePlatform"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+radius = 2.5
+height = 0.5
+sides = 32
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="BackWallInner" type="CSGCylinder3D" parent="OrangePlatform"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+operation = 2
+radius = 2.0
+height = 0.5
+sides = 32
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="BackWallCutFront" type="CSGBox3D" parent="OrangePlatform"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1.5)
+operation = 2
+size = Vector3(6, 1.5, 3)
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="FunnelLeft" type="CSGPolygon3D" parent="OrangePlatform"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.25, 0)
+polygon = PackedVector2Array(-2.5, 0, -2.5, 2.5, -0.5, 2.5, -2, 0)
+depth = 0.5
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="FunnelRight" type="CSGPolygon3D" parent="OrangePlatform"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0.25, 0)
+polygon = PackedVector2Array(2.5, 0, 2, 0, 0.5, 2.5, 2.5, 2.5)
+depth = 0.5
+material = SubResource("StandardMaterial3D_orange")
