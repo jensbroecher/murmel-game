@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+signal tutorial_completed
+
 @onready var label = $Control/Panel/Label
 @onready var button = $Control/Panel/Button
 
@@ -68,4 +70,5 @@ func finish_tutorial():
 	var level = get_level_controller()
 	if level and level.has_method("set_input_enabled"):
 		level.set_input_enabled(true)
+	emit_signal("tutorial_completed")
 	queue_free()

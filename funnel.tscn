@@ -1,33 +1,15 @@
-[gd_scene format=3 uid="uid://funnel_generated"]
+[gd_scene load_steps=2 format=3 uid="uid://dfyqdks5j2x8h"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
-albedo_color = Color(1.0, 0.5, 0.0, 1)
+albedo_color = Color(1, 0.5, 0, 1)
 roughness = 0.5
 
 [node name="Funnel" type="Node3D"]
 
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
+[node name="FunnelShape" type="CSGPolygon3D" parent="."]
 use_collision = true
-
-[node name="OuterCone" type="CSGCylinder3D" parent="CSGCombiner3D"]
-radius = 4.0
-height = 3.0
-sides = 32
-cone = true
-material = SubResource("StandardMaterial3D_orange")
-
-[node name="InnerCone" type="CSGCylinder3D" parent="CSGCombiner3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
-operation = 2
-radius = 3.8
-height = 3.0
-sides = 32
-cone = true
-material = SubResource("StandardMaterial3D_orange")
-
-[node name="Hole" type="CSGCylinder3D" parent="CSGCombiner3D"]
-operation = 2
-radius = 0.8
-height = 5.0
-sides = 32
+polygon = PackedVector2Array(0.8, 0, 1.2, 0, 4, 3, 3.5, 3)
+mode = 1
+spin_degrees = 360.0
+spin_sides = 32
 material = SubResource("StandardMaterial3D_orange")

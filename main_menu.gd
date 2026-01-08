@@ -1,17 +1,25 @@
 extends Control
 
-@onready var difficulty_label = $VBoxContainer/DifficultyContainer/DifficultyValue
 @onready var main_menu = $VBoxContainer
 @onready var level_select = $LevelSelectContainer
 @onready var level_grid = $LevelSelectContainer/LevelGrid
-@onready var tilt_stick_option = $VBoxContainer/ControlsContainer/TiltStickOption
-@onready var invert_tilt_check = $VBoxContainer/ControlsContainer/InvertTiltCheck
+@onready var settings_container = $SettingsContainer
+
+@onready var difficulty_label = $SettingsContainer/DifficultyContainer/DifficultyValue
+@onready var tilt_stick_option = $SettingsContainer/ControlsContainer/TiltStickOption
+@onready var invert_tilt_check = $SettingsContainer/ControlsContainer/InvertTiltCheck
+@onready var music_check = $SettingsContainer/MusicContainer/MusicCheck
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	update_difficulty_display()
 	setup_level_buttons()
 	setup_controls_menu()
+	
+	# Play menu music (Track 0)
+	var music_manager = get_node_or_null("/root/MusicManager")
+	if music_manager:
+		music_manager.play_music_for_level(0)
 	
 	if GlobalGameState.show_level_selection_on_load:
 		_on_levels_pressed()
@@ -46,8 +54,16 @@ func _on_levels_pressed():
 	main_menu.visible = false
 	level_select.visible = true
 
+func _on_settings_pressed():
+	main_menu.visible = false
+	settings_container.visible = true
+
 func _on_back_pressed():
 	level_select.visible = false
+	main_menu.visible = true
+
+func _on_back_from_settings_pressed():
+	settings_container.visible = false
 	main_menu.visible = true
 
 func _on_quit_pressed():
@@ -99,6 +115,8 @@ func setup_controls_menu():
 		tilt_stick_option.selected = 0 if GlobalGameState.tilt_uses_left_stick else 1
 	if invert_tilt_check:
 		invert_tilt_check.button_pressed = GlobalGameState.tilt_inverted
+	if music_check:
+		music_check.button_pressed = GlobalGameState.music_enabled
 
 func _on_tilt_stick_selected(index):
 	var use_left = index == 0
@@ -107,11 +125,19 @@ func _on_tilt_stick_selected(index):
 func _on_invert_tilt_toggled(pressed):
 	GlobalGameState.set_tilt_inverted(pressed)
 
+func _on_music_toggled(pressed):
+	GlobalGameState.set_music_enabled(pressed)
+
 func start_level(level_id: int):
 	GlobalGameState.current_level_index = level_id
 	GlobalGameState.reset_lives()
 	GlobalGameState.clear_collected()
 	GlobalGameState.start_level_timer() # Reset timer for new game
+	
+	# Play level music (Offset by 1 so Menu gets track 0)
+	var music_manager = get_node_or_null("/root/MusicManager")
+	if music_manager:
+		music_manager.play_music_for_level(level_id + 1)
 	
 	var level_path = GlobalGameState.levels[level_id]["path"]
 	get_tree().change_scene_to_file(level_path)

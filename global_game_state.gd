@@ -9,6 +9,7 @@ var collected_diamond_ids: Array = []
 var lives: int = 7
 var tilt_uses_left_stick: bool = true
 var tilt_inverted: bool = false
+var music_enabled: bool = true
 
 # Level Management
 var current_level_index: int = 0
@@ -17,7 +18,7 @@ var show_level_selection_on_load: bool = false
 var level_progress: Dictionary = {}
 var levels: Dictionary = {
 	0: { "name": "Tutorial", "path": "res://stage_0.tscn" },
-	1: { "name": "Rolling Start", "path": "res://stage_1.tscn" },
+	1: { "name": "Loops & Cannons", "path": "res://stage_1.tscn" },
 	2: { "name": "Sky High", "path": "res://stage_2.tscn" },
 	3: { "name": "Mechanisms", "path": "res://stage_3.tscn" }
 }
@@ -64,6 +65,14 @@ func set_tilt_stick(use_left: bool):
 func set_tilt_inverted(inverted: bool):
 	tilt_inverted = inverted
 	save_game()
+
+func set_music_enabled(enabled: bool):
+	music_enabled = enabled
+	save_game()
+	# Notify MusicManager if it exists
+	var music_manager = get_node_or_null("/root/MusicManager")
+	if music_manager:
+		music_manager.update_music_state()
 
 func get_difficulty_name() -> String:
 	match difficulty:
@@ -142,7 +151,8 @@ func save_game():
 		"difficulty": difficulty,
 		"level_progress": level_progress,
 		"tilt_uses_left_stick": tilt_uses_left_stick,
-		"tilt_inverted": tilt_inverted
+		"tilt_inverted": tilt_inverted,
+		"music_enabled": music_enabled
 	}
 	
 	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
@@ -190,6 +200,8 @@ func load_game():
 				tilt_uses_left_stick = bool(data["tilt_uses_left_stick"])
 			if data.has("tilt_inverted"):
 				tilt_inverted = bool(data["tilt_inverted"])
+			if data.has("music_enabled"):
+				music_enabled = bool(data["music_enabled"])
 			print("Game loaded.")
 		else:
 			print("JSON Parse Error: ", json.get_error_message(), " in ", json_string, " at line ", json.get_error_line())

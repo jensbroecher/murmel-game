@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="13_rocket"]
 [ext_resource type="PackedScene" uid="uid://csuvqeghi0eys" path="res://tutorial_overlay.tscn" id="14_tutorial"]
 [ext_resource type="PackedScene" path="res://rails.tscn" id="15_rails"]
-[ext_resource type="PackedScene" path="res://funnel.tscn" id="16_funnel"]
+[ext_resource type="PackedScene" uid="uid://dfyqdks5j2x8h" path="res://funnel.tscn" id="16_funnel"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("3_hdr")
@@ -232,6 +232,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.220215, 1.1515226, 2.01910
 [node name="Rocket" parent="LevelPivot" instance=ExtResource("13_rocket")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -13.393795)
 
+[node name="Rails" parent="LevelPivot" instance=ExtResource("15_rails")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+magnet_strength = 100.0
+
+[node name="Funnel" parent="LevelPivot" instance=ExtResource("16_funnel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.638674, 3.7162037, 13.551638)
+
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("2_camera")
 follow_speed = 5.0
@@ -254,7 +261,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_water")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.01214847, 14.586838, -8.353201)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.05204256, 16.046675, -8.333181)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
 emitting = false
@@ -272,13 +279,6 @@ scale_amount_curve = SubResource("Curve_particles")
 color_ramp = SubResource("Gradient_particles")
 
 [node name="TutorialOverlay" parent="." instance=ExtResource("14_tutorial")]
-
-[node name="Rails" parent="." instance=ExtResource("15_rails")]
-transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
-magnet_strength = 90.0
-
-[node name="Funnel" parent="." instance=ExtResource("16_funnel")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 5, 14)
 
 [connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]
 [connection signal="body_entered" from="WaterPlane/WaterArea" to="." method="_on_water_entered"]

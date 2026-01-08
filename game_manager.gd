@@ -18,6 +18,31 @@ var screen_fader
 var last_hit_time: int = 0
 var total_diamonds: int = 0
 var collected_diamonds: int = 0
+var last_velocity = Vector3.ZERO
+
+func _physics_process(delta):
+	if camera_rig and camera_rig.target_node:
+		var marble = camera_rig.target_node
+		if marble is RigidBody3D:
+			var current_velocity = marble.linear_velocity
+			
+			# Calculate change in velocity (Impulse/Shock)
+			# This detects sudden stops or bounces (walls/floor) but ignores smooth rolling
+			var velocity_change = (current_velocity - last_velocity).length()
+			
+			# Threshold for impact sound
+			# Normal gravity accel per frame (at 60fps) is ~0.16
+			# A collision usually causes a change > 1.0 depending on speed
+			# Using 2.0 filters out small bumps and rail transitions
+			if velocity_change > 2.0: 
+				var current_time = Time.get_ticks_msec()
+				if current_time - last_hit_time > 100: # Short debounce
+					var intensity = clamp(velocity_change / 15.0, 0.0, 1.0)
+					if sound_gen:
+						sound_gen.play_hit(intensity)
+					last_hit_time = current_time
+			
+			last_velocity = current_velocity
 
 func _ready():
 	randomize()
@@ -51,7 +76,12 @@ func _ready():
 	
 	update_lives_display()
 	
-	spawn_marble()
+	if has_node("TutorialOverlay"):
+		var tutorial = get_node("TutorialOverlay")
+		if tutorial.has_signal("tutorial_completed"):
+			tutorial.tutorial_completed.connect(spawn_marble)
+	else:
+		spawn_marble()
 
 func update_lives_display():
 	if lives_label:
@@ -137,26 +167,8 @@ func spawn_marble():
 		marble.body_entered.connect(_on_marble_collision)
 
 func _on_marble_collision(body):
-	if sound_gen and body != $StartPoint: # Ignore start point if it has collision
-		# Cooldown check
-		var current_time = Time.get_ticks_msec()
-		if current_time - last_hit_time < 150: # 150ms cooldown
-			return
-			
-		# Calculate intensity based on velocity (approx)
-		var intensity = 0.5
-		if camera_rig and camera_rig.target_node:
-			var velocity = camera_rig.target_node.linear_velocity
-			var speed = velocity.length()
-			
-			# Ignore small bumps or rolling on flat surfaces
-			if speed < 2.0:
-				return
-				
-			intensity = clamp(speed / 10.0, 0.0, 1.0)
-			
-		sound_gen.play_hit(intensity)
-		last_hit_time = current_time
+	# Sound logic is now handled in _physics_process based on velocity change (impulse)
+	pass
 
 func count_diamonds():
 	# Total is the sum of currently active diamonds + already collected ones

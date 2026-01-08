@@ -57,42 +57,11 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 32
 text = "Levels"
 
-[node name="DifficultyContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="SettingsButton" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
-alignment = 1
-
-[node name="Label" type="Label" parent="VBoxContainer/DifficultyContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Difficulty: "
-
-[node name="DifficultyValue" type="Label" parent="VBoxContainer/DifficultyContainer"]
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.8, 0, 1)
-theme_override_font_sizes/font_size = 24
-text = "Normal"
-
-[node name="ChangeButton" type="Button" parent="VBoxContainer/DifficultyContainer"]
-custom_minimum_size = Vector2(40, 0)
-layout_mode = 2
-text = "Change"
-
-[node name="ControlsContainer" type="HBoxContainer" parent="VBoxContainer"]
-layout_mode = 2
-alignment = 1
-
-[node name="TiltLabel" type="Label" parent="VBoxContainer/ControlsContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-text = "Tilting Stick:"
-
-[node name="TiltStickOption" type="OptionButton" parent="VBoxContainer/ControlsContainer"]
-layout_mode = 2
-custom_minimum_size = Vector2(160, 0)
-
-[node name="InvertTiltCheck" type="CheckBox" parent="VBoxContainer/ControlsContainer"]
-layout_mode = 2
-text = "Invert Tilt"
+theme_override_font_sizes/font_size = 32
+text = "Settings"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 60)
@@ -135,10 +104,92 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Back"
 
+[node name="SettingsContainer" type="VBoxContainer" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -200.0
+offset_right = 250.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="SettingsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "Settings"
+horizontal_alignment = 1
+
+[node name="MusicContainer" type="HBoxContainer" parent="SettingsContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="SettingsContainer/MusicContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Music: "
+
+[node name="MusicCheck" type="CheckBox" parent="SettingsContainer/MusicContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Enabled"
+
+[node name="DifficultyContainer" type="HBoxContainer" parent="SettingsContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="SettingsContainer/DifficultyContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Difficulty: "
+
+[node name="DifficultyValue" type="Label" parent="SettingsContainer/DifficultyContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.8, 0, 1)
+theme_override_font_sizes/font_size = 24
+text = "Normal"
+
+[node name="ChangeButton" type="Button" parent="SettingsContainer/DifficultyContainer"]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+text = "Change"
+
+[node name="ControlsContainer" type="HBoxContainer" parent="SettingsContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="TiltLabel" type="Label" parent="SettingsContainer/ControlsContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Tilting Stick:"
+
+[node name="TiltStickOption" type="OptionButton" parent="SettingsContainer/ControlsContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(160, 0)
+
+[node name="InvertTiltCheck" type="CheckBox" parent="SettingsContainer/ControlsContainer"]
+layout_mode = 2
+text = "Invert Tilt"
+
+[node name="BackFromSettingsButton" type="Button" parent="SettingsContainer"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Back"
+
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/LevelsButton" to="." method="_on_levels_pressed"]
-[connection signal="pressed" from="VBoxContainer/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
-[connection signal="item_selected" from="VBoxContainer/ControlsContainer/TiltStickOption" to="." method="_on_tilt_stick_selected"]
-[connection signal="toggled" from="VBoxContainer/ControlsContainer/InvertTiltCheck" to="." method="_on_invert_tilt_toggled"]
+[connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
+[connection signal="toggled" from="SettingsContainer/MusicContainer/MusicCheck" to="." method="_on_music_toggled"]
+[connection signal="pressed" from="SettingsContainer/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
+[connection signal="item_selected" from="SettingsContainer/ControlsContainer/TiltStickOption" to="." method="_on_tilt_stick_selected"]
+[connection signal="toggled" from="SettingsContainer/ControlsContainer/InvertTiltCheck" to="." method="_on_invert_tilt_toggled"]
+[connection signal="pressed" from="SettingsContainer/BackFromSettingsButton" to="." method="_on_back_from_settings_pressed"]
 [connection signal="pressed" from="LevelSelectContainer/BackButton" to="." method="_on_back_pressed"]

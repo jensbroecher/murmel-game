@@ -3,11 +3,13 @@ extends Node
 var spawn_player: AudioStreamPlayer
 var win_player: AudioStreamPlayer
 var roll_player: AudioStreamPlayer
+var ambient_player: AudioStreamPlayer
 var hit_player: AudioStreamPlayer
 var splash_player: AudioStreamPlayer
 
 var marble_body: RigidBody3D
 var is_dampened: bool = false
+var time_accumulator: float = 0.0
 
 func _ready():
 	# Create players
@@ -19,6 +21,9 @@ func _ready():
 	
 	roll_player = AudioStreamPlayer.new()
 	add_child(roll_player)
+	
+	ambient_player = AudioStreamPlayer.new()
+	add_child(ambient_player)
 	
 	hit_player = AudioStreamPlayer.new()
 	add_child(hit_player)
@@ -37,23 +42,48 @@ func _ready():
 	if not win_player.stream:
 		win_player.stream = generate_win_sound()
 		
-	roll_player.stream = generate_noise_loop()
+	# Rolling sound: New generator for marble
+	roll_player.stream = load("res://sounds/marble.mp3")
+	if not roll_player.stream:
+		roll_player.stream = generate_rolling_sound()
+	if roll_player.stream is AudioStreamMP3:
+		roll_player.stream.loop = true
+	
+	# Ambient sound: Old noise loop for waves/wind
+	ambient_player.stream = generate_noise_loop()
+	
 	hit_player.stream = generate_hit_sound()
 	
 	splash_player.stream = load("res://sounds/water-splash-02-352021.mp3")
 	
-	# Start rolling sound (muted initially)
-	roll_player.volume_db = -80.0
+	# Start sounds
+	roll_player.volume_db = -35.0
 	roll_player.play()
+	
+	ambient_player.volume_db = -30.0
+	ambient_player.play()
 	
 	print("SoundGenerator: Sounds initialized")
 
 func _process(delta):
+	time_accumulator += delta
+	
+	# Ambient Wave Sound Logic
+	if not ambient_player.playing:
+		ambient_player.play()
+	
+	# Modulate ambient sound to simulate waves (slow sine wave)
+	var wave_mod = sin(time_accumulator * 0.5) * 3.0
+	ambient_player.volume_db = -33.0 + wave_mod
+	ambient_player.pitch_scale = 1.0 + (sin(time_accumulator * 0.3) * 0.1)
+	
+	# Rolling Sound Logic
 	if not roll_player.playing:
 		roll_player.play()
 		
 	if marble_body:
 		var speed = marble_body.linear_velocity.length()
+		var is_touching = marble_body.get_contact_count() > 0
 		
 		# If dampened (inside cannon), force a low speed equivalent or dampen volume directly
 		var target_vol = -80.0
@@ -61,14 +91,22 @@ func _process(delta):
 		
 		if is_dampened:
 			# Keep playing but muffled/quiet
-			# We fake a bit of speed to keep it audible but very low
-			target_vol = -20.0 
-			target_pitch = 0.5 # Lower pitch for muffled effect
-		elif speed > 0.1:
-			# Map speed 0-10 to volume -10 to 0 dB (Louder, earlier)
-			# Reducing general loudness by capping max volume at -10.0 dB instead of 0.0
-			target_vol = clamp(linear_to_db(speed / 10.0), -40.0, -10.0)
-			target_pitch = clamp(0.5 + (speed / 10.0), 0.5, 1.5)
+			target_vol = -30.0 
+			target_pitch = 0.5
+		elif not is_touching:
+			# In air: Silence rolling sound
+			target_vol = -80.0
+			# Keep pitch similar to last known speed or drop it, doesn't matter much if silent
+			target_pitch = 1.0 
+		elif speed > 0.02:
+			# Bowling ball rolling: heavy, deep rumble
+			# Volume: Boosted significantly as requested
+			# Speed 5.0 -> 0dB. Speed 0.5 -> -20dB.
+			target_vol = clamp(linear_to_db(speed / 5.0), -25.0, 2.0)
+			
+			# Pitch: Controls the rumble frequency (speed of rotation)
+			# Slower ramp for pitch to avoid chipmunk effect with MP3
+			target_pitch = clamp(0.6 + (speed / 15.0), 0.6, 1.2)
 		
 		roll_player.volume_db = lerp(roll_player.volume_db, target_vol, delta * 10.0)
 		roll_player.pitch_scale = lerp(roll_player.pitch_scale, target_pitch, delta * 10.0)
@@ -95,7 +133,8 @@ func play_win():
 	print("SoundGenerator: Playing Win Sound")
 
 func play_hit(intensity: float):
-	hit_player.volume_db = linear_to_db(clamp(intensity, 0.1, 1.0))
+	# Reduced volume further (-15dB) to make it subtle
+	hit_player.volume_db = linear_to_db(clamp(intensity, 0.1, 1.0)) - 15.0
 	hit_player.pitch_scale = randf_range(0.9, 1.1)
 	hit_player.play()
 	print("SoundGenerator: Playing Hit Sound")
@@ -160,6 +199,47 @@ func generate_sine_sweep(start_hz, end_hz, duration):
 		sample *= envelope * 0.5 # 0.5 amplitude
 		
 		var sample_16 = int(sample * 32767.0)
+		buffer.encode_s16(i * 2, sample_16)
+		
+	stream.data = buffer
+	return stream
+
+func generate_rolling_sound():
+	var sample_rate = 44100
+	# Loop length determines the fundamental "wobble" frequency
+	# 8820 samples = 0.2 seconds = 5Hz fundamental at pitch 1.0
+	var frames = 8820
+	var stream = AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = sample_rate
+	stream.loop_mode = AudioStreamWAV.LOOP_FORWARD
+	stream.loop_end = frames
+	
+	var buffer = PackedByteArray()
+	buffer.resize(frames * 2)
+	
+	var last_val = 0.0
+	
+	for i in range(frames):
+		# 1. Base Texture (Grit)
+		var target = randf_range(-1.0, 1.0)
+		last_val = lerp(last_val, target, 0.2) # Moderate smoothing for stone texture
+		
+		# 2. Modulation (The "Rum-ble" effect)
+		# Reduced modulation depth to avoid "ticking" sound in fallback
+		var angle = (float(i) / frames) * 2.0 * PI
+		var mod = 0.8 + 0.2 * sin(angle) # Smoother
+		
+		# 3. Low Frequency Hum (The heavy mass)
+		var hum = sin(angle) * 0.2
+		
+		# Mix: Modulated noise + Hum
+		var final = (last_val * mod * 0.6) + hum
+		
+		# Soft clip
+		final = clamp(final, -1.0, 1.0)
+		
+		var sample_16 = int(final * 32000.0)
 		buffer.encode_s16(i * 2, sample_16)
 		
 	stream.data = buffer
