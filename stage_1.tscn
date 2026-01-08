@@ -54,7 +54,7 @@ _data = {
 point_count = 3
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
-size = Vector2(2000, 2000)
+size = Vector2(10000, 10000)
 
 [sub_resource type="Shader" id="Shader_water"]
 code = "shader_type spatial;
@@ -72,7 +72,7 @@ void fragment() {
 	vec2 time = (TIME * wave_direction) * time_scale;
 	vec2 time2 = (TIME * wave_direction2) * time_scale;
 	
-	vec3 normal_blend = mix(texture(texture_normal, UV * 25.0 + time).rgb, texture(texture_normal2, UV * 25.0 + time2).rgb, 0.5);
+	vec3 normal_blend = mix(texture(texture_normal, UV * 125.0 + time).rgb, texture(texture_normal2, UV * 125.0 + time2).rgb, 0.5);
 	
 	ALBEDO = albedo.rgb;
 	METALLIC = metallic;
@@ -103,7 +103,7 @@ shader_parameter/wave_direction2 = Vector2(0, 1)
 shader_parameter/time_scale = 0.015
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_water"]
-size = Vector3(2000, 1, 2000)
+size = Vector3(10000, 1, 10000)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
 shading_mode = 0

@@ -27,7 +27,11 @@ func _on_body_entered(body):
 
 func collect():
 	collected = true
-	model.visible = false
+	
+	# Create a tween for the shrink animation
+	var tween = create_tween()
+	tween.tween_property(model, "scale", Vector3.ZERO, 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	
 	audio_player.play()
 	particles.emitting = true
 	
