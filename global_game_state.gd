@@ -11,11 +11,12 @@ var tilt_uses_left_stick: bool = true
 var tilt_inverted: bool = false
 
 # Level Management
-var current_level_index: int = 1
+var current_level_index: int = 0
 var level_start_time: int = 0
 var show_level_selection_on_load: bool = false
 var level_progress: Dictionary = {}
 var levels: Dictionary = {
+	0: { "name": "Tutorial", "path": "res://stage_0.tscn" },
 	1: { "name": "Rolling Start", "path": "res://stage_1.tscn" },
 	2: { "name": "Sky High", "path": "res://stage_2.tscn" },
 	3: { "name": "Mechanisms", "path": "res://stage_3.tscn" }
@@ -94,7 +95,7 @@ func complete_level(level_id: int, time_str: String, lives_left: int):
 	save_game()
 
 func is_level_unlocked(level_id: int) -> bool:
-	if level_id == 1:
+	if level_id == 0 or level_id == 1:
 		return true
 	
 	# Check if previous level is completed on ANY difficulty

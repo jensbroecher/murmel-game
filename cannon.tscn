@@ -1,12 +1,7 @@
 [gd_scene load_steps=10 format=3 uid="uid://cannon12345"]
 
 [ext_resource type="Script" uid="uid://bucvve4tcqx3d" path="res://cannon.gd" id="1_script"]
-[ext_resource type="AudioStream" path="res://sounds/explosion-91872.mp3" id="2_audio"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_arrow"]
-albedo_color = Color(1, 1, 0, 1)
-emission_enabled = true
-emission = Color(0.5, 0.5, 0, 1)
+[ext_resource type="AudioStream" uid="uid://bhnnm7eqf3p0d" path="res://sounds/explosion-91872.mp3" id="2_audio"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cannon"]
 albedo_color = Color(0.2, 0.2, 0.2, 1)
@@ -36,6 +31,11 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.3, 0.7, 1)
 colors = PackedColorArray(3, 3, 0, 1, 1, 0.5, 0, 1, 1, 0.2, 0, 1, 0.2, 0.2, 0.2, 0)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_arrow"]
+albedo_color = Color(1, 1, 0, 1)
+emission_enabled = true
+emission = Color(0.5, 0.5, 0, 1)
+
 [node name="Cannon" type="Node3D"]
 script = ExtResource("1_script")
 
@@ -57,7 +57,7 @@ sides = 32
 material = SubResource("StandardMaterial3D_cannon")
 
 [node name="LaunchPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
 [node name="Area3D" type="Area3D" parent="."]
 
@@ -66,7 +66,7 @@ transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 
 shape = SubResource("CylinderShape3D_area")
 
 [node name="CPUParticles3D" type="CPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 emitting = false
 amount = 1000
 lifetime = 0.8
@@ -83,10 +83,9 @@ color_ramp = SubResource("Gradient_fire")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_audio")
-unit_size = 10.0
 
 [node name="DirectionArrow" type="CSGCombiner3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+transform = Transform3D(1, 0, 0, 0, 0.5179716, 0, 0, 0, 1, 0, 0.9911115, 0)
 
 [node name="ArrowShaft" type="CSGCylinder3D" parent="DirectionArrow"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0.25)

@@ -58,7 +58,10 @@ func setup_level_buttons():
 	for child in level_grid.get_children():
 		child.queue_free()
 		
-	for level_id in GlobalGameState.levels:
+	var sorted_levels = GlobalGameState.levels.keys()
+	sorted_levels.sort()
+	
+	for level_id in sorted_levels:
 		var level_data = GlobalGameState.levels[level_id]
 		var btn = Button.new()
 		

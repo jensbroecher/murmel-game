@@ -27,7 +27,7 @@ material = SubResource("StandardMaterial3D_steel")
 radius = 0.5
 height = 1.0
 
-[node name="Marble" type="RigidBody3D"]
+[node name="Marble" type="RigidBody3D" groups=["marble"]]
 mass = 5.0
 physics_material_override = SubResource("PhysicsMaterial_marble")
 continuous_cd = true
