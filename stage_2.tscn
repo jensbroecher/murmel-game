@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
-[ext_resource type="Texture2D" uid="uid://hfxo2iqiwapd" path="res://kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="3_hdr"]
+[ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="3_hdr"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="4_marble_scene"]
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="5_game"]
 [ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="6_sound"]

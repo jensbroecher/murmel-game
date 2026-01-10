@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://d3or0oxxkrfss"]
+[gd_scene load_steps=8 format=3 uid="uid://d3or0oxxkrfss"]
 
-[ext_resource type="Script" path="res://powerup_pad.gd" id="1_script"]
-[ext_resource type="AudioStream" uid="uid://scale123" path="res://sounds/scale-c7-106132.mp3" id="2_sound"]
+[ext_resource type="Script" uid="uid://ck26eofwsqow" path="res://powerup_pad.gd" id="1_script"]
+[ext_resource type="AudioStream" uid="uid://bquykh43hsddv" path="res://sounds/scale-c7-106132.mp3" id="2_sound"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_pad"]
 height = 0.2
@@ -19,6 +19,16 @@ top_radius = 1.5
 bottom_radius = 1.5
 height = 0.2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_arrow"]
+albedo_color = Color(18.892157, 18.892157, 18.892157, 1)
+emission_enabled = true
+emission = Color(1, 1, 0, 1)
+emission_energy_multiplier = 3.0
+
+[sub_resource type="PrismMesh" id="PrismMesh_arrow"]
+material = SubResource("StandardMaterial3D_arrow")
+size = Vector3(0.5, 0.5, 0.1)
+
 [node name="PowerUpPad" type="Area3D"]
 script = ExtResource("1_script")
 
@@ -27,6 +37,22 @@ shape = SubResource("CylinderShape3D_pad")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("CylinderMesh_pad")
+
+[node name="Arrow1" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0.15, -0.8)
+mesh = SubResource("PrismMesh_arrow")
+
+[node name="Arrow2" type="MeshInstance3D" parent="."]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 0.15, 0.8)
+mesh = SubResource("PrismMesh_arrow")
+
+[node name="Arrow3" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.371139e-08, 1, 4.371139e-08, 0, -4.371139e-08, 1, 1, 4.371139e-08, 1.9106855e-15, 0.8, 0.15, 0)
+mesh = SubResource("PrismMesh_arrow")
+
+[node name="Arrow4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1.1924881e-08, -1, -4.371139e-08, 0, -4.371139e-08, 1, -1, -1.1924881e-08, -5.2125306e-16, -0.8, 0.15, 0)
+mesh = SubResource("PrismMesh_arrow")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("2_sound")

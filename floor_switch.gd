@@ -24,4 +24,8 @@ func _on_body_entered(body):
 		tween.tween_property(mesh, "position:y", -0.05, 0.2)
 		
 		if audio:
+			if audio.stream == null and get_node("/root/Game/SoundGenerator"):
+				var sg = get_node("/root/Game/SoundGenerator")
+				if sg.has_method("generate_switch_melody"):
+					audio.stream = sg.generate_switch_melody()
 			audio.play()

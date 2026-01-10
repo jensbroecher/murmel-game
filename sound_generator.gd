@@ -171,6 +171,46 @@ func generate_hit_sound():
 	stream.data = buffer
 	return stream
 
+func generate_switch_melody():
+	var sample_rate = 44100
+	var duration = 1.0
+	var frames = int(sample_rate * duration)
+	var stream = AudioStreamWAV.new()
+	stream.format = AudioStreamWAV.FORMAT_16_BITS
+	stream.mix_rate = sample_rate
+	
+	var buffer = PackedByteArray()
+	buffer.resize(frames * 2)
+	
+	# Simple arpeggio: C5, E5, G5, C6
+	var notes = [523.25, 659.25, 783.99, 1046.50]
+	var note_duration = frames / 4
+	var phase = 0.0
+	
+	for i in range(frames):
+		var note_idx = int(i / note_duration)
+		if note_idx >= notes.size(): note_idx = notes.size() - 1
+		
+		var freq = notes[note_idx]
+		var increment = (freq * 2.0 * PI) / sample_rate
+		phase += increment
+		
+		var sample = sin(phase)
+		
+		# Envelope per note
+		var local_t = float(i % note_duration) / note_duration
+		var envelope = 1.0
+		if local_t < 0.1: envelope = local_t / 0.1
+		else: envelope = exp(-5.0 * (local_t - 0.1))
+		
+		sample *= envelope * 0.3
+		
+		var sample_16 = int(sample * 32767.0)
+		buffer.encode_s16(i * 2, sample_16)
+		
+	stream.data = buffer
+	return stream
+
 # Generators
 func generate_sine_sweep(start_hz, end_hz, duration):
 	var sample_rate = 44100

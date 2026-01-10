@@ -2,14 +2,14 @@
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
-[ext_resource type="Texture2D" uid="uid://hfxo2iqiwapd" path="res://kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="3_hdr"]
+[ext_resource type="Texture2D" uid="uid://qwamgguo4e4f" path="res://qwantani_night_puresky_4k.hdr" id="3_hdr"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="4_marble_scene"]
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="5_game"]
 [ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="6_sound"]
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="7_ripple"]
 [ext_resource type="PackedScene" uid="uid://cannon12345" path="res://cannon.tscn" id="8_cannon"]
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="11_diamond"]
-[ext_resource type="PackedScene" path="res://rocket.tscn" id="13_rocket"]
+[ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="13_rocket"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("3_hdr")
@@ -32,6 +32,11 @@ roughness = 0.2
 albedo_color = Color(1, 0.5, 0, 1)
 metallic = 0.5
 roughness = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vn1b6"]
+albedo_color = Color(0.2, 0.5, 0.8, 1)
+metallic = 0.7
+roughness = 0.2
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_boost"]
 size = Vector3(4, 4, 2)
@@ -191,11 +196,6 @@ transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="EdgeGuard" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 0.015393671, 0, 0.5945916, -17.815275)
-size = Vector3(24, 1.217041, 24)
-material = SubResource("StandardMaterial3D_floor")
-
 [node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.93225, 0.023406982, 8.725693)
 operation = 2
@@ -241,6 +241,11 @@ material = SubResource("StandardMaterial3D_ramp")
 transform = Transform3D(1.2378472, 0, 0, 0, 2.3053436, 0, 0, 0, 0.4934314, 7.0772924, -0.17113853, 0.40193462)
 operation = 2
 size = Vector3(5.3654785, 2, 8.829956)
+
+[node name="WallNorth" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -18.5)
+size = Vector3(38, 2, 1)
+material = SubResource("StandardMaterial3D_vn1b6")
 
 [node name="HalfPipe" type="CSGCombiner3D" parent="LevelPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.369038, -0.48743057, 6.942352)

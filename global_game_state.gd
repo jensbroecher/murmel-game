@@ -19,7 +19,7 @@ var level_progress: Dictionary = {}
 var levels: Dictionary = {
 	0: { "name": "Tutorial", "path": "res://stage_0.tscn" },
 	1: { "name": "Loops & Cannons", "path": "res://stage_1.tscn" },
-	2: { "name": "Sky High", "path": "res://stage_2.tscn" },
+	2: { "name": "Bumpy", "path": "res://stage_2.tscn" },
 	3: { "name": "Mechanisms", "path": "res://stage_3.tscn" }
 }
 

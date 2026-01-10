@@ -43,11 +43,8 @@ func _process(delta: float) -> void:
 
 func change_size_and_mass(size_multiplier: float, mass_multiplier: float, duration: float) -> void:
 	print("PowerUp activated! Duration: ", duration, " Size Mult: ", size_multiplier)
-	if is_super_marble:
-		print("Already super marble, refreshing timer.")
-		powerup_timer.start(duration)
-		return
-		
+	
+	# Always refresh state and timer
 	is_super_marble = true
 	
 	# Apply changes
@@ -69,12 +66,22 @@ func change_size_and_mass(size_multiplier: float, mass_multiplier: float, durati
 			
 	mass = original_mass * mass_multiplier
 	
+	# Play grow sound
+	var zoom1 = get_node_or_null("Zoom1Player")
+	if zoom1:
+		zoom1.play()
+	
 	# Start timer
 	print("Starting timer for ", duration, " seconds...")
 	powerup_timer.start(duration)
 
 func _on_powerup_timer_timeout() -> void:
 	print("PowerUp finished, reverting...")
+	
+	# Play shrink sound
+	var zoom2 = get_node_or_null("Zoom2Player")
+	if zoom2:
+		zoom2.play()
 	
 	# Revert changes
 	var revert_tween = create_tween()

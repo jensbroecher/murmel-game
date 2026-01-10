@@ -1,6 +1,8 @@
 [gd_scene load_steps=8 format=3 uid="uid://marble12345"]
 
 [ext_resource type="Script" path="res://marble.gd" id="1_marble"]
+[ext_resource type="AudioStream" uid="uid://cjnrhrdqa5ky8" path="res://sounds/futuristic-zoom-whoosh-1-183976.mp3" id="2_zoom1"]
+[ext_resource type="AudioStream" uid="uid://23et61gfwplq" path="res://sounds/futuristic-zoom-whoosh-2-183978.mp3" id="3_zoom2"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_marble"]
 bounce = 0.2
@@ -40,3 +42,15 @@ shape = SubResource("SphereShape3D_marble")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_marble")
+
+[node name="Zoom1Player" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("2_zoom1")
+volume_db = 10.0
+unit_size = 20.0
+max_distance = 100.0
+
+[node name="Zoom2Player" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_zoom2")
+volume_db = 10.0
+unit_size = 20.0
+max_distance = 100.0

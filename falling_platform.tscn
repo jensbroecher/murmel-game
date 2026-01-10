@@ -1,0 +1,60 @@
+[gd_scene load_steps=6 format=3 uid="uid://falling_platform_uid"]
+
+[ext_resource type="Script" path="res://falling_platform.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="2_ripple"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_warning"]
+albedo_color = Color(0.9, 0.4, 0.1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_platform"]
+material = SubResource("StandardMaterial3D_warning")
+size = Vector3(1.2, 0.5, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_platform"]
+size = Vector3(1.2, 0.5, 1.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(1.2, 1, 1.2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+shading_mode = 0
+albedo_color = Color(0.9, 0.6, 0.2, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="QuadMesh" id="QuadMesh_particles"]
+material = SubResource("StandardMaterial3D_particles")
+size = Vector2(0.2, 0.2)
+
+[node name="FallingPlatform" type="RigidBody3D"]
+script = ExtResource("1_script")
+ripple_scene = ExtResource("2_ripple")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_platform")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_platform")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="RespawnParticles" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 20
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("QuadMesh_particles")
+direction = Vector3(0, 1, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+scale_amount_min = 0.5
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

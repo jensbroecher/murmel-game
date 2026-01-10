@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bwlhts28yc1r1"]
+[gd_scene load_steps=31 format=3 uid="uid://bwlhts28yc1r1"]
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
@@ -13,8 +13,8 @@
 [ext_resource type="PackedScene" path="res://rails.tscn" id="15_rails"]
 [ext_resource type="PackedScene" uid="uid://dfyqdks5j2x8h" path="res://funnel.tscn" id="16_funnel"]
 [ext_resource type="PackedScene" uid="uid://cvtgevofbu6n1" path="res://start_platform.tscn" id="17_start_platform"]
-[ext_resource type="PackedScene" uid="uid://poweruppad123" path="res://powerup_pad.tscn" id="18_pad"]
-[ext_resource type="PackedScene" uid="uid://breakablewall123" path="res://breakable_wall.tscn" id="19_wall"]
+[ext_resource type="PackedScene" uid="uid://d3or0oxxkrfss" path="res://powerup_pad.tscn" id="18_pad"]
+[ext_resource type="PackedScene" uid="uid://bh4foenvsyobi" path="res://breakable_wall.tscn" id="19_wall"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("3_hdr")
@@ -194,41 +194,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 1, 0)
 size = Vector3(1, 2, 38)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.93225, 0.023406982, 8.725693)
-operation = 2
-size = Vector3(2, 2, 16)
-
-[node name="Groove6" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.927301, 0, 11.322189)
-operation = 2
-size = Vector3(2, 2, 16)
-
-[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3083496, 0, 8)
-operation = 2
-size = Vector3(13.383301, 2, 2)
-
-[node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.597122, 0, 15.729052)
-operation = 2
-size = Vector3(13.383301, 2, 2)
-
-[node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0327244, 0, 0)
-operation = 2
-size = Vector3(2, 2, 16)
-
-[node name="Groove4" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(0.93671495, -0.35009295, 0, 0.35009295, 0.93671495, 0, 0, 0, 0.33785796, 5.1746025, 0.8677814, -4.153061)
-operation = 2
-size = Vector3(5.3654785, 2, 8.829956)
-
-[node name="StartArea" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.137207, 0, 5.29183)
-operation = 2
-size = Vector3(4, 2, 4)
-
 [node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -13.083199)
 
@@ -236,16 +201,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -13.083199)
 shape = SubResource("BoxShape3D_trigger")
 
 [node name="Diamond1" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 1, -13.49066)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.342062, 1, 12.905211)
+
+[node name="Diamond3" parent="LevelPivot" instance=ExtResource("11_diamond")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0638485, 1, 12.905211)
 
 [node name="Diamond2" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.059209, 1.6450925, 2.9810872)
-
-[node name="Diamond4" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.301655, 0.085258484, 15.726624)
-
-[node name="Diamond6" parent="LevelPivot" instance=ExtResource("11_diamond")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.220215, 1.1515226, 2.0191078)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.898312, 1, -11.689533)
 
 [node name="Rocket" parent="LevelPivot" instance=ExtResource("13_rocket")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -13.393795)
@@ -261,10 +223,112 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.638674, 3.7162037, 13.5516
 transform = Transform3D(1, 0, 0, 0, 0.98525006, -0.17112096, 0, 0.17112096, 0.98525006, 0, 14.660412, -11.156828)
 
 [node name="PowerUpPad" parent="LevelPivot" instance=ExtResource("18_pad")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.1, -2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.975158, 0.1, 13.210367)
 
 [node name="BreakableWall" parent="LevelPivot" instance=ExtResource("19_wall")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, 4)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.982697, 1, 7.433526)
+
+[node name="BreakableWall2" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.98411, 1, 7.433526)
+
+[node name="BreakableWall3" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.9839964, 1, 7.433526)
+
+[node name="BreakableWall10" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.29865, 1, 2.3483691)
+
+[node name="BreakableWall29" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.13489652, 1, 2.3483691)
+
+[node name="BreakableWall30" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.089595, 1, 2.3483691)
+
+[node name="BreakableWall31" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.283349, 1, 2.3483691)
+
+[node name="BreakableWall32" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.001857, 1, 2.3483691)
+
+[node name="BreakableWall33" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.593442, 1, 2.3483691)
+
+[node name="BreakableWall34" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.010399, 1, 7.24692)
+
+[node name="BreakableWall35" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.073134, 1, 7.24692)
+
+[node name="BreakableWall11" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.285191, 1, 2.3483691)
+
+[node name="BreakableWall20" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.29865, 1, -6.4473906)
+
+[node name="BreakableWall21" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.285191, 1, -6.4473906)
+
+[node name="BreakableWall12" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.206454, 1, 2.3483691)
+
+[node name="BreakableWall4" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.729122, 1, 13.175758)
+
+[node name="BreakableWall5" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -5.7448516, 1, 9.190913)
+
+[node name="BreakableWall13" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.9402685, 1, 0.11662996)
+
+[node name="BreakableWall14" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.9402685, 1, -3.8225322)
+
+[node name="BreakableWall15" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.9402685, 1, -7.792563)
+
+[node name="BreakableWall16" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -13.9402685, 1, -11.766254)
+
+[node name="BreakableWall17" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.366874, 1, -16.005926)
+
+[node name="BreakableWall18" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.366874, 1, -12.05169)
+
+[node name="BreakableWall19" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -10.366874, 1, -8.143209)
+
+[node name="BreakableWall22" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.53159, 1, -16.005926)
+
+[node name="BreakableWall23" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.53159, 1, -12.05169)
+
+[node name="BreakableWall24" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.53159, 1, -8.143209)
+
+[node name="BreakableWall6" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.0612662, 1, 15.9756775)
+
+[node name="BreakableWall7" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.0612662, 1, 11.998064)
+
+[node name="BreakableWall8" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.0612662, 1, 8.019078)
+
+[node name="BreakableWall9" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -2.0612662, 1, 4.091373)
+
+[node name="BreakableWall25" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.210535, 1, 15.9756775)
+
+[node name="BreakableWall26" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.210535, 1, 11.998064)
+
+[node name="BreakableWall27" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.210535, 1, 8.019078)
+
+[node name="BreakableWall28" parent="LevelPivot" instance=ExtResource("19_wall")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 6.210535, 1, 4.091373)
 
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("2_camera")
