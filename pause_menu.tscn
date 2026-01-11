@@ -1,6 +1,77 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8q4w2x3y501"]
+[gd_scene load_steps=10 format=3 uid="uid://c8q4w2x3y501"]
 
 [ext_resource type="Script" path="res://pause_menu.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://cswx2f5woqd84" path="res://frosted_glass.gdshader" id="2_blur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("2_blur")
+shader_parameter/lod = 2.0
+shader_parameter/tint_color = Color(1, 1, 1, 0.1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blur_bg"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_border"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.6, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0.2, 0.2, 0.3, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.3, 0.3, 0.5, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.1, 0.1, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [node name="PauseMenu" type="CanvasLayer"]
 process_mode = 3
@@ -31,27 +102,72 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer"]
+[node name="Card" type="Control" parent="Control/CenterContainer"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 2
+
+[node name="BlurPanel" type="Panel" parent="Control/CenterContainer/Card"]
+material = SubResource("ShaderMaterial_blur")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blur_bg")
+
+[node name="BorderPanel" type="Panel" parent="Control/CenterContainer/Card"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_border")
+
+[node name="ContentMargin" type="MarginContainer" parent="Control/CenterContainer/Card"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterContainer/Card/ContentMargin"]
 layout_mode = 2
 theme_override_constants/separation = 20
+alignment = 1
 
-[node name="Label" type="Label" parent="Control/CenterContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "PAUSED"
-horizontal_alignment = 1
-
-[node name="ResumeButton" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+[node name="ResumeButton" type="Button" parent="Control/CenterContainer/Card/ContentMargin/VBoxContainer"]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "RESUME"
 
-[node name="RestartButton" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+[node name="RestartButton" type="Button" parent="Control/CenterContainer/Card/ContentMargin/VBoxContainer"]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "RESTART"
 
-[node name="MenuButton" type="Button" parent="Control/CenterContainer/VBoxContainer"]
+[node name="MenuButton" type="Button" parent="Control/CenterContainer/Card/ContentMargin/VBoxContainer"]
 custom_minimum_size = Vector2(200, 60)
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "MAIN MENU"

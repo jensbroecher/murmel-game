@@ -5,9 +5,9 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	
 	# Connect signals
-	var resume_btn = $Control/CenterContainer/VBoxContainer/ResumeButton
-	var restart_btn = $Control/CenterContainer/VBoxContainer/RestartButton
-	var menu_btn = $Control/CenterContainer/VBoxContainer/MenuButton
+	var resume_btn = $Control/CenterContainer/Card/ContentMargin/VBoxContainer/ResumeButton
+	var restart_btn = $Control/CenterContainer/Card/ContentMargin/VBoxContainer/RestartButton
+	var menu_btn = $Control/CenterContainer/Card/ContentMargin/VBoxContainer/MenuButton
 	
 	if resume_btn:
 		if not resume_btn.pressed.is_connected(resume):

@@ -2,8 +2,8 @@ extends CanvasLayer
 
 signal tutorial_completed
 
-@onready var label = $Control/Panel/Label
-@onready var button = $Control/Panel/Button
+@onready var label = $Control/CardContainer/Card/ContentMargin/VBoxContainer/Label
+@onready var button = $Control/CardContainer/Card/ContentMargin/VBoxContainer/Button
 
 var steps = [
 	"Welcome to HardTilt - Marble Run Challenge!\n\nYour goal is to navigate the Marblebot to the spaceship and collect all the diamonds in a stage.\nAvoid falling off the edge.",

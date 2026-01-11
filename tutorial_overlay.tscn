@@ -1,6 +1,77 @@
-[gd_scene load_steps=2 format=3 uid="uid://tutorialoverlay123"]
+[gd_scene load_steps=10 format=3 uid="uid://tutorialoverlay123"]
 
 [ext_resource type="Script" path="res://tutorial_overlay.gd" id="1_script"]
+[ext_resource type="Shader" uid="uid://cswx2f5woqd84" path="res://frosted_glass.gdshader" id="2_blur"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("2_blur")
+shader_parameter/lod = 2.0
+shader_parameter/tint_color = Color(1, 1, 1, 0.1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blur_bg"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_border"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.6, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0.2, 0.2, 0.3, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.3, 0.3, 0.5, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.1, 0.1, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
 [node name="TutorialOverlay" type="CanvasLayer"]
 script = ExtResource("1_script")
@@ -22,48 +93,74 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.392157)
 
-[node name="Panel" type="Panel" parent="Control"]
+[node name="CardContainer" type="CenterContainer" parent="Control"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -300.0
-offset_top = -150.0
-offset_right = 300.0
-offset_bottom = 150.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Control/Panel"]
+[node name="Card" type="Control" parent="Control/CardContainer"]
+custom_minimum_size = Vector2(600, 300)
+layout_mode = 2
+
+[node name="BlurPanel" type="Panel" parent="Control/CardContainer/Card"]
+material = SubResource("ShaderMaterial_blur")
 layout_mode = 1
-anchors_preset = 10
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = 20.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 200.0
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blur_bg")
+
+[node name="BorderPanel" type="Panel" parent="Control/CardContainer/Card"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_border")
+
+[node name="ContentMargin" type="MarginContainer" parent="Control/CardContainer/Card"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CardContainer/Card/ContentMargin"]
+layout_mode = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Label" type="Label" parent="Control/CardContainer/Card/ContentMargin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_font_sizes/font_size = 24
 text = "Tutorial Text Here"
 horizontal_alignment = 1
+vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="Button" type="Button" parent="Control/Panel"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = -70.0
-offset_right = 60.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="Button" type="Button" parent="Control/CardContainer/Card/ContentMargin/VBoxContainer"]
+custom_minimum_size = Vector2(150, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Next"
 
-[connection signal="pressed" from="Control/Panel/Button" to="." method="_on_button_pressed"]
+[connection signal="pressed" from="Control/CardContainer/Card/ContentMargin/VBoxContainer/Button" to="." method="_on_button_pressed"]
