@@ -111,6 +111,7 @@ func spawn_marble():
 		var marble = marble_scene.instantiate()
 		marble.name = "Marble" # Ensure name matches for win condition
 		marble.reset_threshold = -9999.0 # Disable marble's internal reset
+		marble.set_meta("spawn_time", Time.get_ticks_msec())
 		add_child(marble)
 		marble.global_position = start_point.global_position
 		marble.freeze = true # Hold in place initially
@@ -245,18 +246,19 @@ func _on_water_entered(body):
 			# Spawn main ripple (Big)
 			var ripple = ripple_scene.instantiate()
 			ripple.target_scale_size = 2.5
-			add_child(ripple)
-			ripple.global_position = Vector3(body.global_position.x, -20.0, body.global_position.z)
+			# Set position BEFORE adding to tree to ensure particles emit at correct location
+			ripple.position = Vector3(body.global_position.x, -20.0, body.global_position.z)
 			ripple.rotation = Vector3.ZERO
+			add_child(ripple)
 			
 			# Spawn extra smaller ripples
 			for i in range(4):
 				var extra_ripple = ripple_scene.instantiate()
 				extra_ripple.target_scale_size = randf_range(0.2, 0.8)
-				add_child(extra_ripple)
 				var offset = Vector3(randf_range(-0.3, 0.3), 0, randf_range(-0.3, 0.3))
-				extra_ripple.global_position = Vector3(body.global_position.x, -20.0, body.global_position.z) + offset
+				extra_ripple.position = Vector3(body.global_position.x, -20.0, body.global_position.z) + offset
 				extra_ripple.rotation = Vector3.ZERO
+				add_child(extra_ripple)
 		
 		# Play splash sound
 		if sound_gen: sound_gen.play_splash()

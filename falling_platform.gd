@@ -24,8 +24,8 @@ func _physics_process(delta):
 func spawn_splash():
 	if ripple_scene:
 		var ripple = ripple_scene.instantiate()
+		ripple.position = Vector3(global_position.x, -20.0, global_position.z)
 		get_parent().add_child(ripple)
-		ripple.global_position = Vector3(global_position.x, -20.0, global_position.z)
 		
 		# Play splash sound if available
 		var sg = get_node_or_null("/root/Game/SoundGenerator")
