@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://kmy8ylkyn643"]
+[gd_scene load_steps=32 format=3 uid="uid://kmy8ylkyn643"]
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="7_ripple"]
 [ext_resource type="PackedScene" path="res://floor_switch.tscn" id="8_switch"]
 [ext_resource type="PackedScene" path="res://gate.tscn" id="9_gate"]
+[ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="12_1q66l"]
 [ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="13_rocket"]
 [ext_resource type="PackedScene" path="res://falling_platform.tscn" id="14_falling_platform"]
 
@@ -170,7 +171,7 @@ offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 64
-text = "YOU WIN!"
+text = "STAGE CLEARED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -214,7 +215,7 @@ size = Vector3(1, 2, 20)
 material = SubResource("StandardMaterial3D_platform")
 
 [node name="MovingPlatform" parent="LevelPivot" instance=ExtResource("7_platform")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34672546, -5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.46134186, -5.5)
 move_offset = Vector3(0, 0, -9)
 duration = 4.0
 
@@ -228,7 +229,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.28, -0.25, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.72, -0.25, 0)
 
 [node name="FloorSwitch" parent="LevelPivot" instance=ExtResource("8_switch")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2386436, 0.1, -18.159023)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.613999, 0.1, 1.5266771)
 
 [node name="Gate" parent="LevelPivot" instance=ExtResource("9_gate")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3821745, -22)
@@ -262,6 +263,15 @@ material = SubResource("StandardMaterial3D_ji1a0")
 
 [node name="Path3D" type="Path3D" parent="LevelPivot/RampHump"]
 curve = SubResource("Curve3D_xe7wj")
+
+[node name="Diamond1" parent="LevelPivot" instance=ExtResource("12_1q66l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.438137, 1, -0.60258293)
+
+[node name="Diamond2" parent="LevelPivot" instance=ExtResource("12_1q66l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.509015, 2.3569777, -9.831511)
+
+[node name="Diamond3" parent="LevelPivot" instance=ExtResource("12_1q66l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.509015, 0.9721291, -22.438787)
 
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("2_camera")

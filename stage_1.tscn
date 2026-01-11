@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
-[ext_resource type="Texture2D" uid="uid://qwamgguo4e4f" path="res://qwantani_night_puresky_4k.hdr" id="3_hdr"]
+[ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="3_hdr"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="4_marble_scene"]
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="5_game"]
 [ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="6_sound"]
@@ -82,6 +82,7 @@ shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_water")
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
 shader_parameter/time_scale = 0.015
+shader_parameter/uv_scale = 125.0
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_water"]
 size = Vector3(10000, 1, 10000)
@@ -119,6 +120,7 @@ environment = SubResource("Environment_main")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+light_energy = 0.5
 shadow_enabled = true
 
 [node name="HUD" type="Control" parent="."]
@@ -154,7 +156,7 @@ offset_bottom = 50.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 64
-text = "YOU WIN!"
+text = "STAGE CLEARED"
 horizontal_alignment = 1
 vertical_alignment = 1
 

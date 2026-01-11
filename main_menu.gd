@@ -20,6 +20,7 @@ var play_btn: Button
 @onready var spaceship = $BackgroundContainer/SubViewport/Background3D/Spaceship
 @onready var space_girl = $BackgroundContainer/SubViewport/Background3D/SpaceGirl
 @onready var robot_sphere = $BackgroundContainer/SubViewport/Background3D/RobotSphere
+@onready var space_station = $BackgroundContainer/SubViewport/Background3D/SpaceStation
 @onready var neptune = $BackgroundContainer/SubViewport/Background3D/Neptune
 @onready var camera = $BackgroundContainer/SubViewport/Background3D/Camera3D
 @onready var background_image = $BackgroundImage
@@ -274,8 +275,12 @@ func _process(delta):
 	if neptune:
 		neptune.rotate_y(0.001 * delta)
 
+	if space_station:
+		space_station.rotate_y(0.02 * delta)
+		space_station.position.y = 1.0 + sin(Time.get_ticks_msec() * 0.0003) * 0.1
+
 func _on_play_pressed():
-	start_level(GlobalGameState.current_level_index)
+	start_level(0)
 
 func _on_difficulty_toggle_pressed():
 	var new_diff

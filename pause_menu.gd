@@ -32,6 +32,15 @@ func pause():
 	show()
 	get_tree().paused = true
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Animate card
+	var card = $Control/CenterContainer/Card
+	if card:
+		card.scale = Vector2(0.8, 0.8)
+		card.modulate.a = 0.0
+		var tween = create_tween().set_parallel(true)
+		tween.tween_property(card, "scale", Vector2(1.0, 1.0), 0.3).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.tween_property(card, "modulate:a", 1.0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func resume():
 	hide()

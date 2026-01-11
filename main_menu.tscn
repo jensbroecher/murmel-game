@@ -1,11 +1,11 @@
-[gd_scene load_steps=27 format=3 uid="uid://oa1t7v4dhhuu"]
+[gd_scene load_steps=28 format=3 uid="uid://oa1t7v4dhhuu"]
 
 [ext_resource type="Script" uid="uid://djuq5ikhx3aon" path="res://main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://bfqs17371vvpu" path="res://anime girl 3d model/anime girl 3d model.gltf" id="2_girl"]
 [ext_resource type="PackedScene" uid="uid://dhqvabn8eein3" path="res://spacecraft 3d model/spacecraft 3d model.gltf" id="3_ship"]
 [ext_resource type="PackedScene" uid="uid://cuohxb2qa5wx4" path="res://neptune/source/neptune.fbx" id="4_neptune"]
 [ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
-[ext_resource type="Texture2D" uid="uid://qwamgguo4e4f" path="res://qwantani_night_puresky_4k.hdr" id="5_env"]
+[ext_resource type="Texture2D" uid="uid://hfxo2iqiwapd" path="res://kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="5_env"]
 [ext_resource type="Texture2D" uid="uid://o3kvg5qmkmcm" path="res://images/hard tilt title.png" id="5_title"]
 [ext_resource type="PackedScene" uid="uid://cui0cy8hve2cg" path="res://robot sphere.fbx" id="6_robot"]
 [ext_resource type="Texture2D" uid="uid://c0sir83tsh6v2" path="res://images/marble_run_challenge.png" id="7_subtitle"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://b308txc4cav48" path="res://images/checkbox-blank-circle.svg" id="12_check_off"]
 [ext_resource type="Texture2D" uid="uid://c1hb87mjtirj0" path="res://images/toggle-switch.svg" id="13_toggle_on"]
 [ext_resource type="Texture2D" uid="uid://b08fhq2t6dfs3" path="res://images/toggle-switch-off.svg" id="14_toggle_off"]
+[ext_resource type="PackedScene" uid="uid://dt2voxw4x2ao7" path="res://space station.fbx" id="15_station"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("5_env")
@@ -25,7 +26,7 @@ sky_material = SubResource("PanoramaSkyMaterial_env")
 
 [sub_resource type="Environment" id="Environment_glow"]
 background_mode = 2
-background_energy_multiplier = 0.5
+background_energy_multiplier = 0.2
 sky = SubResource("Sky_env")
 ambient_light_source = 3
 reflected_light_source = 2
@@ -146,7 +147,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="BackgroundContainer/SubViewport/Background3D"]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 0, 0)
-light_energy = 0.5
+light_energy = 2.0
 light_specular = 0.5
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="BackgroundContainer/SubViewport/Background3D"]
@@ -165,10 +166,13 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.0806131, 1, 0)
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1.5, -3)
 
 [node name="Neptune" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("4_neptune")]
-transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, -9, 2, -10)
+transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, -24, 10, -40)
 
 [node name="RobotSphere" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("6_robot")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -1.5)
+
+[node name="SpaceStation" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("15_station")]
+transform = Transform3D(8.808496, 2.719106, 3.8751552, -0.2592659, 8.450671, -5.3403106, -4.7268543, 4.603542, 7.514269, -5.377059, -7.78135, -10.097701)
 
 [node name="Title" type="TextureRect" parent="."]
 layout_mode = 1

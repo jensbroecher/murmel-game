@@ -44,7 +44,7 @@ func fade_in_iris(duration: float = 1.0):
 	
 	var tween = create_tween()
 	# Expand radius to 1.5 (open/transparent)
-	tween.tween_method(func(val): iris_material.set_shader_parameter("radius", val), -0.25, 1.5, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
+	tween.tween_method(func(val): iris_material.set_shader_parameter("radius", val), -0.25, 2.0, duration).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(func(): 
 		color_rect.visible = false
 		fade_in_completed.emit()
@@ -55,12 +55,12 @@ func fade_out_iris(duration: float = 1.0):
 	color_rect.visible = true
 	color_rect.color.a = 1.0
 	
-	# Start with radius 1.5 (open/transparent)
-	iris_material.set_shader_parameter("radius", 1.5)
+	# Start with radius 2.0 (open/transparent)
+	iris_material.set_shader_parameter("radius", 2.0)
 	
 	var tween = create_tween()
 	# Shrink radius to -0.25 (fully closed/black considering blur)
-	tween.tween_method(func(val): iris_material.set_shader_parameter("radius", val), 1.5, -0.25, duration).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
+	tween.tween_method(func(val): iris_material.set_shader_parameter("radius", val), 2.0, -0.25, duration).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	tween.tween_callback(func(): 
 		fade_out_completed.emit()
 	)

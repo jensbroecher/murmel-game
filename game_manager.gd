@@ -200,16 +200,40 @@ func show_message(text: String, duration: float = 2.0):
 	label.anchor_top = 0.3 # Slightly above center to not overlap with win label potentially
 	label.anchor_right = 0.5
 	label.anchor_bottom = 0.3
+	label.grow_horizontal = Control.GROW_DIRECTION_BOTH
+	label.grow_vertical = Control.GROW_DIRECTION_BOTH
 	
-	if $HUD:
-		$HUD.add_child(label)
+	if has_node("HUD"):
+		get_node("HUD").add_child(label)
 	else:
-		add_child(label) # Fallback
+		add_child(label)
 	
 	var tween = create_tween()
 	tween.tween_interval(duration)
 	tween.tween_property(label, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(label.queue_free)
+
+func level_complete():
+	show_message("LIFT OFF!", 5.0)
+	
+	# Disable input to prevent tilting during launch
+	if level_pivot and "input_enabled" in level_pivot:
+		level_pivot.input_enabled = false
+	
+	# Wait for rocket to fly up a bit
+	await get_tree().create_timer(3.0).timeout
+	
+	# Iris Close
+	if screen_fader:
+		screen_fader.fade_out_iris(1.5)
+		await screen_fader.fade_out_completed
+	
+	# Finish logic
+	GlobalGameState.complete_level(GlobalGameState.current_level_index, GlobalGameState.get_elapsed_time(), GlobalGameState.lives)
+	GlobalGameState.reset_lives()
+	GlobalGameState.clear_collected()
+	GlobalGameState.show_level_selection_on_load = true
+	get_tree().change_scene_to_file("res://main_menu.tscn")
 
 func _on_finish_trigger_body_entered(body):
 	if body.name == "Marble":
@@ -218,7 +242,7 @@ func _on_finish_trigger_body_entered(body):
 			return
 
 		win_label.visible = true
-		win_label.text = "YOU WIN!\nTime: " + GlobalGameState.get_elapsed_time()
+		win_label.text = "STAGE CLEARED\nTime: " + GlobalGameState.get_elapsed_time()
 		if sound_gen:
 			sound_gen.play_win()
 		print("You Won!")
@@ -227,7 +251,8 @@ func _on_finish_trigger_body_entered(body):
 		# Launch Rocket
 		var rocket = level_pivot.get_node_or_null("Rocket")
 		if rocket and rocket.has_method("launch"):
-			rocket.launch()
+			rocket.launch(body)
+			return # Rocket handles the rest via level_complete()
 		
 		# Despawn Effect
 		_play_despawn_effect(body)
