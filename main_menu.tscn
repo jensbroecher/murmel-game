@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://oa1t7v4dhhuu"]
+[gd_scene load_steps=9 format=3 uid="uid://oa1t7v4dhhuu"]
 
 [ext_resource type="Script" uid="uid://djuq5ikhx3aon" path="res://main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://bfqs17371vvpu" path="res://anime girl 3d model/anime girl 3d model.gltf" id="2_girl"]
@@ -6,6 +6,12 @@
 [ext_resource type="PackedScene" path="res://neptune/source/neptune.fbx" id="4_neptune"]
 [ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
 [ext_resource type="Texture2D" path="res://images/hard tilt title.png" id="5_title"]
+[ext_resource type="Texture2D" path="res://qwantani_night_puresky_4k.hdr" id="5_env"]
+[ext_resource type="ArrayMesh" path="res://robot sphere 3d model.obj" id="6_robot"]
+[ext_resource type="Texture2D" path="res://images/marble challenge subtitle.png" id="7_subtitle"]
+
+[ext_resource type="AudioStream" path="res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3" id="8_hover"]
+[ext_resource type="AudioStream" path="res://sounds/beep-313342.mp3" id="9_click"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
 bg_color = Color(0.2, 0.2, 0.3, 0.8)
@@ -45,15 +51,28 @@ corner_radius_bottom_left = 25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_robot"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+metallic = 1.0
+roughness = 0.1
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
+panorama = ExtResource("5_env")
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("PanoramaSkyMaterial_env")
+
 [sub_resource type="Environment" id="Environment_glow"]
-background_mode = 1
-background_color = Color(0, 0, 0, 0)
-ambient_light_source = 2
-ambient_light_color = Color(0.5, 0.5, 0.7, 1)
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_env")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
 glow_enabled = true
-glow_intensity = 0.5
-glow_strength = 1.0
-glow_bloom = 0.2
+glow_intensity = 0.1
+glow_strength = 0.5
+glow_bloom = 0.0
 glow_blend_mode = 1
 
 [node name="MainMenu" type="Control"]
@@ -97,8 +116,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="BackgroundContainer/SubViewport/Background3D"]
 transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 0, 0)
-light_energy = 1.0
+light_energy = 0.5
 light_specular = 0.5
+
+[node name="ReflectionProbe" type="ReflectionProbe" parent="BackgroundContainer/SubViewport/Background3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 1, 0.5)
+update_mode = 1
+size = Vector3(5, 5, 5)
+enable_shadows = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="BackgroundContainer/SubViewport/Background3D"]
+environment = SubResource("Environment_glow")
 
 [node name="SpaceGirl" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("2_girl")]
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.0806131, 1, 0)
@@ -107,19 +135,38 @@ transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.0806131, 1, 0)
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1.5, -3)
 
 [node name="Neptune" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("4_neptune")]
-transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, -7, 2, -10)
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, -9, 2, -10)
+
+[node name="RobotSphere" type="MeshInstance3D" parent="BackgroundContainer/SubViewport/Background3D"]
+transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 4.0, 0.5, -1.5)
+mesh = ExtResource("6_robot")
+material_override = SubResource("StandardMaterial3D_robot")
 
 [node name="Title" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -300.0
+offset_left = -400.0
 offset_top = 150.0
-offset_right = 300.0
+offset_right = 200.0
 offset_bottom = 350.0
 grow_horizontal = 2
 texture = ExtResource("5_title")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Subtitle" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -250.0
+offset_top = 310.0
+offset_right = 450.0
+offset_bottom = 415.0
+grow_horizontal = 2
+texture = ExtResource("7_subtitle")
 expand_mode = 1
 stretch_mode = 5
 
@@ -305,6 +352,12 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Back"
+
+[node name="HoverSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_hover")
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("9_click")
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/LevelsButton" to="." method="_on_levels_pressed"]

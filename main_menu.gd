@@ -12,13 +12,28 @@ extends Control
 
 @onready var spaceship = $BackgroundContainer/SubViewport/Background3D/Spaceship
 @onready var space_girl = $BackgroundContainer/SubViewport/Background3D/SpaceGirl
+@onready var robot_sphere = $BackgroundContainer/SubViewport/Background3D/RobotSphere
 @onready var neptune = $BackgroundContainer/SubViewport/Background3D/Neptune
+@onready var camera = $BackgroundContainer/SubViewport/Background3D/Camera3D
+@onready var background_image = $BackgroundImage
+
+# Parallax settings
+var initial_camera_pos: Vector3
+var initial_bg_pos: Vector2
+var parallax_intensity_camera = 0.2
+var parallax_intensity_bg = 15.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	update_difficulty_display()
 	setup_level_buttons()
 	setup_controls_menu()
+	
+	if camera:
+		initial_camera_pos = camera.position
+	
+	# Setup background parallax deferred to ensure correct viewport size
+	call_deferred("setup_background_parallax")
 	
 	# Play menu music (Track 0)
 	var music_manager = get_node_or_null("/root/MusicManager")
@@ -37,12 +52,40 @@ func _ready():
 		if child is Button:
 			setup_hover_anim(child)
 
+func setup_background_parallax():
+	if background_image:
+		# Reset anchors to top-left so we can manually control size/position without anchor constraints
+		background_image.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		background_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		
+		# Initial setup
+		var viewport_size = get_viewport_rect().size
+		background_image.size = viewport_size * 1.1
+		background_image.position = (viewport_size - background_image.size) / 2
+		initial_bg_pos = background_image.position
+
 func setup_hover_anim(button: Button):
+	# print("MainMenu: Setting up hover anim for ", button.name)
 	button.pivot_offset = button.custom_minimum_size / 2
-	button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
-	button.mouse_exited.connect(_on_button_mouse_exited.bind(button))
+	if not button.mouse_entered.is_connected(_on_button_mouse_entered.bind(button)):
+		button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
+	if not button.mouse_exited.is_connected(_on_button_mouse_exited.bind(button)):
+		button.mouse_exited.connect(_on_button_mouse_exited.bind(button))
+	
+	# Connect click sound via SoundManager
+	if not button.pressed.is_connected(_on_button_pressed):
+		button.pressed.connect(_on_button_pressed)
+
+func _on_button_pressed():
+	var sound_manager = get_node_or_null("/root/SoundManager")
+	if sound_manager:
+		sound_manager.play_ui_click()
 
 func _on_button_mouse_entered(button: Button):
+	var sound_manager = get_node_or_null("/root/SoundManager")
+	if sound_manager:
+		sound_manager.play_ui_hover()
+
 	var tween = create_tween()
 	tween.tween_property(button, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
@@ -51,6 +94,33 @@ func _on_button_mouse_exited(button: Button):
 	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _process(delta):
+	# Parallax effect
+	var viewport_size = get_viewport_rect().size
+	var mouse_pos = get_viewport().get_mouse_position()
+	
+	# Calculate normalized mouse position (-1 to 1)
+	var norm_mouse_x = (mouse_pos.x / viewport_size.x) * 2.0 - 1.0
+	var norm_mouse_y = (mouse_pos.y / viewport_size.y) * 2.0 - 1.0
+	
+	if camera:
+		var target_pos = initial_camera_pos + Vector3(norm_mouse_x * parallax_intensity_camera, -norm_mouse_y * parallax_intensity_camera, 0)
+		camera.position = camera.position.lerp(target_pos, 5.0 * delta)
+		
+	if background_image:
+		# Continuously update size to handle window resizing
+		var target_size = viewport_size * 1.1
+		background_image.size = target_size
+		
+		# Base position is centered relative to viewport
+		var base_pos = (viewport_size - target_size) / 2
+		
+		# Add parallax offset
+		var parallax_offset = Vector2(-norm_mouse_x * parallax_intensity_bg, -norm_mouse_y * parallax_intensity_bg)
+		
+		# Smoothly interpolate position
+		var target_pos = base_pos + parallax_offset
+		background_image.position = background_image.position.lerp(target_pos, 5.0 * delta)
+
 	if spaceship:
 		spaceship.rotate_y(0.05 * delta)
 		# Add some floating motion
@@ -67,9 +137,15 @@ func _process(delta):
 		# Keep original base Y position of 0.5 (raised from -1.0), add float offset
 		space_girl.position.y = 0.5 + float_y
 		
+	if robot_sphere:
+		var rot_y = 3.8 + sin(Time.get_ticks_msec() * 0.0005) * 0.2
+		robot_sphere.rotation.y = rot_y
+		var float_y = sin(Time.get_ticks_msec() * 0.0015 + 1.0) * 0.08
+		robot_sphere.position.y = 0.5 + float_y
+		
 	# Neptune rotation handled above
 	if neptune:
-		neptune.rotate_y(0.03 * delta)
+		neptune.rotate_y(0.001 * delta)
 
 func _on_play_pressed():
 	start_level(GlobalGameState.current_level_index)
@@ -148,6 +224,8 @@ func setup_level_buttons():
 		
 		if is_unlocked:
 			btn.pressed.connect(func(): start_level(level_id))
+		
+		setup_hover_anim(btn)
 			
 		level_grid.add_child(btn)
 

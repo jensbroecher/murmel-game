@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GlobalGameState="*res://global_game_state.gd"
 MusicManager="*res://music_manager.gd"
+SoundManager="*res://sound_manager.gd"
 
 [physics]
 
