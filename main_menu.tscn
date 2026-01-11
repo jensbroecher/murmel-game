@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
 [ext_resource type="Texture2D" path="res://images/hard tilt title.png" id="5_title"]
 [ext_resource type="Texture2D" path="res://qwantani_night_puresky_4k.hdr" id="5_env"]
-[ext_resource type="ArrayMesh" path="res://robot sphere 3d model.obj" id="6_robot"]
+[ext_resource type="PackedScene" path="res://robot sphere.fbx" id="6_robot"]
 [ext_resource type="Texture2D" path="res://images/marble challenge subtitle.png" id="7_subtitle"]
 
 [ext_resource type="AudioStream" path="res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3" id="8_hover"]
@@ -137,10 +137,8 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1.5, -3)
 [node name="Neptune" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("4_neptune")]
 transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, -9, 2, -10)
 
-[node name="RobotSphere" type="MeshInstance3D" parent="BackgroundContainer/SubViewport/Background3D"]
-transform = Transform3D(0.8, 0, 0, 0, 0.8, 0, 0, 0, 0.8, 4.0, 0.5, -1.5)
-mesh = ExtResource("6_robot")
-material_override = SubResource("StandardMaterial3D_robot")
+[node name="RobotSphere" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("6_robot")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 0.5, -1.5)
 
 [node name="Title" type="TextureRect" parent="."]
 layout_mode = 1
