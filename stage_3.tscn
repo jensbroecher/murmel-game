@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://kmy8ylkyn643"]
+[gd_scene load_steps=31 format=3 uid="uid://kmy8ylkyn643"]
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
@@ -214,7 +214,7 @@ size = Vector3(1, 2, 20)
 material = SubResource("StandardMaterial3D_platform")
 
 [node name="MovingPlatform" parent="LevelPivot" instance=ExtResource("7_platform")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -5.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.34672546, -5.5)
 move_offset = Vector3(0, 0, -9)
 duration = 4.0
 
@@ -228,10 +228,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.28, -0.25, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.72, -0.25, 0)
 
 [node name="FloorSwitch" parent="LevelPivot" instance=ExtResource("8_switch")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.744352, 0.1, -23.323647)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.2386436, 0.1, -18.159023)
 
 [node name="Gate" parent="LevelPivot" instance=ExtResource("9_gate")]
-transform = Transform3D(2.5, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3821745, -22)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.3821745, -22)
 
 [node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -32)
@@ -285,7 +285,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_water")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -18.498894)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
 emitting = false

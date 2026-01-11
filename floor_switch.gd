@@ -17,15 +17,16 @@ func _on_body_entered(body):
 	if body is RigidBody3D:
 		is_pressed = true
 		emit_signal("switch_activated")
-		print("Switch activated!")
+		# print("Switch activated by: ", body.name)
 		
 		# Visual feedback
 		var tween = create_tween()
 		tween.tween_property(mesh, "position:y", -0.05, 0.2)
 		
 		if audio:
-			if audio.stream == null and get_node("/root/Game/SoundGenerator"):
-				var sg = get_node("/root/Game/SoundGenerator")
-				if sg.has_method("generate_switch_melody"):
-					audio.stream = sg.generate_switch_melody()
+			# Always check for SoundGenerator to ensure we get the melody
+			var sg = get_node_or_null("/root/Game/SoundGenerator")
+			if sg and sg.has_method("generate_switch_melody"):
+				audio.stream = sg.generate_switch_melody()
+				
 			audio.play()

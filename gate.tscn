@@ -1,20 +1,22 @@
-[gd_scene load_steps=4 format=3 uid="uid://gate_1"]
+[gd_scene load_steps=5 format=3 uid="uid://gate_1"]
 
 [ext_resource type="Script" path="res://gate.gd" id="1_script"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_gate"]
-size = Vector3(4, 3, 0.5)
+[sub_resource type="BoxMesh" id="BoxMesh_gate_final"]
+size = Vector3(10.5, 1.5, 0.8)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_gate"]
-size = Vector3(4, 3, 0.5)
+[sub_resource type="BoxShape3D" id="BoxShape3D_gate_final"]
+size = Vector3(10.5, 1.5, 0.8)
 
-[node name="Gate" type="AnimatableBody3D"]
+[node name="Gate" type="StaticBody3D"]
+collision_layer = 1
+collision_mask = 1
 script = ExtResource("1_script")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-mesh = SubResource("BoxMesh_gate")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+mesh = SubResource("BoxMesh_gate_final")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-shape = SubResource("BoxShape3D_gate")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+shape = SubResource("BoxShape3D_gate_final")
