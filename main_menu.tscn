@@ -1,17 +1,39 @@
-[gd_scene load_steps=9 format=3 uid="uid://oa1t7v4dhhuu"]
+[gd_scene load_steps=27 format=3 uid="uid://oa1t7v4dhhuu"]
 
 [ext_resource type="Script" uid="uid://djuq5ikhx3aon" path="res://main_menu.gd" id="1_menu"]
 [ext_resource type="PackedScene" uid="uid://bfqs17371vvpu" path="res://anime girl 3d model/anime girl 3d model.gltf" id="2_girl"]
 [ext_resource type="PackedScene" uid="uid://dhqvabn8eein3" path="res://spacecraft 3d model/spacecraft 3d model.gltf" id="3_ship"]
-[ext_resource type="PackedScene" path="res://neptune/source/neptune.fbx" id="4_neptune"]
+[ext_resource type="PackedScene" uid="uid://cuohxb2qa5wx4" path="res://neptune/source/neptune.fbx" id="4_neptune"]
 [ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
-[ext_resource type="Texture2D" path="res://images/hard tilt title.png" id="5_title"]
-[ext_resource type="Texture2D" path="res://qwantani_night_puresky_4k.hdr" id="5_env"]
-[ext_resource type="PackedScene" path="res://robot sphere.fbx" id="6_robot"]
-[ext_resource type="Texture2D" path="res://images/marble challenge subtitle.png" id="7_subtitle"]
+[ext_resource type="Texture2D" uid="uid://qwamgguo4e4f" path="res://qwantani_night_puresky_4k.hdr" id="5_env"]
+[ext_resource type="Texture2D" uid="uid://o3kvg5qmkmcm" path="res://images/hard tilt title.png" id="5_title"]
+[ext_resource type="PackedScene" uid="uid://cui0cy8hve2cg" path="res://robot sphere.fbx" id="6_robot"]
+[ext_resource type="Texture2D" uid="uid://c0sir83tsh6v2" path="res://images/marble_run_challenge.png" id="7_subtitle"]
+[ext_resource type="AudioStream" uid="uid://clw8vi228p1o3" path="res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3" id="8_hover"]
+[ext_resource type="AudioStream" uid="uid://bf457ofb3uh8y" path="res://sounds/beep-313342.mp3" id="9_click"]
+[ext_resource type="Shader" uid="uid://cswx2f5woqd84" path="res://frosted_glass.gdshader" id="10_blur"]
+[ext_resource type="Texture2D" uid="uid://c5jvmyicbf8fc" path="res://images/checkbox-marked-circle.svg" id="11_check_on"]
+[ext_resource type="Texture2D" uid="uid://b308txc4cav48" path="res://images/checkbox-blank-circle.svg" id="12_check_off"]
+[ext_resource type="Texture2D" uid="uid://c1hb87mjtirj0" path="res://images/toggle-switch.svg" id="13_toggle_on"]
+[ext_resource type="Texture2D" uid="uid://b08fhq2t6dfs3" path="res://images/toggle-switch-off.svg" id="14_toggle_off"]
 
-[ext_resource type="AudioStream" path="res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3" id="8_hover"]
-[ext_resource type="AudioStream" path="res://sounds/beep-313342.mp3" id="9_click"]
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
+panorama = ExtResource("5_env")
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("PanoramaSkyMaterial_env")
+
+[sub_resource type="Environment" id="Environment_glow"]
+background_mode = 2
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_env")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 2
+glow_enabled = true
+glow_intensity = 0.1
+glow_strength = 0.5
+glow_blend_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
 bg_color = Color(0.2, 0.2, 0.3, 0.8)
@@ -51,29 +73,37 @@ corner_radius_bottom_left = 25
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_robot"]
-albedo_color = Color(0.8, 0.8, 0.8, 1)
-metallic = 1.0
-roughness = 0.1
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
+shader = ExtResource("10_blur")
+shader_parameter/lod = 2.0
+shader_parameter/tint_color = Color(1, 1, 1, 0.1)
 
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
-panorama = ExtResource("5_env")
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_blur_bg"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
 
-[sub_resource type="Sky" id="Sky_env"]
-sky_material = SubResource("PanoramaSkyMaterial_env")
-
-[sub_resource type="Environment" id="Environment_glow"]
-background_mode = 2
-background_energy_multiplier = 0.5
-sky = SubResource("Sky_env")
-ambient_light_source = 3
-reflected_light_source = 2
-tonemap_mode = 2
-glow_enabled = true
-glow_intensity = 0.1
-glow_strength = 0.5
-glow_bloom = 0.0
-glow_blend_mode = 1
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_border"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.6, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+expand_margin_left = 20.0
+expand_margin_top = 20.0
+expand_margin_right = 20.0
+expand_margin_bottom = 20.0
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -120,7 +150,7 @@ light_energy = 0.5
 light_specular = 0.5
 
 [node name="ReflectionProbe" type="ReflectionProbe" parent="BackgroundContainer/SubViewport/Background3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.0, 1, 0.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0.5)
 update_mode = 1
 size = Vector3(5, 5, 5)
 enable_shadows = true
@@ -138,17 +168,17 @@ transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1.5, -3)
 transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, -9, 2, -10)
 
 [node name="RobotSphere" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("6_robot")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.0, 0.5, -1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -1.5)
 
 [node name="Title" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -400.0
-offset_top = 150.0
-offset_right = 200.0
-offset_bottom = 350.0
+offset_left = -310.0
+offset_top = 168.0
+offset_right = 390.0
+offset_bottom = 418.0
 grow_horizontal = 2
 texture = ExtResource("5_title")
 expand_mode = 1
@@ -159,10 +189,10 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -250.0
-offset_top = 310.0
-offset_right = 450.0
-offset_bottom = 415.0
+offset_left = -270.0
+offset_top = 300.0
+offset_right = 270.0
+offset_bottom = 440.0
 grow_horizontal = 2
 texture = ExtResource("7_subtitle")
 expand_mode = 1
@@ -243,30 +273,47 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -200.0
-offset_right = 250.0
-offset_bottom = 200.0
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="LevelSelectContainer"]
+[node name="Content" type="PanelContainer" parent="LevelSelectContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "Select Level"
-horizontal_alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
 
-[node name="LevelGrid" type="GridContainer" parent="LevelSelectContainer"]
+[node name="Stack" type="MarginContainer" parent="LevelSelectContainer/Content"]
+layout_mode = 2
+
+[node name="BlurPanelBg" type="Panel" parent="LevelSelectContainer/Content/Stack"]
+material = SubResource("ShaderMaterial_blur")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blur_bg")
+
+[node name="BorderPanel" type="Panel" parent="LevelSelectContainer/Content/Stack"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_border")
+
+[node name="LevelList" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="LevelButtonsBox" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack/LevelList"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/h_separation = 20
-theme_override_constants/v_separation = 20
-columns = 2
+theme_override_constants/separation = 40
 
-[node name="BackButton" type="Button" parent="LevelSelectContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="Spacer" type="Control" parent="LevelSelectContainer/Content/Stack/LevelList"]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+
+[node name="BackButton" type="Button" parent="LevelSelectContainer/Content/Stack/LevelList"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Back"
@@ -279,74 +326,119 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -250.0
-offset_top = -200.0
-offset_right = 250.0
-offset_bottom = 200.0
+offset_left = -400.0
+offset_top = -300.0
+offset_right = 400.0
+offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="SettingsContainer"]
+[node name="Content" type="PanelContainer" parent="SettingsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 48
-text = "Settings"
-horizontal_alignment = 1
+theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
 
-[node name="MusicContainer" type="HBoxContainer" parent="SettingsContainer"]
+[node name="Stack" type="MarginContainer" parent="SettingsContainer/Content"]
+layout_mode = 2
+
+[node name="BlurPanelBg" type="Panel" parent="SettingsContainer/Content/Stack"]
+material = SubResource("ShaderMaterial_blur")
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_blur_bg")
+
+[node name="BorderPanel" type="Panel" parent="SettingsContainer/Content/Stack"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_border")
+
+[node name="SettingsList" type="VBoxContainer" parent="SettingsContainer/Content/Stack"]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="MusicContainer" type="HBoxContainer" parent="SettingsContainer/Content/Stack/SettingsList"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="SettingsContainer/MusicContainer"]
+[node name="Label" type="Label" parent="SettingsContainer/Content/Stack/SettingsList/MusicContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Music: "
 
-[node name="MusicCheck" type="CheckBox" parent="SettingsContainer/MusicContainer"]
+[node name="MusicCheck" type="CheckBox" parent="SettingsContainer/Content/Stack/SettingsList/MusicContainer"]
+custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_constants/check_v_offset = 0
+theme_override_icons/checked = ExtResource("11_check_on")
+theme_override_icons/unchecked = ExtResource("12_check_off")
 text = "Enabled"
+icon_alignment = 1
+expand_icon = true
 
-[node name="DifficultyContainer" type="HBoxContainer" parent="SettingsContainer"]
+[node name="DifficultyContainer" type="VBoxContainer" parent="SettingsContainer/Content/Stack/SettingsList"]
+layout_mode = 2
+
+[node name="DifficultyInfo" type="HBoxContainer" parent="SettingsContainer/Content/Stack/SettingsList/DifficultyContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="SettingsContainer/DifficultyContainer"]
+[node name="Label" type="Label" parent="SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/DifficultyInfo"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Difficulty: "
 
-[node name="DifficultyValue" type="Label" parent="SettingsContainer/DifficultyContainer"]
+[node name="DifficultyValue" type="Label" parent="SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/DifficultyInfo"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.8, 0, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Normal"
 
-[node name="ChangeButton" type="Button" parent="SettingsContainer/DifficultyContainer"]
-custom_minimum_size = Vector2(40, 0)
+[node name="ChangeButton" type="Button" parent="SettingsContainer/Content/Stack/SettingsList/DifficultyContainer"]
+custom_minimum_size = Vector2(180, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Change"
 
-[node name="ControlsContainer" type="HBoxContainer" parent="SettingsContainer"]
+[node name="ControlsContainer" type="HBoxContainer" parent="SettingsContainer/Content/Stack/SettingsList"]
 layout_mode = 2
 alignment = 1
 
-[node name="TiltLabel" type="Label" parent="SettingsContainer/ControlsContainer"]
+[node name="TiltLabel" type="Label" parent="SettingsContainer/Content/Stack/SettingsList/ControlsContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 32
 text = "Tilting Stick:"
 
-[node name="TiltStickOption" type="OptionButton" parent="SettingsContainer/ControlsContainer"]
-custom_minimum_size = Vector2(160, 0)
+[node name="TiltStickToggle" type="CheckButton" parent="SettingsContainer/Content/Stack/SettingsList/ControlsContainer"]
+custom_minimum_size = Vector2(300, 60)
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_icons/checked = ExtResource("13_toggle_on")
+theme_override_icons/unchecked = ExtResource("14_toggle_off")
+text = "Left Stick"
+expand_icon = true
 
-[node name="InvertTiltCheck" type="CheckBox" parent="SettingsContainer/ControlsContainer"]
+[node name="InvertTiltCheck" type="CheckBox" parent="SettingsContainer/Content/Stack/SettingsList"]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/icon_max_width = 60
+theme_override_font_sizes/font_size = 32
+theme_override_constants/check_v_offset = 0
+theme_override_icons/checked = ExtResource("11_check_on")
+theme_override_icons/unchecked = ExtResource("12_check_off")
 text = "Invert Tilt"
+icon_alignment = 1
+expand_icon = true
 
-[node name="BackFromSettingsButton" type="Button" parent="SettingsContainer"]
-custom_minimum_size = Vector2(0, 50)
+[node name="Spacer" type="Control" parent="SettingsContainer/Content/Stack/SettingsList"]
+custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
+
+[node name="BackFromSettingsButton" type="Button" parent="SettingsContainer/Content/Stack/SettingsList"]
+custom_minimum_size = Vector2(180, 50)
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 24
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Back"
@@ -361,9 +453,9 @@ stream = ExtResource("9_click")
 [connection signal="pressed" from="VBoxContainer/LevelsButton" to="." method="_on_levels_pressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="LevelSelectContainer/BackButton" to="." method="_on_back_pressed"]
-[connection signal="toggled" from="SettingsContainer/MusicContainer/MusicCheck" to="." method="_on_music_toggled"]
-[connection signal="pressed" from="SettingsContainer/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
-[connection signal="item_selected" from="SettingsContainer/ControlsContainer/TiltStickOption" to="." method="_on_tilt_stick_selected"]
-[connection signal="toggled" from="SettingsContainer/ControlsContainer/InvertTiltCheck" to="." method="_on_invert_tilt_toggled"]
-[connection signal="pressed" from="SettingsContainer/BackFromSettingsButton" to="." method="_on_back_from_settings_pressed"]
+[connection signal="pressed" from="LevelSelectContainer/Content/Stack/LevelList/BackButton" to="." method="_on_back_pressed"]
+[connection signal="toggled" from="SettingsContainer/Content/Stack/SettingsList/MusicContainer/MusicCheck" to="." method="_on_music_toggled"]
+[connection signal="pressed" from="SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
+[connection signal="toggled" from="SettingsContainer/Content/Stack/SettingsList/ControlsContainer/TiltStickToggle" to="." method="_on_tilt_stick_toggled"]
+[connection signal="toggled" from="SettingsContainer/Content/Stack/SettingsList/InvertTiltCheck" to="." method="_on_invert_tilt_toggled"]
+[connection signal="pressed" from="SettingsContainer/Content/Stack/SettingsList/BackFromSettingsButton" to="." method="_on_back_from_settings_pressed"]

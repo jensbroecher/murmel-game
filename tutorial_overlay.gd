@@ -6,10 +6,8 @@ signal tutorial_completed
 @onready var button = $Control/Panel/Button
 
 var steps = [
-	"Welcome to the Tutorial!\n\nYour goal is to navigate the marble to the end of the level.",
-	"Controls:\n\nUse the Left Stick (or touch/drag) to tilt the floor.\nThe marble will roll due to gravity.",
-	"Collect Diamonds for extra score!\n\nAvoid falling off the edge.",
-	"Good luck!"
+	"Welcome to HardTilt - Marble Run Challenge!\n\nYour goal is to navigate the Marblebot to the spaceship and collect all the diamonds in a stage.\nAvoid falling off the edge.",
+	"Controls:\n\nUse the Left Stick (or touch/drag) to tilt the floor.\nThe marble will roll due to gravity. Good luck!"
 ]
 
 var current_step = 0

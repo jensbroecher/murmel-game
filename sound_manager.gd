@@ -25,12 +25,12 @@ func play_sound(sound_path: String, volume_db: float = 0.0):
 		print("SoundManager: Could not load sound: ", sound_path)
 
 func play_ui_hover():
-	# Using the requested file for hover
-	play_sound("res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3", -5.0)
+	# Was click sound, now hover (swapped)
+	play_sound("res://sounds/beep-313342.mp3", -10.0)
 
 func play_ui_click():
-	# Using the requested file for click
-	play_sound("res://sounds/beep-313342.mp3", -5.0)
+	# Was hover sound, now click (swapped)
+	play_sound("res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3", -5.0)
 
 func _play_stream(stream, volume_db):
 	if available.size() > 0:

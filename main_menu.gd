@@ -2,13 +2,20 @@ extends Control
 
 @onready var main_menu = $VBoxContainer
 @onready var level_select = $LevelSelectContainer
-@onready var level_grid = $LevelSelectContainer/LevelGrid
+@onready var level_grid = $LevelSelectContainer/Content/Stack/LevelList/LevelButtonsBox
 @onready var settings_container = $SettingsContainer
 
-@onready var difficulty_label = $SettingsContainer/DifficultyContainer/DifficultyValue
-@onready var tilt_stick_option = $SettingsContainer/ControlsContainer/TiltStickOption
-@onready var invert_tilt_check = $SettingsContainer/ControlsContainer/InvertTiltCheck
-@onready var music_check = $SettingsContainer/MusicContainer/MusicCheck
+@onready var difficulty_label = $SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/DifficultyInfo/DifficultyValue
+@onready var tilt_stick_toggle = $SettingsContainer/Content/Stack/SettingsList/ControlsContainer/TiltStickToggle
+@onready var invert_tilt_check = $SettingsContainer/Content/Stack/SettingsList/InvertTiltCheck
+@onready var music_check = $SettingsContainer/Content/Stack/SettingsList/MusicContainer/MusicCheck
+
+# Button styles
+var btn_normal_style
+var btn_hover_style
+var btn_pressed_style
+var btn_focus_style
+var play_btn: Button
 
 @onready var spaceship = $BackgroundContainer/SubViewport/Background3D/Spaceship
 @onready var space_girl = $BackgroundContainer/SubViewport/Background3D/SpaceGirl
@@ -28,9 +35,65 @@ var parallax_intensity_bg = 15.0
 
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	
+	# Get button styles from the Play button first
+	play_btn = main_menu.get_node_or_null("PlayButton")
+	if play_btn:
+		btn_normal_style = play_btn.get_theme_stylebox("normal")
+		btn_hover_style = play_btn.get_theme_stylebox("hover")
+		btn_pressed_style = play_btn.get_theme_stylebox("pressed")
+		btn_focus_style = play_btn.get_theme_stylebox("focus")
+	
 	update_difficulty_display()
+	
+	# Resize checkbox icons
+	resize_checkbox_icons()
+	
 	setup_level_buttons()
 	setup_controls_menu()
+
+func resize_checkbox_icons():
+	# Manually resize the checkbox and toggle textures to be larger by loading SVGs with scale
+	
+	# Helper to load SVG with scale and color injection
+	var load_svg_custom = func(path: String, scale: float) -> ImageTexture:
+		if not FileAccess.file_exists(path):
+			return null
+			
+		var file = FileAccess.open(path, FileAccess.READ)
+		var svg_text = file.get_as_text()
+		file.close()
+		
+		# Inject white fill if missing (simple heuristic)
+		if not "fill=" in svg_text:
+			svg_text = svg_text.replace("<path", "<path fill=\"white\"")
+		
+		var img = Image.new()
+		var err = img.load_svg_from_string(svg_text, scale)
+		if err != OK:
+			return null
+			
+		return ImageTexture.create_from_image(img)
+	
+	# 1. Resize Checkboxes (Scale 2.0 -> 48x48)
+	var new_checked = load_svg_custom.call("res://images/checkbox-marked-circle.svg", 2.0)
+	var new_unchecked = load_svg_custom.call("res://images/checkbox-blank-circle.svg", 2.0)
+	
+	if new_checked and new_unchecked:
+		if music_check:
+			music_check.add_theme_icon_override("checked", new_checked)
+			music_check.add_theme_icon_override("unchecked", new_unchecked)
+		if invert_tilt_check:
+			invert_tilt_check.add_theme_icon_override("checked", new_checked)
+			invert_tilt_check.add_theme_icon_override("unchecked", new_unchecked)
+
+	# 2. Resize Toggle Switch (Scale 3.0 -> 72x72, keeps it crisp)
+	var new_toggle_on = load_svg_custom.call("res://images/toggle-switch.svg", 3.0)
+	var new_toggle_off = load_svg_custom.call("res://images/toggle-switch-off.svg", 3.0)
+	
+	if tilt_stick_toggle and new_toggle_on and new_toggle_off:
+		tilt_stick_toggle.add_theme_icon_override("checked", new_toggle_on)
+		tilt_stick_toggle.add_theme_icon_override("unchecked", new_toggle_off)
 	
 	if camera:
 		initial_camera_pos = camera.position
@@ -47,19 +110,74 @@ func _ready():
 		_on_levels_pressed()
 		GlobalGameState.show_level_selection_on_load = false
 	
-	# Connect buttons (assuming nodes exist, otherwise will need to connect in editor or code)
-	# For this implementation, I will rely on the scene structure matching this script
+	# Helper to style a button
+	var style_btn = func(btn: Button):
+		if not btn: return
+		if btn_normal_style: btn.add_theme_stylebox_override("normal", btn_normal_style)
+		if btn_hover_style: btn.add_theme_stylebox_override("hover", btn_hover_style)
+		if btn_pressed_style: btn.add_theme_stylebox_override("pressed", btn_pressed_style)
+		if btn_focus_style: btn.add_theme_stylebox_override("focus", btn_focus_style)
+		# Copy other theme properties if needed
+		if play_btn:
+			btn.add_theme_color_override("font_color", play_btn.get_theme_color("font_color"))
+			btn.add_theme_color_override("font_hover_color", play_btn.get_theme_color("font_hover_color"))
+			btn.add_theme_font_size_override("font_size", play_btn.get_theme_font_size("font_size"))
+	
+	# Style Settings buttons
+	var settings_back_btn = settings_container.get_node_or_null("Content/Stack/SettingsList/BackFromSettingsButton")
+	style_btn.call(settings_back_btn)
+	
+	# Style the Change button
+	var change_diff_btn = settings_container.get_node_or_null("Content/Stack/SettingsList/DifficultyContainer/ChangeButton")
+	style_btn.call(change_diff_btn)
+	
+	# Style Level Select Back button
+	var level_back_btn = level_select.get_node_or_null("Content/Stack/LevelList/BackButton")
+	style_btn.call(level_back_btn)
 	
 	# Setup hover animations for main menu buttons
 	for child in main_menu.get_children():
 		if child is Button:
 			setup_hover_anim(child)
+	
+	# Setup hover anims for other buttons
+	if settings_back_btn: setup_hover_anim(settings_back_btn)
+	if level_back_btn: setup_hover_anim(level_back_btn)
+	if change_diff_btn: setup_hover_anim(change_diff_btn)
 
 	# Screen Transition (Iris Open)
 	if ScreenFaderScene:
 		screen_fader = ScreenFaderScene.instantiate()
 		add_child(screen_fader)
 		screen_fader.fade_in_iris(1.5)
+		
+	# Zoom Fade In Animation for Main Menu buttons
+	animate_buttons_intro()
+
+func animate_buttons_intro():
+	# Only animate if main menu is visible (it should be on start)
+	if not main_menu.visible: return
+	
+	var buttons = []
+	for child in main_menu.get_children():
+		if child is Button or child is Control: # Include spacers if any
+			buttons.append(child)
+			
+	# Initial state
+	for btn in buttons:
+		btn.scale = Vector2(0.1, 0.1)
+		btn.modulate.a = 0.0
+		# Reset pivot to center for scaling
+		if btn is Control:
+			btn.pivot_offset = btn.size / 2
+			
+	# Animate
+	var delay = 0.0
+	for btn in buttons:
+		var tween = create_tween()
+		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.5).set_delay(delay).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		tween.parallel().tween_property(btn, "modulate:a", 1.0, 0.3).set_delay(delay)
+		delay += 0.1
 
 func setup_background_parallax():
 	if background_image:
@@ -75,7 +193,7 @@ func setup_background_parallax():
 
 func setup_hover_anim(button: Button):
 	# print("MainMenu: Setting up hover anim for ", button.name)
-	button.pivot_offset = button.custom_minimum_size / 2
+	button.pivot_offset = button.size / 2
 	if not button.mouse_entered.is_connected(_on_button_mouse_entered.bind(button)):
 		button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
 	if not button.mouse_exited.is_connected(_on_button_mouse_exited.bind(button)):
@@ -180,21 +298,42 @@ func update_difficulty_display():
 
 func _on_levels_pressed():
 	main_menu.visible = false
-	level_select.visible = true
+	fade_in_menu(level_select)
 
 func _on_settings_pressed():
 	main_menu.visible = false
-	settings_container.visible = true
+	fade_in_menu(settings_container)
 
 func _on_back_pressed():
-	level_select.visible = false
+	fade_out_menu(level_select)
 	main_menu.visible = true
+	# Re-run animation when returning to main menu? 
+	# User said "zoom fade in the buttons when the main menu loads".
+	# If we just hide/show, it might be nice to re-animate.
+	animate_buttons_intro()
 
 func _on_back_from_settings_pressed():
-	settings_container.visible = false
+	fade_out_menu(settings_container)
 	main_menu.visible = true
+	animate_buttons_intro()
+
+func fade_in_menu(menu_node: Control):
+	menu_node.visible = true
+	menu_node.modulate.a = 0.0
+	var tween = create_tween()
+	tween.tween_property(menu_node, "modulate:a", 1.0, 0.3).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func fade_out_menu(menu_node: Control):
+	var tween = create_tween()
+	tween.tween_property(menu_node, "modulate:a", 0.0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	tween.finished.connect(func(): menu_node.visible = false)
 
 func _on_quit_pressed():
+	# Ensure iris close animation plays before quitting
+	if screen_fader:
+		screen_fader.fade_out_iris(1.0)
+		await screen_fader.fade_out_completed
+		
 	get_tree().quit()
 
 func setup_level_buttons():
@@ -209,49 +348,128 @@ func setup_level_buttons():
 		var level_data = GlobalGameState.levels[level_id]
 		var btn = Button.new()
 		
+		# Configure Button as a container
+		btn.text = "" # No default text
+		btn.custom_minimum_size = Vector2(0, 100) # Slightly taller for two lines
+		
+		# Create VBox for labels
+		var vbox = VBoxContainer.new()
+		vbox.mouse_filter = Control.MOUSE_FILTER_IGNORE # Let clicks pass to button
+		vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+		vbox.anchors_preset = Control.PRESET_FULL_RECT
+		vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
+		vbox.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		vbox.size_flags_vertical = Control.SIZE_EXPAND_FILL
+		
+		btn.add_child(vbox)
+		
 		var is_unlocked = GlobalGameState.is_level_unlocked(level_id)
 		
-		var btn_text = level_data["name"]
+		# 1. Level Name Label (Large, Bold)
+		var name_label = Label.new()
+		name_label.text = level_data["name"]
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.add_theme_font_size_override("font_size", 32)
+		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
+		# Make level name bold
+		var bold_font = FontVariation.new()
+		var sys_font = SystemFont.new()
+		sys_font.font_names = PackedStringArray(["Sans-Serif"])
+		bold_font.set_base_font(sys_font)
+		bold_font.variation_embolden = 1.0
+		name_label.add_theme_font_override("font", bold_font)
+		
+		vbox.add_child(name_label)
+		
+		# 2. Info Label (Small, Regular)
+		var info_label = Label.new()
+		info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		info_label.add_theme_font_size_override("font_size", 18)
+		info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		# Use a lighter color or default
+		info_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1))
+		
+		var info_text = ""
 		
 		if not is_unlocked:
-			btn_text += "\n[LOCKED]"
+			info_text = "[LOCKED]"
 			btn.disabled = true
+			info_label.add_theme_color_override("font_color", Color(0.6, 0.6, 0.6, 1))
 		else:
 			var best_diff = GlobalGameState.get_best_completed_difficulty(level_id)
 			if best_diff != -1:
 				var stats = GlobalGameState.get_stats_for_difficulty(level_id, best_diff)
 				var diff_name = GlobalGameState.get_difficulty_label(best_diff)
 				if stats.has("time") and stats.has("lives"):
-					btn_text += "\nCompleted (%s)\nTime: %s | Lives: %d" % [diff_name, stats["time"], stats["lives"]]
+					info_text = "Completed (%s) - Time: %s | Lives: %d" % [diff_name, stats["time"], stats["lives"]]
 				else:
-					# Fallback for legacy or partial data
-					btn_text += "\nCompleted (%s)" % diff_name
+					info_text = "Completed (%s)" % diff_name
 		
-		btn.text = btn_text
-		btn.custom_minimum_size = Vector2(200, 80)
-		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
+		info_label.text = info_text
+		vbox.add_child(info_label)
+		
+		# Apply styles with extra padding
+		var padding_v = 20
+		
+		if btn_normal_style: 
+			var s = btn_normal_style.duplicate()
+			if s is StyleBoxFlat:
+				s.content_margin_top = padding_v
+				s.content_margin_bottom = padding_v
+			btn.add_theme_stylebox_override("normal", s)
+			
+		if btn_hover_style: 
+			var s = btn_hover_style.duplicate()
+			if s is StyleBoxFlat:
+				s.content_margin_top = padding_v
+				s.content_margin_bottom = padding_v
+			btn.add_theme_stylebox_override("hover", s)
+			
+		if btn_pressed_style: 
+			var s = btn_pressed_style.duplicate()
+			if s is StyleBoxFlat:
+				s.content_margin_top = padding_v
+				s.content_margin_bottom = padding_v
+			btn.add_theme_stylebox_override("pressed", s)
+			
+		if btn_focus_style: 
+			var s = btn_focus_style.duplicate()
+			if s is StyleBoxFlat:
+				s.content_margin_top = padding_v
+				s.content_margin_bottom = padding_v
+			btn.add_theme_stylebox_override("focus", s)
+		
+		# Apply colors from play button if available (we need to get play_btn again or store it)
+		# For simplicity, we can assume hardcoded colors or re-fetch
+		# btn.add_theme_color_override("font_color", Color(0.9, 0.9, 0.9, 1)) # Handled by labels now
 		
 		if is_unlocked:
 			btn.pressed.connect(func(): start_level(level_id))
 		
-		setup_hover_anim(btn)
+		# setup_hover_anim(btn) # Disabled as requested
 			
 		level_grid.add_child(btn)
 
 func setup_controls_menu():
-	if tilt_stick_option:
-		tilt_stick_option.clear()
-		tilt_stick_option.add_item("Left Stick", 0)
-		tilt_stick_option.add_item("Right Stick", 1)
-		tilt_stick_option.selected = 0 if GlobalGameState.tilt_uses_left_stick else 1
+	if tilt_stick_toggle:
+		var is_right = not GlobalGameState.tilt_uses_left_stick
+		tilt_stick_toggle.button_pressed = is_right
+		_update_tilt_toggle_text(is_right)
+		
 	if invert_tilt_check:
 		invert_tilt_check.button_pressed = GlobalGameState.tilt_inverted
 	if music_check:
 		music_check.button_pressed = GlobalGameState.music_enabled
 
-func _on_tilt_stick_selected(index):
-	var use_left = index == 0
-	GlobalGameState.set_tilt_stick(use_left)
+func _on_tilt_stick_toggled(pressed):
+	# pressed = true -> Right Stick (1), false -> Left Stick (0)
+	GlobalGameState.set_tilt_stick(not pressed)
+	_update_tilt_toggle_text(pressed)
+
+func _update_tilt_toggle_text(is_right: bool):
+	if tilt_stick_toggle:
+		tilt_stick_toggle.text = "Right Stick" if is_right else "Left Stick"
 
 func _on_invert_tilt_toggled(pressed):
 	GlobalGameState.set_tilt_inverted(pressed)
@@ -262,7 +480,7 @@ func _on_music_toggled(pressed):
 func start_level(level_id: int):
 	# Optional: Fade out with Iris before starting
 	if screen_fader:
-		screen_fader.fade_out_iris(1.0)
+		screen_fader.fade_out_iris(2.0)
 		await screen_fader.fade_out_completed
 	
 	GlobalGameState.current_level_index = level_id
