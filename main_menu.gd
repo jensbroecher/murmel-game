@@ -17,6 +17,9 @@ extends Control
 @onready var camera = $BackgroundContainer/SubViewport/Background3D/Camera3D
 @onready var background_image = $BackgroundImage
 
+const ScreenFaderScene = preload("res://screen_fader.tscn")
+var screen_fader
+
 # Parallax settings
 var initial_camera_pos: Vector3
 var initial_bg_pos: Vector2
@@ -51,6 +54,12 @@ func _ready():
 	for child in main_menu.get_children():
 		if child is Button:
 			setup_hover_anim(child)
+
+	# Screen Transition (Iris Open)
+	if ScreenFaderScene:
+		screen_fader = ScreenFaderScene.instantiate()
+		add_child(screen_fader)
+		screen_fader.fade_in_iris(1.5)
 
 func setup_background_parallax():
 	if background_image:
@@ -251,6 +260,11 @@ func _on_music_toggled(pressed):
 	GlobalGameState.set_music_enabled(pressed)
 
 func start_level(level_id: int):
+	# Optional: Fade out with Iris before starting
+	if screen_fader:
+		screen_fader.fade_out_iris(1.0)
+		await screen_fader.fade_out_completed
+	
 	GlobalGameState.current_level_index = level_id
 	GlobalGameState.reset_lives()
 	GlobalGameState.clear_collected()
