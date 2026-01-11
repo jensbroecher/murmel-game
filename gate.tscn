@@ -3,10 +3,27 @@
 [ext_resource type="Script" path="res://gate.gd" id="1_script"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_gate_final"]
-size = Vector3(10.5, 1.5, 0.8)
+size = Vector3(10, 2.5, 0.8)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gate_final"]
-size = Vector3(10.5, 1.5, 0.8)
+size = Vector3(10, 2.5, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+transparency = 1
+vertex_color_use_as_albedo = true
+shading_mode = 0
+albedo_color = Color(0.4, 0.8, 1, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_particles"]
+material = SubResource("StandardMaterial3D_particles")
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="Curve" id="Curve_particles"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Gradient" id="Gradient_particles"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
 
 [node name="Gate" type="StaticBody3D"]
 collision_layer = 1
@@ -14,9 +31,26 @@ collision_mask = 1
 script = ExtResource("1_script")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 mesh = SubResource("BoxMesh_gate_final")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
 shape = SubResource("BoxShape3D_gate_final")
+
+[node name="OpenParticles" type="CPUParticles3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.25, 0)
+emitting = false
+amount = 600
+lifetime = 1.5
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("BoxMesh_particles")
+emission_shape = 3
+emission_box_extents = Vector3(5, 1.25, 0.4)
+direction = Vector3(0, 1, 0)
+spread = 20.0
+initial_velocity_min = 2.0
+initial_velocity_max = 4.0
+scale_amount_curve = SubResource("Curve_particles")
+color_ramp = SubResource("Gradient_particles")

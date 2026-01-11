@@ -1,6 +1,60 @@
-[gd_scene load_steps=2 format=3 uid="uid://mainmenu12345"]
+[gd_scene load_steps=8 format=3 uid="uid://oa1t7v4dhhuu"]
 
-[ext_resource type="Script" path="res://main_menu.gd" id="1_menu"]
+[ext_resource type="Script" uid="uid://djuq5ikhx3aon" path="res://main_menu.gd" id="1_menu"]
+[ext_resource type="PackedScene" uid="uid://bfqs17371vvpu" path="res://anime girl 3d model/anime girl 3d model.gltf" id="2_girl"]
+[ext_resource type="PackedScene" uid="uid://dhqvabn8eein3" path="res://spacecraft 3d model/spacecraft 3d model.gltf" id="3_ship"]
+[ext_resource type="PackedScene" path="res://neptune/source/neptune.fbx" id="4_neptune"]
+[ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
+[ext_resource type="Texture2D" path="res://images/hard tilt title.png" id="5_title"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn"]
+bg_color = Color(0.2, 0.2, 0.3, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_pressed"]
+bg_color = Color(0.1, 0.1, 0.2, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_btn_hover"]
+bg_color = Color(0.3, 0.3, 0.5, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+
+[sub_resource type="Environment" id="Environment_glow"]
+background_mode = 1
+background_color = Color(0, 0, 0, 0)
+ambient_light_source = 2
+ambient_light_color = Color(0.5, 0.5, 0.7, 1)
+glow_enabled = true
+glow_intensity = 0.5
+glow_strength = 1.0
+glow_bloom = 0.2
+glow_blend_mode = 1
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -11,14 +65,63 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="BackgroundImage" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.1, 0.1, 0.2, 1)
+texture = ExtResource("4_sky")
+expand_mode = 1
+
+[node name="BackgroundContainer" type="SubViewportContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="BackgroundContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1152, 648)
+render_target_update_mode = 4
+
+[node name="Background3D" type="Node3D" parent="BackgroundContainer/SubViewport"]
+
+[node name="Camera3D" type="Camera3D" parent="BackgroundContainer/SubViewport/Background3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="BackgroundContainer/SubViewport/Background3D"]
+transform = Transform3D(0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, -0.75, 0.433013, 0, 0, 0)
+light_energy = 1.0
+light_specular = 0.5
+
+[node name="SpaceGirl" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("2_girl")]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.0806131, 1, 0)
+
+[node name="Spaceship" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("3_ship")]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1.5, -3)
+
+[node name="Neptune" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("4_neptune")]
+transform = Transform3D(0.015, 0, 0, 0, 0.015, 0, 0, 0, 0.015, -7, 2, -10)
+
+[node name="Title" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -300.0
+offset_top = 150.0
+offset_right = 300.0
+offset_bottom = 350.0
+grow_horizontal = 2
+texture = ExtResource("5_title")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
@@ -27,46 +130,64 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
+offset_left = -75.0
 offset_top = -200.0
-offset_right = 150.0
+offset_right = 75.0
 offset_bottom = 200.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 20
-
-[node name="Title" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 64
-text = "HardTilt - Marble Challenge"
-horizontal_alignment = 1
+theme_override_constants/separation = 35
 
 [node name="Spacer" type="Control" parent="VBoxContainer"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 
 [node name="PlayButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(180, 70)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Play"
 
 [node name="LevelsButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(180, 70)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Levels"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(180, 70)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Settings"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
-custom_minimum_size = Vector2(0, 60)
+custom_minimum_size = Vector2(180, 70)
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Quit"
 
 [node name="LevelSelectContainer" type="VBoxContainer" parent="."]
@@ -102,6 +223,7 @@ columns = 2
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Back"
 
 [node name="SettingsContainer" type="VBoxContainer" parent="."]
@@ -170,8 +292,8 @@ theme_override_font_sizes/font_size = 24
 text = "Tilting Stick:"
 
 [node name="TiltStickOption" type="OptionButton" parent="SettingsContainer/ControlsContainer"]
-layout_mode = 2
 custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
 
 [node name="InvertTiltCheck" type="CheckBox" parent="SettingsContainer/ControlsContainer"]
 layout_mode = 2
@@ -181,15 +303,16 @@ text = "Invert Tilt"
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
+theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Back"
 
 [connection signal="pressed" from="VBoxContainer/PlayButton" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="VBoxContainer/LevelsButton" to="." method="_on_levels_pressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="LevelSelectContainer/BackButton" to="." method="_on_back_pressed"]
 [connection signal="toggled" from="SettingsContainer/MusicContainer/MusicCheck" to="." method="_on_music_toggled"]
 [connection signal="pressed" from="SettingsContainer/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
 [connection signal="item_selected" from="SettingsContainer/ControlsContainer/TiltStickOption" to="." method="_on_tilt_stick_selected"]
 [connection signal="toggled" from="SettingsContainer/ControlsContainer/InvertTiltCheck" to="." method="_on_invert_tilt_toggled"]
 [connection signal="pressed" from="SettingsContainer/BackFromSettingsButton" to="." method="_on_back_from_settings_pressed"]
-[connection signal="pressed" from="LevelSelectContainer/BackButton" to="." method="_on_back_pressed"]

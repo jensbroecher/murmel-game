@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://rocket12345"]
 
 [ext_resource type="Script" uid="uid://ct3axo3ramjwn" path="res://rocket.gd" id="1_rocket"]
-[ext_resource type="PackedScene" uid="uid://bv0h5ymfugbpv" path="res://toy_rocket_4k_free_3d_model_gltf/scene.gltf" id="2_model"]
-[ext_resource type="AudioStream" path="res://sounds/065110_seamless-rocket-booster-roar-amp-crackle-42487.mp3" id="3_sound"]
+[ext_resource type="PackedScene" uid="uid://dhqvabn8eein3" path="res://spacecraft 3d model/spacecraft 3d model.gltf" id="2_model"]
+[ext_resource type="AudioStream" uid="uid://cpvp870eerrjg" path="res://sounds/065110_seamless-rocket-booster-roar-amp-crackle-42487.mp3" id="3_sound"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fire"]
 transparency = 1
@@ -13,8 +13,6 @@ albedo_color = Color(1, 0.5, 0, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_fire"]
 material = SubResource("StandardMaterial3D_fire")
-radius = 0.5
-height = 1.0
 radial_segments = 8
 rings = 4
 
@@ -22,14 +20,12 @@ rings = 4
 script = ExtResource("1_rocket")
 
 [node name="Model" parent="." instance=ExtResource("2_model")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 3.513788, 0)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
 stream = ExtResource("3_sound")
-unit_size = 10.0
 
 [node name="CPUParticles3D" type="CPUParticles3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 emitting = false
 amount = 100
 lifetime = 1.5

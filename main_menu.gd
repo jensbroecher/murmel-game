@@ -10,6 +10,10 @@ extends Control
 @onready var invert_tilt_check = $SettingsContainer/ControlsContainer/InvertTiltCheck
 @onready var music_check = $SettingsContainer/MusicContainer/MusicCheck
 
+@onready var spaceship = $BackgroundContainer/SubViewport/Background3D/Spaceship
+@onready var space_girl = $BackgroundContainer/SubViewport/Background3D/SpaceGirl
+@onready var neptune = $BackgroundContainer/SubViewport/Background3D/Neptune
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	update_difficulty_display()
@@ -27,6 +31,45 @@ func _ready():
 	
 	# Connect buttons (assuming nodes exist, otherwise will need to connect in editor or code)
 	# For this implementation, I will rely on the scene structure matching this script
+	
+	# Setup hover animations for main menu buttons
+	for child in main_menu.get_children():
+		if child is Button:
+			setup_hover_anim(child)
+
+func setup_hover_anim(button: Button):
+	button.pivot_offset = button.custom_minimum_size / 2
+	button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
+	button.mouse_exited.connect(_on_button_mouse_exited.bind(button))
+
+func _on_button_mouse_entered(button: Button):
+	var tween = create_tween()
+	tween.tween_property(button, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _on_button_mouse_exited(button: Button):
+	var tween = create_tween()
+	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _process(delta):
+	if spaceship:
+		spaceship.rotate_y(0.05 * delta)
+		# Add some floating motion
+		spaceship.position.y = 1.5 + sin(Time.get_ticks_msec() * 0.0002) * 0.1
+	
+	if space_girl:
+		# Random-like rotation (using sin waves with different frequencies)
+		# Face camera (approx PI rotation) plus some sway
+		var rot_y = -PI * 0.5 + sin(Time.get_ticks_msec() * 0.0005) * 0.5
+		space_girl.rotation.y = rot_y
+		
+		# Floating motion (offset from spaceship for variety)
+		var float_y = sin(Time.get_ticks_msec() * 0.0008 + 2.0) * 0.15
+		# Keep original base Y position of 0.5 (raised from -1.0), add float offset
+		space_girl.position.y = 0.5 + float_y
+		
+	# Neptune rotation handled above
+	if neptune:
+		neptune.rotate_y(0.03 * delta)
 
 func _on_play_pressed():
 	start_level(GlobalGameState.current_level_index)
@@ -101,6 +144,7 @@ func setup_level_buttons():
 		
 		btn.text = btn_text
 		btn.custom_minimum_size = Vector2(200, 80)
+		btn.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		
 		if is_unlocked:
 			btn.pressed.connect(func(): start_level(level_id))

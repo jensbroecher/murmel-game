@@ -14,9 +14,20 @@ func open():
 	if is_open: return
 	is_open = true
 	
+	# Play particles if they exist
+	if has_node("OpenParticles"):
+		$OpenParticles.emitting = true
+	
 	var tween = create_tween()
 	# IMPORTANT: Sync tween with physics to prevent collision issues during movement
 	tween.set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	
-	# Move down using the exported offset
-	tween.tween_property(self, "position", position + open_offset, duration).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)
+	# Shrink to zero instead of moving down
+	tween.tween_property(self, "scale", Vector3.ZERO, duration).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+	
+	# Disable collision after shrinking
+	tween.tween_callback(func():
+		collision_layer = 0
+		collision_mask = 0
+		visible = false
+	)
