@@ -12,9 +12,9 @@ config_version=5
 
 config/name="HardTilt - Marble Challenge"
 run/main_scene="res://splash_screen.tscn"
-boot_splash/show_image=false
-boot_splash/bg_color=Color(0, 0, 0, 1)
 config/features=PackedStringArray("4.5", "Mobile")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
@@ -30,5 +30,5 @@ common/physics_ticks_per_second=120
 
 [rendering]
 
-environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 renderer/rendering_method="mobile"
+environment/defaults/default_clear_color=Color(0, 0, 0, 1)

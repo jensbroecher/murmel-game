@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://b6w61w1bwwf3e"]
+[gd_scene load_steps=2 format=3 uid="uid://dxbjt6kucjgth"]
 
-[ext_resource type="Script" path="res://splash_screen.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d20dlu17wycsp" path="res://splash_screen.gd" id="1_script"]
 
 [node name="SplashScreen" type="Control"]
 layout_mode = 3
@@ -34,6 +34,6 @@ offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 48
-text = "HARD TILT"
+text = "JABRO Interactive presents"
 horizontal_alignment = 1
 vertical_alignment = 1

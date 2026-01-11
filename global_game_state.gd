@@ -14,13 +14,14 @@ var music_enabled: bool = true
 # Level Management
 var current_level_index: int = 0
 var level_start_time: int = 0
+var timer_active: bool = false
 var show_level_selection_on_load: bool = false
 var level_progress: Dictionary = {}
 var levels: Dictionary = {
-	0: { "name": "Tutorial", "path": "res://stage_0.tscn" },
-	1: { "name": "Loops & Cannons", "path": "res://stage_1.tscn" },
-	2: { "name": "Bumpy", "path": "res://stage_2.tscn" },
-	3: { "name": "Mechanisms", "path": "res://stage_3.tscn" }
+	0: { "name": "Tutorial", "path": "res://stage_0.tscn", "concept_by": "Klaus Bröcher" },
+	1: { "name": "Loops & Cannons", "path": "res://stage_1.tscn", "concept_by": "Jens Bröcher" },
+	2: { "name": "Bumpy", "path": "res://stage_2.tscn", "concept_by": "Jens Bröcher" },
+	3: { "name": "Mechanisms", "path": "res://stage_3.tscn", "concept_by": "Jens Bröcher" }
 }
 
 func _ready():
@@ -48,8 +49,16 @@ func lose_life() -> bool:
 
 func start_level_timer():
 	level_start_time = Time.get_ticks_msec()
+	timer_active = true
+
+func reset_level_timer():
+	level_start_time = 0
+	timer_active = false
 
 func get_elapsed_time() -> String:
+	if not timer_active:
+		return "00:00"
+		
 	var current_time = Time.get_ticks_msec()
 	var elapsed = current_time - level_start_time
 	var seconds = (elapsed / 1000) % 60
@@ -83,9 +92,9 @@ func get_difficulty_name() -> String:
 
 func get_difficulty_description() -> String:
 	match difficulty:
-		Difficulty.EASY: return "Unlimited Lives"
-		Difficulty.NORMAL: return "7 Lives"
-		Difficulty.HARD: return "7 Lives + Reset on Fail"
+		Difficulty.EASY: return "Unlimited Tries"
+		Difficulty.NORMAL: return "7 Tries"
+		Difficulty.HARD: return "7 Tries + Reset on Fail"
 	return ""
 
 func complete_level(level_id: int, time_str: String, lives_left: int):

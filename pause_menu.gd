@@ -12,14 +12,31 @@ func _ready():
 	if resume_btn:
 		if not resume_btn.pressed.is_connected(resume):
 			resume_btn.pressed.connect(resume)
+		setup_button_sounds(resume_btn)
 
 	if restart_btn:
 		if not restart_btn.pressed.is_connected(restart_level):
 			restart_btn.pressed.connect(restart_level)
+		setup_button_sounds(restart_btn)
 
 	if menu_btn:
 		if not menu_btn.pressed.is_connected(go_to_menu):
 			menu_btn.pressed.connect(go_to_menu)
+		setup_button_sounds(menu_btn)
+
+func setup_button_sounds(btn: Button):
+	if not btn.mouse_entered.is_connected(_play_hover_sound):
+		btn.mouse_entered.connect(_play_hover_sound)
+	if not btn.pressed.is_connected(_play_click_sound):
+		btn.pressed.connect(_play_click_sound)
+
+func _play_hover_sound():
+	if SoundManager:
+		SoundManager.play_ui_hover()
+
+func _play_click_sound():
+	if SoundManager:
+		SoundManager.play_ui_click()
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
@@ -51,7 +68,7 @@ func restart_level():
 	resume() # Unpause
 	get_tree().reload_current_scene()
 	# Reset level specific state if needed
-	GlobalGameState.start_level_timer()
+	GlobalGameState.reset_level_timer()
 	GlobalGameState.clear_collected()
 
 func go_to_menu():

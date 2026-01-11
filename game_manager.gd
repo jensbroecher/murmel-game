@@ -8,6 +8,7 @@ const PauseMenuScene = preload("res://pause_menu.tscn")
 
 @onready var win_label = $HUD/WinLabel
 @onready var lives_label = $HUD/LivesLabel
+@onready var time_label = $HUD/TimeLabel
 @onready var start_point = $StartPoint
 @onready var spawn_particles = $StartPoint/SpawnParticles
 @onready var camera_rig = $CameraRig
@@ -19,6 +20,10 @@ var last_hit_time: int = 0
 var total_diamonds: int = 0
 var collected_diamonds: int = 0
 var last_velocity = Vector3.ZERO
+
+func _process(delta):
+	if time_label:
+		time_label.text = GlobalGameState.get_elapsed_time()
 
 func _physics_process(delta):
 	if camera_rig and camera_rig.target_node:
@@ -49,8 +54,7 @@ func _ready():
 	
 	# Start timer if this is the first load of the level (start time is 0)
 	# If start time is not 0, it means we respawned (reload scene), so timer continues
-	if GlobalGameState.level_start_time == 0:
-		GlobalGameState.start_level_timer()
+	# Timer will be started in spawn_marble to exclude tutorial time
 	
 	call_deferred("count_diamonds")
 	
@@ -75,10 +79,16 @@ func _ready():
 		win_label.visible = false
 	
 	update_lives_display()
+	setup_concept_label()
 	
 	if has_node("TutorialOverlay"):
 		var tutorial = get_node("TutorialOverlay")
-		if tutorial.has_signal("tutorial_completed"):
+		
+		# If we are respawning (timer active), skip tutorial
+		if GlobalGameState.timer_active:
+			tutorial.queue_free()
+			spawn_marble()
+		elif tutorial.has_signal("tutorial_completed"):
 			tutorial.tutorial_completed.connect(spawn_marble)
 	else:
 		spawn_marble()
@@ -86,9 +96,39 @@ func _ready():
 func update_lives_display():
 	if lives_label:
 		if GlobalGameState.difficulty == GlobalGameState.Difficulty.EASY:
-			lives_label.text = "Lives: Unlimited"
+			lives_label.text = "Remaining Tries: Unlimited"
 		else:
-			lives_label.text = "Lives: %d" % GlobalGameState.lives
+			lives_label.text = "Remaining Tries: %d" % GlobalGameState.lives
+
+func setup_concept_label():
+	var level_data = GlobalGameState.levels.get(GlobalGameState.current_level_index)
+	if not level_data or not level_data.has("concept_by"):
+		return
+
+	var hud = get_node_or_null("HUD")
+	if hud:
+		var label = Label.new()
+		label.text = "Concept: " + level_data["concept_by"]
+		label.name = "ConceptLabel"
+		
+		# Bottom Right Anchor
+		label.layout_mode = 1 # Anchors
+		label.anchors_preset = Control.PRESET_BOTTOM_RIGHT
+		label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+		label.grow_vertical = Control.GROW_DIRECTION_BEGIN
+		
+		# Margins from bottom right
+		label.offset_left = -400 # Width allowance
+		label.offset_top = -60   # Height allowance
+		label.offset_right = -30 # Right Margin
+		label.offset_bottom = -20 # Bottom Margin
+		
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+		label.add_theme_font_size_override("font_size", 24)
+		label.add_theme_color_override("font_color", Color(1, 1, 1, 0.7))
+		
+		hud.add_child(label)
 
 func spawn_marble():
 	# Pre-position camera
@@ -108,6 +148,10 @@ func spawn_marble():
 	await get_tree().create_timer(1.0).timeout
 	
 	if marble_scene:
+		# Start Timer Here (if not already running)
+		if not GlobalGameState.timer_active:
+			GlobalGameState.start_level_timer()
+
 		var marble = marble_scene.instantiate()
 		marble.name = "Marble" # Ensure name matches for win condition
 		marble.reset_threshold = -9999.0 # Disable marble's internal reset

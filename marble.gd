@@ -9,6 +9,8 @@ var original_collision_scale: Vector3
 
 var is_super_marble: bool = false
 var powerup_timer: Timer
+var wind_tween: Tween
+var wind_active: bool = false
 
 func _ready() -> void:
 	# Enable Continuous Collision Detection (CCD) to prevent tunneling
@@ -36,6 +38,32 @@ func _ready() -> void:
 	powerup_timer.one_shot = true
 	add_child(powerup_timer)
 	powerup_timer.timeout.connect(_on_powerup_timer_timeout)
+
+func _physics_process(delta: float) -> void:
+	var is_airborne = get_contact_count() == 0
+	var wind_player = get_node_or_null("WindPlayer")
+	
+	if wind_player:
+		if is_airborne:
+			if not wind_active:
+				wind_active = true
+				if not wind_player.playing:
+					wind_player.volume_db = -80.0
+					wind_player.play()
+				
+				if wind_tween: wind_tween.kill()
+				wind_tween = create_tween()
+				# Fade in over 1.0 second
+				wind_tween.tween_property(wind_player, "volume_db", 0.0, 1.0)
+		else:
+			if wind_active:
+				wind_active = false
+				
+				if wind_tween: wind_tween.kill()
+				wind_tween = create_tween()
+				# Fade out quickly
+				wind_tween.tween_property(wind_player, "volume_db", -80.0, 0.2)
+				wind_tween.tween_callback(wind_player.stop)
 
 func _process(delta: float) -> void:
 	if global_position.y < reset_threshold:

@@ -34,6 +34,8 @@ var initial_bg_pos: Vector2
 var parallax_intensity_camera = 0.2
 var parallax_intensity_bg = 15.0
 
+var is_loading_level: bool = false
+
 func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
@@ -407,7 +409,7 @@ func setup_level_buttons():
 				var stats = GlobalGameState.get_stats_for_difficulty(level_id, best_diff)
 				var diff_name = GlobalGameState.get_difficulty_label(best_diff)
 				if stats.has("time") and stats.has("lives"):
-					info_text = "Completed (%s) - Time: %s | Lives: %d" % [diff_name, stats["time"], stats["lives"]]
+					info_text = "Completed (%s) - Time: %s | Remaining Tries: %d" % [diff_name, stats["time"], stats["lives"]]
 				else:
 					info_text = "Completed (%s)" % diff_name
 		
@@ -453,8 +455,20 @@ func setup_level_buttons():
 			btn.pressed.connect(func(): start_level(level_id))
 		
 		# setup_hover_anim(btn) # Disabled as requested
+		setup_button_sounds(btn)
 			
 		level_grid.add_child(btn)
+
+func setup_button_sounds(button: Button):
+	if not button.mouse_entered.is_connected(_on_button_mouse_entered_sound_only):
+		button.mouse_entered.connect(_on_button_mouse_entered_sound_only)
+	if not button.pressed.is_connected(_on_button_pressed):
+		button.pressed.connect(_on_button_pressed)
+
+func _on_button_mouse_entered_sound_only():
+	var sound_manager = get_node_or_null("/root/SoundManager")
+	if sound_manager:
+		sound_manager.play_ui_hover()
 
 func setup_controls_menu():
 	if tilt_stick_toggle:
@@ -483,6 +497,10 @@ func _on_music_toggled(pressed):
 	GlobalGameState.set_music_enabled(pressed)
 
 func start_level(level_id: int):
+	if is_loading_level:
+		return
+	is_loading_level = true
+	
 	# Optional: Fade out with Iris before starting
 	if screen_fader:
 		screen_fader.fade_out_iris(2.0)
@@ -491,7 +509,7 @@ func start_level(level_id: int):
 	GlobalGameState.current_level_index = level_id
 	GlobalGameState.reset_lives()
 	GlobalGameState.clear_collected()
-	GlobalGameState.start_level_timer() # Reset timer for new game
+	GlobalGameState.reset_level_timer() # Reset timer for new game (starts on spawn)
 	
 	# Play level music (Offset by 1 so Menu gets track 0)
 	var music_manager = get_node_or_null("/root/MusicManager")
