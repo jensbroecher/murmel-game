@@ -1,7 +1,7 @@
 [gd_scene load_steps=28 format=3 uid="uid://oa1t7v4dhhuu"]
 
 [ext_resource type="Script" uid="uid://djuq5ikhx3aon" path="res://main_menu.gd" id="1_menu"]
-[ext_resource type="PackedScene" uid="uid://bfqs17371vvpu" path="res://anime girl 3d model/anime girl 3d model.gltf" id="2_girl"]
+[ext_resource type="PackedScene" path="res://anime girl 3d model edited.glb" id="2_girl"]
 [ext_resource type="PackedScene" uid="uid://dhqvabn8eein3" path="res://spacecraft 3d model/spacecraft 3d model.gltf" id="3_ship"]
 [ext_resource type="PackedScene" uid="uid://cuohxb2qa5wx4" path="res://neptune/source/neptune.fbx" id="4_neptune"]
 [ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
@@ -163,7 +163,7 @@ environment = SubResource("Environment_glow")
 transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 2.0806131, 1, 0)
 
 [node name="Spaceship" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("3_ship")]
-transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 2.5, 1.5, -3)
+transform = Transform3D(-1.0241454, -3.8666687, 0, 3.8666687, -1.0241454, 0, 0, 0, 4, 2.5, 1.5, -3)
 
 [node name="Neptune" parent="BackgroundContainer/SubViewport/Background3D" instance=ExtResource("4_neptune")]
 transform = Transform3D(0.025, 0, 0, 0, 0.025, 0, 0, 0, 0.025, -24, 10, -40)
@@ -272,25 +272,25 @@ text = "Quit"
 [node name="LevelSelectContainer" type="VBoxContainer" parent="."]
 visible = false
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = -1
 anchor_left = 0.5
-anchor_top = 0.5
+anchor_top = 0.2
 anchor_right = 0.5
-anchor_bottom = 0.5
+anchor_bottom = 0.8
 offset_left = -400.0
-offset_top = -300.0
 offset_right = 400.0
-offset_bottom = 300.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 20
 
 [node name="Content" type="PanelContainer" parent="LevelSelectContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
 
 [node name="Stack" type="MarginContainer" parent="LevelSelectContainer/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="BlurPanelBg" type="Panel" parent="LevelSelectContainer/Content/Stack"]
 material = SubResource("ShaderMaterial_blur")
@@ -301,24 +301,45 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_blur_bg")
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_border")
 
-[node name="LevelList" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack"]
+[node name="LevelContentBox" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack"]
 layout_mode = 2
-theme_override_constants/separation = 20
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="LevelButtonsBox" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack/LevelList"]
+[node name="LevelList" type="ScrollContainer" parent="LevelSelectContainer/Content/Stack/LevelContentBox"]
+custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 2
+
+[node name="LevelMargins" type="MarginContainer" parent="LevelSelectContainer/Content/Stack/LevelContentBox/LevelList"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_right = 30
+
+[node name="LevelButtonsBox" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack/LevelContentBox/LevelList/LevelMargins"]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 40
 
-[node name="Spacer" type="Control" parent="LevelSelectContainer/Content/Stack/LevelList"]
+[node name="Spacer" type="Control" parent="LevelSelectContainer/Content/Stack/LevelContentBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="LevelSelectContainer/Content/Stack/LevelList"]
+[node name="BackButton" type="Button" parent="LevelSelectContainer/Content/Stack/LevelContentBox"]
 custom_minimum_size = Vector2(180, 50)
 layout_mode = 2
 size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.9, 0.9, 0.9, 1)
+theme_override_colors/font_hover_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
+theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
 text = "Back"
 
@@ -340,10 +361,12 @@ theme_override_constants/separation = 20
 
 [node name="Content" type="PanelContainer" parent="SettingsContainer"]
 layout_mode = 2
+size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
 
 [node name="Stack" type="MarginContainer" parent="SettingsContainer/Content"]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="BlurPanelBg" type="Panel" parent="SettingsContainer/Content/Stack"]
 material = SubResource("ShaderMaterial_blur")
@@ -457,7 +480,7 @@ stream = ExtResource("9_click")
 [connection signal="pressed" from="VBoxContainer/LevelsButton" to="." method="_on_levels_pressed"]
 [connection signal="pressed" from="VBoxContainer/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_pressed"]
-[connection signal="pressed" from="LevelSelectContainer/Content/Stack/LevelList/BackButton" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="LevelSelectContainer/Content/Stack/LevelContentBox/BackButton" to="." method="_on_back_pressed"]
 [connection signal="toggled" from="SettingsContainer/Content/Stack/SettingsList/MusicContainer/MusicCheck" to="." method="_on_music_toggled"]
 [connection signal="pressed" from="SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/ChangeButton" to="." method="_on_difficulty_toggle_pressed"]
 [connection signal="toggled" from="SettingsContainer/Content/Stack/SettingsList/ControlsContainer/TiltStickToggle" to="." method="_on_tilt_stick_toggled"]

@@ -2,7 +2,8 @@ extends Control
 
 @onready var main_menu = $VBoxContainer
 @onready var level_select = $LevelSelectContainer
-@onready var level_grid = $LevelSelectContainer/Content/Stack/LevelList/LevelButtonsBox
+@onready var level_grid = $LevelSelectContainer/Content/Stack/LevelContentBox/LevelList/LevelMargins/LevelButtonsBox
+@onready var level_back_btn = $LevelSelectContainer/Content/Stack/LevelContentBox/BackButton
 @onready var settings_container = $SettingsContainer
 
 @onready var difficulty_label = $SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/DifficultyInfo/DifficultyValue
@@ -24,6 +25,8 @@ var play_btn: Button
 @onready var neptune = $BackgroundContainer/SubViewport/Background3D/Neptune
 @onready var camera = $BackgroundContainer/SubViewport/Background3D/Camera3D
 @onready var background_image = $BackgroundImage
+@onready var title = $Title
+@onready var subtitle = $Subtitle
 
 const ScreenFaderScene = preload("res://screen_fader.tscn")
 var screen_fader
@@ -31,8 +34,12 @@ var screen_fader
 # Parallax settings
 var initial_camera_pos: Vector3
 var initial_bg_pos: Vector2
+var initial_title_pos: Vector2
+var initial_subtitle_pos: Vector2
 var parallax_intensity_camera = 0.2
 var parallax_intensity_bg = 15.0
+var parallax_intensity_title = 10.0
+var parallax_intensity_subtitle = 20.0
 
 var is_loading_level: bool = false
 
@@ -102,7 +109,7 @@ func resize_checkbox_icons():
 		initial_camera_pos = camera.position
 	
 	# Setup background parallax deferred to ensure correct viewport size
-	call_deferred("setup_background_parallax")
+	call_deferred("setup_parallax")
 	
 	# Play menu music (Track 0)
 	var music_manager = get_node_or_null("/root/MusicManager")
@@ -135,8 +142,11 @@ func resize_checkbox_icons():
 	style_btn.call(change_diff_btn)
 	
 	# Style Level Select Back button
-	var level_back_btn = level_select.get_node_or_null("Content/Stack/LevelList/BackButton")
-	style_btn.call(level_back_btn)
+	# Force explicit node retrieval to ensure connection
+	var lvl_back = $LevelSelectContainer/Content/Stack/LevelContentBox/BackButton
+	if lvl_back:
+		style_btn.call(lvl_back)
+		setup_hover_anim(lvl_back)
 	
 	# Setup hover animations for main menu buttons
 	for child in main_menu.get_children():
@@ -145,7 +155,6 @@ func resize_checkbox_icons():
 	
 	# Setup hover anims for other buttons
 	if settings_back_btn: setup_hover_anim(settings_back_btn)
-	if level_back_btn: setup_hover_anim(level_back_btn)
 	if change_diff_btn: setup_hover_anim(change_diff_btn)
 
 	# Screen Transition (Iris Open)
@@ -182,7 +191,12 @@ func animate_buttons_intro():
 		tween.parallel().tween_property(btn, "modulate:a", 1.0, 0.3).set_delay(delay)
 		delay += 0.1
 
-func setup_background_parallax():
+func setup_parallax():
+	if title:
+		initial_title_pos = title.position
+	if subtitle:
+		initial_subtitle_pos = subtitle.position
+
 	if background_image:
 		# Reset anchors to top-left so we can manually control size/position without anchor constraints
 		background_image.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -250,6 +264,15 @@ func _process(delta):
 		# Smoothly interpolate position
 		var target_pos = base_pos + parallax_offset
 		background_image.position = background_image.position.lerp(target_pos, 5.0 * delta)
+
+	# UI Parallax (Title and Subtitle)
+	if title:
+		var target_pos = initial_title_pos + Vector2(norm_mouse_x * parallax_intensity_title, norm_mouse_y * parallax_intensity_title)
+		title.position = title.position.lerp(target_pos, 5.0 * delta)
+		
+	if subtitle:
+		var target_pos = initial_subtitle_pos + Vector2(norm_mouse_x * parallax_intensity_subtitle, norm_mouse_y * parallax_intensity_subtitle)
+		subtitle.position = subtitle.position.lerp(target_pos, 5.0 * delta)
 
 	if spaceship:
 		spaceship.rotate_y(0.05 * delta)
@@ -376,7 +399,7 @@ func setup_level_buttons():
 		var name_label = Label.new()
 		name_label.text = level_data["name"]
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		name_label.add_theme_font_size_override("font_size", 32)
+		name_label.add_theme_font_size_override("font_size", 24)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		# Make level name bold
@@ -392,7 +415,7 @@ func setup_level_buttons():
 		# 2. Info Label (Small, Regular)
 		var info_label = Label.new()
 		info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		info_label.add_theme_font_size_override("font_size", 18)
+		info_label.add_theme_font_size_override("font_size", 16)
 		info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		# Use a lighter color or default
 		info_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8, 1))
@@ -417,7 +440,7 @@ func setup_level_buttons():
 		vbox.add_child(info_label)
 		
 		# Apply styles with extra padding
-		var padding_v = 20
+		var padding_v = 30
 		
 		if btn_normal_style: 
 			var s = btn_normal_style.duplicate()

@@ -1,0 +1,305 @@
+[gd_scene load_steps=27 format=3 uid="uid://cdo5led2nywun"]
+
+[ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_kwjo8"]
+[ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="2_tdumi"]
+[ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="3_66w27"]
+[ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="4_dep4y"]
+[ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="5_xd32j"]
+[ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="6_bkemo"]
+[ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="7_fugvh"]
+[ext_resource type="PackedScene" path="res://bumper.tscn" id="8_gcp6j"]
+[ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="9_sq2db"]
+[ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="10_qy2do"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
+panorama = ExtResource("4_dep4y")
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("PanoramaSkyMaterial_env")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_env")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.8, 0.3, 0.3, 1)
+metallic = 0.7
+roughness = 0.2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_34wnn"]
+albedo_color = Color(1, 0.5, 0, 1)
+metallic = 0.5
+roughness = 0.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 2, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
+size = Vector2(10000, 10000)
+
+[sub_resource type="Shader" id="Shader_water"]
+code = "shader_type spatial;
+
+uniform vec4 albedo : source_color = vec4(0.0, 0.2, 0.4, 0.8);
+uniform float metallic : hint_range(0.0, 1.0) = 0.8;
+uniform float roughness : hint_range(0.0, 1.0) = 0.2;
+uniform sampler2D texture_normal;
+uniform sampler2D texture_normal2;
+uniform vec2 wave_direction = vec2(2.0, 0.0);
+uniform vec2 wave_direction2 = vec2(0.0, 1.0);
+uniform float time_scale : hint_range(0.0, 0.2, 0.005) = 0.025;
+
+void fragment() {
+	vec2 time = (TIME * wave_direction) * time_scale;
+	vec2 time2 = (TIME * wave_direction2) * time_scale;
+	
+	vec3 normal_blend = mix(texture(texture_normal, UV * 125.0 + time).rgb, texture(texture_normal2, UV * 125.0 + time2).rgb, 0.5);
+	
+	ALBEDO = albedo.rgb;
+	METALLIC = metallic;
+	ROUGHNESS = roughness;
+	NORMAL_MAP = normal_blend;
+	ALPHA = albedo.a;
+}"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_water"]
+noise_type = 3
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_water"]
+noise = SubResource("FastNoiseLite_water")
+seamless = true
+as_normal_map = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
+render_priority = 0
+shader = SubResource("Shader_water")
+shader_parameter/albedo = Color(0, 0.2, 0.4, 0.8)
+shader_parameter/metallic = 0.8
+shader_parameter/roughness = 0.2
+shader_parameter/texture_normal = SubResource("NoiseTexture2D_water")
+shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_water")
+shader_parameter/wave_direction = Vector2(2, 0)
+shader_parameter/wave_direction2 = Vector2(0, 1)
+shader_parameter/time_scale = 0.015
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
+size = Vector3(10000, 1, 10000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+shading_mode = 0
+albedo_color = Color(0.5, 0.9, 1, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_particles"]
+material = SubResource("StandardMaterial3D_particles")
+radius = 0.06
+height = 0.12
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Curve" id="Curve_particles"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.8), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_particles"]
+offsets = PackedFloat32Array(0, 0.1, 1)
+colors = PackedColorArray(1, 1, 1, 0, 10, 10, 10, 1, 10, 10, 10, 1)
+
+[node name="Game" type="Node3D"]
+script = ExtResource("1_kwjo8")
+marble_scene = ExtResource("2_tdumi")
+ripple_scene = ExtResource("3_66w27")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LivesLabel" type="Label" parent="HUD"]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 32
+text = "Remaining Tries: 7"
+
+[node name="WinLabel" type="Label" parent="HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "STAGE CLEARED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 32
+text = "00:00"
+horizontal_alignment = 2
+
+[node name="SoundGenerator" type="Node" parent="."]
+script = ExtResource("5_xd32j")
+
+[node name="LevelPivot" type="Node3D" parent="."]
+script = ExtResource("6_bkemo")
+
+[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot"]
+use_collision = true
+
+[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
+size = Vector3(24, 2, 24)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(5.427, 0, 0, 0, 1.5, 0, 0, 0, 1.641, -5.202637, 0.023406982, -0.9812031)
+operation = 2
+size = Vector3(3.0058594, 2, 16)
+
+[node name="Groove6" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -14.875, 0, -5)
+operation = 2
+size = Vector3(3.8950195, 2, 16)
+
+[node name="Groove8" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -2.8776832, 0, 14.158872)
+operation = 2
+size = Vector3(3.8950195, 2, 7.4366455)
+
+[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.890961, 0, 5.658105)
+operation = 2
+size = Vector3(6.59021, 2, 2)
+
+[node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.254326, 0, 15.296307)
+operation = 2
+size = Vector3(10.533936, 2, 2)
+
+[node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.19343, 0, -3.288103)
+operation = 2
+size = Vector3(2, 2, 16)
+
+[node name="Groove4" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(0.93671495, -0.35009295, 0, 0.35009295, 0.93671495, 0, 0, 0, 0.33785796, 11.373256, 0.8677814, -9.8060465)
+operation = 2
+size = Vector3(5.3654785, 2, 8.829956)
+
+[node name="Ramp" type="CSGPolygon3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(1.309702, 0, 0, 0, 0.79184085, 0, 0, 0, 1.0401152, -2.2944202, -1.5835817, 0.5740347)
+polygon = PackedVector2Array(0, 0, 4, 2, 4, 0)
+depth = 4.0
+material = SubResource("StandardMaterial3D_34wnn")
+
+[node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -1.5558624)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="Diamond1" parent="LevelPivot" instance=ExtResource("7_fugvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 0.06312299, -4.9262695)
+
+[node name="Diamond2" parent="LevelPivot" instance=ExtResource("7_fugvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.186, -0.2, -12.04)
+
+[node name="Diamond4" parent="LevelPivot" instance=ExtResource("7_fugvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.807542, 0.085258484, 15.089773)
+
+[node name="Diamond6" parent="LevelPivot" instance=ExtResource("7_fugvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.568556, -0.11659622, 6.8145294)
+
+[node name="Diamond5" parent="LevelPivot" instance=ExtResource("7_fugvh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.02866, 0.5415249, 5.3344116)
+
+[node name="Bumper" parent="LevelPivot" instance=ExtResource("8_gcp6j")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, -0.5, 7)
+
+[node name="Bumper2" parent="LevelPivot" instance=ExtResource("8_gcp6j")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -10.004, -0.5, 0.003)
+
+[node name="Bumper3" parent="LevelPivot" instance=ExtResource("8_gcp6j")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -1.6383576, -0.5, -9.252398)
+
+[node name="Rocket" parent="LevelPivot" instance=ExtResource("9_sq2db")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -1.6941223)
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("10_qy2do")
+follow_speed = 5.0
+
+[node name="CameraPivot" type="Node3D" parent="CameraRig"]
+transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
+current = true
+
+[node name="WaterPlane" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+mesh = SubResource("PlaneMesh_water")
+surface_material_override/0 = SubResource("ShaderMaterial_water")
+
+[node name="WaterArea" type="Area3D" parent="WaterPlane"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlane/WaterArea"]
+shape = SubResource("BoxShape3D_water")
+
+[node name="StartPoint" type="Marker3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.926768, 7.682711, -4.4528756)
+
+[node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
+emitting = false
+amount = 800
+one_shot = true
+mesh = SubResource("SphereMesh_particles")
+emission_shape = 1
+emission_sphere_radius = 4.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -10.0
+radial_accel_max = -10.0
+damping_min = 5.0
+damping_max = 5.0
+scale_amount_curve = SubResource("Curve_particles")
+color_ramp = SubResource("Gradient_particles")
+
+[connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]
+[connection signal="body_entered" from="WaterPlane/WaterArea" to="." method="_on_water_entered"]
