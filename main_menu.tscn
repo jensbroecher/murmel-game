@@ -318,7 +318,10 @@ vertical_scroll_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_right = 30
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 20
 
 [node name="LevelButtonsBox" type="VBoxContainer" parent="LevelSelectContainer/Content/Stack/LevelContentBox/LevelList/LevelMargins"]
 layout_mode = 2

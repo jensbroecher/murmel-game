@@ -61,6 +61,12 @@ func _ready():
 	
 	setup_level_buttons()
 	setup_controls_menu()
+	
+	# Apply shiny effect to 3D models
+	call_deferred("apply_shiny_materials")
+	
+	# Defer parallax setup to ensure layout is complete
+	call_deferred("setup_parallax")
 
 func resize_checkbox_icons():
 	# Manually resize the checkbox and toggle textures to be larger by loading SVGs with scale
@@ -101,148 +107,32 @@ func resize_checkbox_icons():
 	var new_toggle_on = load_svg_custom.call("res://images/toggle-switch.svg", 3.0)
 	var new_toggle_off = load_svg_custom.call("res://images/toggle-switch-off.svg", 3.0)
 	
-	if tilt_stick_toggle and new_toggle_on and new_toggle_off:
-		tilt_stick_toggle.add_theme_icon_override("checked", new_toggle_on)
-		tilt_stick_toggle.add_theme_icon_override("unchecked", new_toggle_off)
-	
-	if camera:
-		initial_camera_pos = camera.position
-	
-	# Setup background parallax deferred to ensure correct viewport size
-	call_deferred("setup_parallax")
-	
-	# Play menu music (Track 0)
-	var music_manager = get_node_or_null("/root/MusicManager")
-	if music_manager:
-		music_manager.play_music_for_level(0)
-	
-	if GlobalGameState.show_level_selection_on_load:
-		_on_levels_pressed()
-		GlobalGameState.show_level_selection_on_load = false
-	
-	# Helper to style a button
-	var style_btn = func(btn: Button):
-		if not btn: return
-		if btn_normal_style: btn.add_theme_stylebox_override("normal", btn_normal_style)
-		if btn_hover_style: btn.add_theme_stylebox_override("hover", btn_hover_style)
-		if btn_pressed_style: btn.add_theme_stylebox_override("pressed", btn_pressed_style)
-		if btn_focus_style: btn.add_theme_stylebox_override("focus", btn_focus_style)
-		# Copy other theme properties if needed
-		if play_btn:
-			btn.add_theme_color_override("font_color", play_btn.get_theme_color("font_color"))
-			btn.add_theme_color_override("font_hover_color", play_btn.get_theme_color("font_hover_color"))
-			btn.add_theme_font_size_override("font_size", play_btn.get_theme_font_size("font_size"))
-	
-	# Style Settings buttons
-	var settings_back_btn = settings_container.get_node_or_null("Content/Stack/SettingsList/BackFromSettingsButton")
-	style_btn.call(settings_back_btn)
-	
-	# Style the Change button
-	var change_diff_btn = settings_container.get_node_or_null("Content/Stack/SettingsList/DifficultyContainer/ChangeButton")
-	style_btn.call(change_diff_btn)
-	
-	# Style Level Select Back button
-	# Force explicit node retrieval to ensure connection
-	var lvl_back = $LevelSelectContainer/Content/Stack/LevelContentBox/BackButton
-	if lvl_back:
-		style_btn.call(lvl_back)
-		setup_hover_anim(lvl_back)
-	
-	# Setup hover animations for main menu buttons
-	for child in main_menu.get_children():
-		if child is Button:
-			setup_hover_anim(child)
-	
-	# Setup hover anims for other buttons
-	if settings_back_btn: setup_hover_anim(settings_back_btn)
-	if change_diff_btn: setup_hover_anim(change_diff_btn)
-
-	# Screen Transition (Iris Open)
-	if ScreenFaderScene:
-		screen_fader = ScreenFaderScene.instantiate()
-		add_child(screen_fader)
-		screen_fader.fade_in_iris(1.5)
-		
-	# Zoom Fade In Animation for Main Menu buttons
-	animate_buttons_intro()
-
-func animate_buttons_intro():
-	# Only animate if main menu is visible (it should be on start)
-	if not main_menu.visible: return
-	
-	var buttons = []
-	for child in main_menu.get_children():
-		if child is Button or child is Control: # Include spacers if any
-			buttons.append(child)
-			
-	# Initial state
-	for btn in buttons:
-		btn.scale = Vector2(0.1, 0.1)
-		btn.modulate.a = 0.0
-		# Reset pivot to center for scaling
-		if btn is Control:
-			btn.pivot_offset = btn.size / 2
-			
-	# Animate
-	var delay = 0.0
-	for btn in buttons:
-		var tween = create_tween()
-		tween.tween_property(btn, "scale", Vector2(1.0, 1.0), 0.5).set_delay(delay).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
-		tween.parallel().tween_property(btn, "modulate:a", 1.0, 0.3).set_delay(delay)
-		delay += 0.1
+	if new_toggle_on and new_toggle_off:
+		if tilt_stick_toggle:
+			tilt_stick_toggle.add_theme_icon_override("checked", new_toggle_on)
+			tilt_stick_toggle.add_theme_icon_override("unchecked", new_toggle_off)
 
 func setup_parallax():
+	if camera:
+		initial_camera_pos = camera.position
+		
+	if background_image:
+		background_image.set_anchors_preset(Control.PRESET_TOP_LEFT)
+		background_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		var viewport_size = get_viewport_rect().size
+		background_image.size = viewport_size * 1.1
+		background_image.position = (viewport_size - background_image.size) / 2
+		initial_bg_pos = background_image.position
+		
 	if title:
 		initial_title_pos = title.position
 	if subtitle:
 		initial_subtitle_pos = subtitle.position
 
-	if background_image:
-		# Reset anchors to top-left so we can manually control size/position without anchor constraints
-		background_image.set_anchors_preset(Control.PRESET_TOP_LEFT)
-		background_image.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		
-		# Initial setup
-		var viewport_size = get_viewport_rect().size
-		background_image.size = viewport_size * 1.1
-		background_image.position = (viewport_size - background_image.size) / 2
-		initial_bg_pos = background_image.position
-
-func setup_hover_anim(button: Button):
-	# print("MainMenu: Setting up hover anim for ", button.name)
-	button.pivot_offset = button.size / 2
-	if not button.mouse_entered.is_connected(_on_button_mouse_entered.bind(button)):
-		button.mouse_entered.connect(_on_button_mouse_entered.bind(button))
-	if not button.mouse_exited.is_connected(_on_button_mouse_exited.bind(button)):
-		button.mouse_exited.connect(_on_button_mouse_exited.bind(button))
-	
-	# Connect click sound via SoundManager
-	if not button.pressed.is_connected(_on_button_pressed):
-		button.pressed.connect(_on_button_pressed)
-
-func _on_button_pressed():
-	var sound_manager = get_node_or_null("/root/SoundManager")
-	if sound_manager:
-		sound_manager.play_ui_click()
-
-func _on_button_mouse_entered(button: Button):
-	var sound_manager = get_node_or_null("/root/SoundManager")
-	if sound_manager:
-		sound_manager.play_ui_hover()
-
-	var tween = create_tween()
-	tween.tween_property(button, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
-func _on_button_mouse_exited(button: Button):
-	var tween = create_tween()
-	tween.tween_property(button, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-
 func _process(delta):
-	# Parallax effect
 	var viewport_size = get_viewport_rect().size
 	var mouse_pos = get_viewport().get_mouse_position()
 	
-	# Calculate normalized mouse position (-1 to 1)
 	var norm_mouse_x = (mouse_pos.x / viewport_size.x) * 2.0 - 1.0
 	var norm_mouse_y = (mouse_pos.y / viewport_size.y) * 2.0 - 1.0
 	
@@ -365,6 +255,17 @@ func _on_quit_pressed():
 		await screen_fader.fade_out_completed
 		
 	get_tree().quit()
+
+func animate_buttons_intro():
+	# Simple pop-in animation for main menu buttons
+	var buttons = [play_btn, main_menu.get_node_or_null("LevelsButton"), main_menu.get_node_or_null("SettingsButton"), main_menu.get_node_or_null("QuitButton")]
+	for i in range(buttons.size()):
+		var btn = buttons[i]
+		if btn:
+			btn.pivot_offset = btn.size / 2
+			btn.scale = Vector2.ZERO
+			var tween = create_tween()
+			tween.tween_property(btn, "scale", Vector2.ONE, 0.4).set_delay(i * 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 
 func setup_level_buttons():
 	# Clear existing children if any
@@ -541,3 +442,50 @@ func start_level(level_id: int):
 	
 	var level_path = GlobalGameState.levels[level_id]["path"]
 	get_tree().change_scene_to_file(level_path)
+
+func _on_button_pressed():
+	var sound_manager = get_node_or_null("/root/SoundManager")
+	if sound_manager:
+		sound_manager.play_ui_click()
+
+func apply_shiny_materials():
+	make_node_shiny(spaceship)
+	make_node_shiny(space_girl)
+	make_node_shiny(robot_sphere)
+	make_node_shiny(space_station)
+
+func make_node_shiny(node: Node):
+	if not node:
+		return
+		
+	if node is MeshInstance3D and node.mesh:
+		# Iterate over surfaces
+		for i in range(node.mesh.get_surface_count()):
+			var mat = node.get_active_material(i)
+			if mat:
+				# Duplicate to ensure uniqueness and not affect original resources
+				# We always duplicate to apply overrides safely
+				mat = mat.duplicate()
+				node.set_surface_override_material(i, mat)
+				
+				if mat is BaseMaterial3D:
+					mat.roughness = 0.15
+					mat.metallic = 0.9
+					mat.emission_enabled = true
+					mat.emission = Color(0.1, 0.1, 0.1) # Subtle glow
+					mat.emission_energy_multiplier = 0.5
+			else:
+				# If no material found (unlikely for imported meshes), try to get from mesh
+				mat = node.mesh.surface_get_material(i)
+				if mat:
+					mat = mat.duplicate()
+					node.set_surface_override_material(i, mat)
+					if mat is BaseMaterial3D:
+						mat.roughness = 0.15
+						mat.metallic = 0.9
+						mat.emission_enabled = true
+						mat.emission = Color(0.1, 0.1, 0.1) # Subtle glow
+						mat.emission_energy_multiplier = 0.5
+	
+	for child in node.get_children():
+		make_node_shiny(child)
