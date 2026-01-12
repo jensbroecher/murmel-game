@@ -109,6 +109,10 @@ func _input(event):
 		var relative_x = event.relative.x
 		var relative_y = event.relative.y
 		
+		if GlobalGameState.tilt_inverted:
+			relative_x = -relative_x
+			relative_y = -relative_y
+		
 		# Rotate input based on camera angle if available
 		if camera_rig and "pivot" in camera_rig:
 			# Get camera pivot Y rotation

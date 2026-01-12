@@ -7,6 +7,8 @@ extends Control
 @onready var settings_container = $SettingsContainer
 
 @onready var difficulty_label = $SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/DifficultyInfo/DifficultyValue
+@onready var change_difficulty_btn = $SettingsContainer/Content/Stack/SettingsList/DifficultyContainer/ChangeButton
+@onready var settings_back_btn = $SettingsContainer/Content/Stack/SettingsList/BackFromSettingsButton
 @onready var tilt_stick_toggle = $SettingsContainer/Content/Stack/SettingsList/ControlsContainer/TiltStickToggle
 @onready var invert_tilt_check = $SettingsContainer/Content/Stack/SettingsList/InvertTiltCheck
 @onready var music_check = $SettingsContainer/Content/Stack/SettingsList/MusicContainer/MusicCheck
@@ -59,8 +61,21 @@ func _ready():
 	# Resize checkbox icons
 	resize_checkbox_icons()
 	
+	# Setup sounds for main menu buttons
+	for child in main_menu.get_children():
+		if child is Button:
+			setup_button_sounds(child)
+	
 	setup_level_buttons()
 	setup_controls_menu()
+	
+	# Setup sounds for other buttons
+	if level_back_btn:
+		setup_button_sounds(level_back_btn)
+	if change_difficulty_btn:
+		setup_button_sounds(change_difficulty_btn)
+	if settings_back_btn:
+		setup_button_sounds(settings_back_btn)
 	
 	# Apply shiny effect to 3D models
 	call_deferred("apply_shiny_materials")
