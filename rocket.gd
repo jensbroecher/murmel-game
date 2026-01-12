@@ -59,6 +59,11 @@ func launch(marble_body = null):
 	# Camera Follow and Level Completion
 	var game_manager = get_tree().current_scene
 	if game_manager:
+		# Stop rolling sound
+		var sound_gen = game_manager.get_node_or_null("SoundGenerator")
+		if sound_gen:
+			sound_gen.set_marble(null)
+
 		# Find CameraRig
 		var camera_rig = game_manager.get_node_or_null("CameraRig")
 		if camera_rig:

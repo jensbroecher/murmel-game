@@ -16,6 +16,9 @@ material = SubResource("StandardMaterial3D_fire")
 radial_segments = 8
 rings = 4
 
+[sub_resource type="Gradient" id="Gradient_exhaust"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_trigger"]
 height = 8.0
 radius = 2.5
@@ -42,3 +45,4 @@ initial_velocity_max = 10.0
 scale_amount_min = 0.5
 scale_amount_max = 2.0
 color = Color(1, 0.6, 0.2, 1)
+color_ramp = SubResource("Gradient_exhaust")
