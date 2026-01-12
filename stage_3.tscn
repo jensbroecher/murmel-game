@@ -242,6 +242,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.28, -0.25, 0)
 [node name="FallingPlatform3" parent="LevelPivot" instance=ExtResource("14_falling_platform")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.72, -0.25, 0)
 
+[node name="FallingPlatform4" parent="LevelPivot" instance=ExtResource("14_falling_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.84, -0.25, 1.4552099)
+
+[node name="FallingPlatform5" parent="LevelPivot" instance=ExtResource("14_falling_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.28, -0.25, 1.4552099)
+
+[node name="FallingPlatform6" parent="LevelPivot" instance=ExtResource("14_falling_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.72, -0.25, 1.4552099)
+
 [node name="FloorSwitch" parent="LevelPivot" instance=ExtResource("8_switch")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.613999, 0.1, 1.5266771)
 

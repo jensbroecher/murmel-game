@@ -46,6 +46,13 @@ var parallax_intensity_subtitle = 20.0
 var is_loading_level: bool = false
 
 func _ready():
+	# Instantiate and add ScreenFader
+	screen_fader = ScreenFaderScene.instantiate()
+	add_child(screen_fader)
+	
+	# Start with iris opening animation
+	screen_fader.fade_in_iris(1.5)
+	
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	
 	# Get button styles from the Play button first
