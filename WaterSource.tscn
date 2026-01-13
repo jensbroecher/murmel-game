@@ -1,6 +1,5 @@
-[gd_scene load_steps=4 format=3 uid="uid://cvnsxsg5cd4ti"]
+[gd_scene load_steps=3 format=3 uid="uid://cvnsxsg5cd4ti"]
 
-[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="1_mat"]
 [ext_resource type="Script" uid="uid://b6if3phax11ph" path="res://water_spawner.gd" id="2_spawner"]
 [ext_resource type="PackedScene" uid="uid://waterdrop123" path="res://WaterDrop.tscn" id="3_drop"]
 
@@ -11,5 +10,5 @@ script = ExtResource("2_spawner")
 drop_scene = ExtResource("3_drop")
 spawn_interval = 0.02
 spread = 0.1
-max_drops = 600
+max_drops = 5000
 fountain_force = 10.0
