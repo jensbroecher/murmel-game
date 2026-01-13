@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://watermat123"]
+
+[ext_resource type="Shader" uid="uid://5dfhax3ieboe" path="res://water.gdshader" id="1_shader"]
+[ext_resource type="Texture2D" uid="uid://cxr1td28yeoba" path="res://WaterNoise.tres" id="2_noise"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_shader")
+shader_parameter/albedo = Color(0, 0.2, 0.4, 0.8)
+shader_parameter/metallic = 0.8
+shader_parameter/roughness = 0.2
+shader_parameter/texture_normal = ExtResource("2_noise")
+shader_parameter/texture_normal2 = ExtResource("2_noise")
+shader_parameter/wave_direction = Vector2(2, 0)
+shader_parameter/wave_direction2 = Vector2(0, 1)
+shader_parameter/time_scale = 0.015

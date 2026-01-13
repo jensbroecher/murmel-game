@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://cvnsxsg5cd4ti"]
+
+[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="1_mat"]
+[ext_resource type="Script" path="res://water_spawner.gd" id="2_spawner"]
+[ext_resource type="PackedScene" uid="uid://waterdrop123" path="res://WaterDrop.tscn" id="3_drop"]
+
+[node name="WaterSource" type="Node3D"]
+
+[node name="WaterSpawner" type="Node3D" parent="."]
+script = ExtResource("2_spawner")
+drop_scene = ExtResource("3_drop")
+spawn_interval = 0.02
+spread = 0.3
+
+[node name="SourceMesh" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+size = Vector3(2, 1, 2)
+material = ExtResource("1_mat")

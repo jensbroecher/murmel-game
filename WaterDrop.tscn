@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://waterdrop123"]
+
+[ext_resource type="Script" path="res://water_drop.gd" id="1_script"]
+[ext_resource type="Material" uid="uid://waterdropmat" path="res://WaterDropMaterial.tres" id="2_mat"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_drop"]
+material = ExtResource("2_mat")
+radius = 0.15
+height = 0.3
+radial_segments = 16
+rings = 8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_drop"]
+radius = 0.15
+
+[node name="WaterDrop" type="RigidBody3D"]
+collision_layer = 256
+collision_mask = 1
+mass = 0.1
+physics_material_override = null
+script = ExtResource("1_script")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_drop")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_drop")
