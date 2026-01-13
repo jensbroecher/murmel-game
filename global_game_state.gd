@@ -22,7 +22,7 @@ var levels: Dictionary = {
 	1: { "name": "Loops & Cannons", "path": "res://stage_1.tscn", "concept_by": "Jens Bröcher" },
 	2: { "name": "Bumpy", "path": "res://stage_2.tscn", "concept_by": "Jens Bröcher" },
 	3: { "name": "Mechanisms", "path": "res://stage_3.tscn", "concept_by": "Jens Bröcher" },
-	4: { "name": "Long Jump", "path": "res://stage_4.tscn", "concept_by": "Jens Bröcher" }
+	4: { "name": "Cascade", "path": "res://stage_4.tscn", "concept_by": "Jens Bröcher" }
 }
 
 func _ready():

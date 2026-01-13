@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 			if vec_len > gamepad_deadzone:
 				var relative_x = ax_x
 				var relative_y = ax_y
-				if camera_rig and "pivot" in camera_rig:
+				if camera_rig and "pivot" in camera_rig and camera_rig.pivot:
 					var cam_y_rot = camera_rig.pivot.rotation.y
 					var rotated_x = relative_x * cos(cam_y_rot) - relative_y * sin(cam_y_rot)
 					var rotated_y = relative_x * sin(cam_y_rot) + relative_y * cos(cam_y_rot)
@@ -87,7 +87,7 @@ func _input(event):
 			var relative_x = event.relative.x
 			var relative_y = event.relative.y
 			
-			if camera_rig and "pivot" in camera_rig:
+			if camera_rig and "pivot" in camera_rig and camera_rig.pivot:
 				var cam_y_rot = camera_rig.pivot.rotation.y
 				var rotated_x = relative_x * cos(cam_y_rot) - relative_y * sin(cam_y_rot)
 				var rotated_y = relative_x * sin(cam_y_rot) + relative_y * cos(cam_y_rot)

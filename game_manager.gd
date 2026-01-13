@@ -316,7 +316,8 @@ func _on_water_entered(body):
 			var ripple = ripple_scene.instantiate()
 			ripple.target_scale_size = 2.5
 			# Set position BEFORE adding to tree to ensure particles emit at correct location
-			ripple.position = Vector3(body.global_position.x, -20.0, body.global_position.z)
+			# Use body position for Y (water surface)
+			ripple.position = Vector3(body.global_position.x, body.global_position.y, body.global_position.z)
 			ripple.rotation = Vector3.ZERO
 			add_child(ripple)
 			
@@ -325,7 +326,7 @@ func _on_water_entered(body):
 				var extra_ripple = ripple_scene.instantiate()
 				extra_ripple.target_scale_size = randf_range(0.2, 0.8)
 				var offset = Vector3(randf_range(-0.3, 0.3), 0, randf_range(-0.3, 0.3))
-				extra_ripple.position = Vector3(body.global_position.x, -20.0, body.global_position.z) + offset
+				extra_ripple.position = Vector3(body.global_position.x, body.global_position.y, body.global_position.z) + offset
 				extra_ripple.rotation = Vector3.ZERO
 				add_child(extra_ripple)
 		

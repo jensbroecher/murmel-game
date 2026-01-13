@@ -1,11 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://elevator123"]
 
 [ext_resource type="Script" path="res://elevator.gd" id="1_script"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_elevator"]
-albedo_color = Color(0.3, 0.3, 0.3, 1)
-metallic = 0.8
-roughness = 0.4
+[ext_resource type="Material" uid="uid://elevatormat123" path="res://ElevatorMaterial.tres" id="2_mat"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(6, 1.0, 6)
@@ -27,22 +23,22 @@ sync_to_physics = true
 
 [node name="FloorMesh" type="CSGBox3D" parent="."]
 size = Vector3(6, 1.0, 6)
-material = SubResource("StandardMaterial3D_elevator")
+material = ExtResource("2_mat")
 
 [node name="WallX1" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -2.75)
 size = Vector3(6, 2, 0.5)
-material = SubResource("StandardMaterial3D_elevator")
+material = ExtResource("2_mat")
 
 [node name="WallX2" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 2.75)
 size = Vector3(6, 2, 0.5)
-material = SubResource("StandardMaterial3D_elevator")
+material = ExtResource("2_mat")
 
 [node name="WallZ2" type="CSGBox3D" parent="."]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 2.75, 1.5, 0)
 size = Vector3(6, 2, 0.5)
-material = SubResource("StandardMaterial3D_elevator")
+material = ExtResource("2_mat")
 
 [node name="CollisionFloor" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_floor")
@@ -70,7 +66,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.75, -0.5, 0)
 
 [node name="DoorMesh" type="CSGBox3D" parent="Door"]
 size = Vector3(0.5, 2, 6)
-material = SubResource("StandardMaterial3D_elevator")
+material = ExtResource("2_mat")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Door"]
 shape = SubResource("BoxShape3D_door")
