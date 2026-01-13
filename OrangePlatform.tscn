@@ -1,0 +1,29 @@
+[gd_scene load_steps=3 format=3 uid="uid://cftwhjua3qjji"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
+albedo_color = Color(1, 0.5, 0, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wall"]
+albedo_color = Color(0.8, 0.4, 0, 1)
+
+[node name="OrangePlatform" type="CSGCombiner3D"]
+use_collision = true
+
+[node name="Floor" type="CSGBox3D" parent="."]
+size = Vector3(10, 1, 10)
+material = SubResource("StandardMaterial3D_orange")
+
+[node name="Wall1" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -4.5)
+size = Vector3(10, 2, 1)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall2" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -4.5, 1.5, 0)
+size = Vector3(10, 2, 1)
+material = SubResource("StandardMaterial3D_wall")
+
+[node name="Wall3" type="CSGBox3D" parent="."]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 4.5, 1.5, 0)
+size = Vector3(10, 2, 1)
+material = SubResource("StandardMaterial3D_wall")

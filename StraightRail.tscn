@@ -1,0 +1,52 @@
+[gd_scene load_steps=5 format=3 uid="uid://straight_rail"]
+
+[ext_resource type="Script" path="res://magnetic_rails.gd" id="1_magnet"]
+
+[sub_resource type="Curve3D" id="Curve3D_straight"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, -20, 20),
+"tilts": PackedFloat32Array(0.0, 0.0)
+}
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_strength"]
+_data = [Vector2(0, 0.02), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_steel"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+metallic = 1.0
+roughness = 0.1
+
+[node name="StraightRail" type="Path3D"]
+curve = SubResource("Curve3D_straight")
+script = ExtResource("1_magnet")
+strength_curve = SubResource("Curve_strength")
+
+[node name="RailLeft" type="CSGPolygon3D" parent="."]
+polygon = PackedVector2Array(-0.25, 0.0, -0.27, 0.07, -0.32, 0.09, -0.38, 0.07, -0.4, 0.0, -0.38, -0.07, -0.32, -0.09, -0.27, -0.07)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+smooth_faces = true
+material = SubResource("StandardMaterial3D_steel")
+use_collision = true
+
+[node name="RailRight" type="CSGPolygon3D" parent="."]
+polygon = PackedVector2Array(0.25, 0.0, 0.27, 0.07, 0.32, 0.09, 0.38, 0.07, 0.4, 0.0, 0.38, -0.07, 0.32, -0.09, 0.27, -0.07)
+mode = 2
+path_node = NodePath("..")
+path_interval_type = 0
+path_interval = 0.5
+path_simplify_angle = 0.0
+path_rotation = 2
+path_local = true
+path_continuous_u = true
+smooth_faces = true
+material = SubResource("StandardMaterial3D_steel")
+use_collision = true

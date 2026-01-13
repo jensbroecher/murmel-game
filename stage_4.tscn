@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://cdo5led2nywun"]
+[gd_scene load_steps=26 format=3 uid="uid://cdo5led2nywun"]
 
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_kwjo8"]
 [ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="4_dep4y"]
@@ -8,6 +8,8 @@
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="10_qy2do"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="11_marble"]
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="12_ripple"]
+[ext_resource type="PackedScene" path="res://OrangePlatform.tscn" id="13_platform"]
+[ext_resource type="PackedScene" path="res://Elevator.tscn" id="15_elevator"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("4_dep4y")
@@ -109,6 +111,11 @@ script = ExtResource("1_kwjo8")
 marble_scene = ExtResource("11_marble")
 ripple_scene = ExtResource("12_ripple")
 
+[node name="Elevator" parent="." instance=ExtResource("15_elevator")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.368402, -0.5, 10.480002)
+move_offset = Vector3(0, 30, 0)
+duration = 8.0
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_main")
 
@@ -182,13 +189,25 @@ size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
 
 [node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -1.5558624)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.39093, 0, -10.947969)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
 shape = SubResource("BoxShape3D_trigger")
 
 [node name="Rocket" parent="LevelPivot" instance=ExtResource("9_sq2db")]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -1.6941223)
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -9.307762, -1.3467139, -11.086229)
+
+[node name="StartPlatform" parent="LevelPivot" instance=ExtResource("13_platform")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5412331, 7.022114, 4.701974)
+
+[node name="MidPlatform1" parent="LevelPivot" instance=ExtResource("13_platform")]
+transform = Transform3D(0.23247787, 0, -0.9726017, 0, 1, 0, 0.9726017, 0, 0.23247787, 9.4933815, 16.756063, 10.929058)
+
+[node name="MidPlatform2" parent="LevelPivot" instance=ExtResource("13_platform")]
+transform = Transform3D(-0.95924985, 0, -0.28255916, 0, 1, 0, 0.28255916, 0, -0.95924985, -1.9999151, 2.356408, 14.290678)
+
+[node name="MidPlatform3" parent="LevelPivot" instance=ExtResource("13_platform")]
+transform = Transform3D(-0.960206, 0, -0.27929288, 0, 1, 0, 0.27929288, 0, -0.960206, 0.97894096, 12.212257, 13.014733)
 
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("10_qy2do")
@@ -212,7 +231,7 @@ surface_material_override/0 = SubResource("ShaderMaterial_water")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8.592045, 7.682711, -4.4528756)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.235104, 21.457857, 11.539152)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
 emitting = false
