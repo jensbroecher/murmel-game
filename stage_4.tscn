@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cdo5led2nywun"]
+[gd_scene load_steps=28 format=3 uid="uid://cdo5led2nywun"]
 
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_kwjo8"]
 [ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="4_dep4y"]
@@ -10,10 +10,13 @@
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="12_ripple"]
 [ext_resource type="PackedScene" uid="uid://cftwhjua3qjji" path="res://CascadePlatform.tscn" id="13_platform"]
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="13_xd32j"]
+[ext_resource type="PackedScene" uid="uid://bgmn6gss2s6qd" path="res://futuristic island city 3d model.fbx" id="14_bkemo"]
 [ext_resource type="PackedScene" uid="uid://elevator123" path="res://Elevator.tscn" id="15_elevator"]
 [ext_resource type="PackedScene" uid="uid://cvnsxsg5cd4ti" path="res://WaterSource.tscn" id="16_spring"]
 [ext_resource type="Material" uid="uid://jd7fjt1s5sa1" path="res://ElevatorMaterial.tres" id="17_elev_mat"]
+[ext_resource type="PackedScene" uid="uid://cuv5esd8iajl7" path="res://futuristic yacht 3d model.fbx" id="17_gcp6j"]
 [ext_resource type="AudioStream" uid="uid://b46wvlexhay8q" path="res://sounds/water-fountain-75681.mp3" id="17_sound"]
+[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="18_water_mat"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("4_dep4y")
@@ -32,52 +35,6 @@ size = Vector3(4, 2, 4)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 size = Vector2(10000, 10000)
-
-[sub_resource type="Shader" id="Shader_water"]
-code = "shader_type spatial;
-
-uniform vec4 albedo : source_color = vec4(0.0, 0.2, 0.4, 0.8);
-uniform float metallic : hint_range(0.0, 1.0) = 0.8;
-uniform float roughness : hint_range(0.0, 1.0) = 0.2;
-uniform sampler2D texture_normal;
-uniform sampler2D texture_normal2;
-uniform vec2 wave_direction = vec2(2.0, 0.0);
-uniform vec2 wave_direction2 = vec2(0.0, 1.0);
-uniform float time_scale : hint_range(0.0, 0.2, 0.005) = 0.025;
-
-void fragment() {
-	vec2 time = (TIME * wave_direction) * time_scale;
-	vec2 time2 = (TIME * wave_direction2) * time_scale;
-	
-	vec3 normal_blend = mix(texture(texture_normal, UV * 125.0 + time).rgb, texture(texture_normal2, UV * 125.0 + time2).rgb, 0.5);
-	
-	ALBEDO = albedo.rgb;
-	METALLIC = metallic;
-	ROUGHNESS = roughness;
-	NORMAL_MAP = normal_blend;
-	ALPHA = albedo.a;
-}"
-
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_water"]
-noise_type = 3
-fractal_type = 2
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_water"]
-noise = SubResource("FastNoiseLite_water")
-seamless = true
-as_normal_map = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
-render_priority = 0
-shader = SubResource("Shader_water")
-shader_parameter/albedo = Color(0, 0.2, 0.4, 0.8)
-shader_parameter/metallic = 0.8
-shader_parameter/roughness = 0.2
-shader_parameter/texture_normal = SubResource("NoiseTexture2D_water")
-shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_water")
-shader_parameter/wave_direction = Vector2(2, 0)
-shader_parameter/wave_direction2 = Vector2(0, 1)
-shader_parameter/time_scale = 0.015
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_water"]
 size = Vector3(10000, 1, 10000)
@@ -246,10 +203,13 @@ transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
 current = true
 
+[node name="futuristic island city 3d model" parent="." instance=ExtResource("14_bkemo")]
+transform = Transform3D(-99.09691, 0, 13.409005, 0, 100, 0, -13.409005, 0, -99.09691, 285.3485, 0.24855328, 0)
+
 [node name="WaterPlane" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
 mesh = SubResource("PlaneMesh_water")
-surface_material_override/0 = SubResource("ShaderMaterial_water")
+surface_material_override/0 = ExtResource("18_water_mat")
 
 [node name="WaterArea" type="Area3D" parent="WaterPlane"]
 
@@ -273,6 +233,9 @@ damping_min = 5.0
 damping_max = 5.0
 scale_amount_curve = SubResource("Curve_particles")
 color_ramp = SubResource("Gradient_particles")
+
+[node name="futuristic yacht 3d model" parent="." instance=ExtResource("17_gcp6j")]
+transform = Transform3D(56.59823, 0, 19.915833, 0, 60, 0, -19.915833, 0, 56.59823, -110.53288, -12.65192, -7.387043)
 
 [connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]
 [connection signal="body_entered" from="WaterPlane/WaterArea" to="." method="_on_water_entered"]

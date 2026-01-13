@@ -6,7 +6,7 @@
 [resource]
 render_priority = 0
 shader = ExtResource("1_shader")
-shader_parameter/albedo = Color(0, 0.2, 0.4, 0.8)
+shader_parameter/albedo = Color(0.25, 0.35, 0.45, 1.0)
 shader_parameter/metallic = 0.8
 shader_parameter/roughness = 0.2
 shader_parameter/texture_normal = ExtResource("2_noise")
@@ -14,3 +14,6 @@ shader_parameter/texture_normal2 = ExtResource("2_noise")
 shader_parameter/wave_direction = Vector2(2, 0)
 shader_parameter/wave_direction2 = Vector2(0, 1)
 shader_parameter/time_scale = 0.015
+shader_parameter/fade_start = 500.0
+shader_parameter/fade_range = 1000.0
+shader_parameter/min_alpha = 0.6

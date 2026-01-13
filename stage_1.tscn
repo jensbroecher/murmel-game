@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bwlhts28yc1r0"]
+[gd_scene load_steps=32 format=3 uid="uid://bwlhts28yc1r0"]
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="11_diamond"]
 [ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="13_rocket"]
 [ext_resource type="Shader" uid="uid://5dfhax3ieboe" path="res://water.gdshader" id="14_water"]
+[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="20_water_mat"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("3_hdr")
@@ -363,10 +364,12 @@ transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
 current = true
 
+
+
 [node name="WaterPlane" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
 mesh = SubResource("PlaneMesh_water")
-surface_material_override/0 = SubResource("ShaderMaterial_water")
+surface_material_override/0 = ExtResource("20_water_mat")
 
 [node name="WaterArea" type="Area3D" parent="WaterPlane"]
 
