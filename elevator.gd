@@ -67,18 +67,19 @@ func _open_and_tilt():
 	tween.tween_callback(return_elevator)
 
 func return_elevator():
-	print("Elevator: return_elevator called. Current End Rotation: " + str(rotation_degrees))
+	print("Elevator: return_elevator called.")
 	is_moving = true
 	var tween = create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	
-	# Reset Tilt gradually over the descent (90% of duration to ensure it's flat before landing)
-	# Reset Tilt gradually over the descent
-	tween.tween_property(self, "rotation_degrees:z", 0.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
-	tween.parallel().tween_property(self, "position", start_pos, duration).set_trans(Tween.TRANS_LINEAR)
+	var initial_transform = transform
+	var target_transform = Transform3D(Basis(), start_pos)
+	
+	# smoothly interpolate both position and rotation using transform.interpolate_with
+	tween.tween_method(func(val): transform = initial_transform.interpolate_with(target_transform, val), 0.0, 1.0, duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	
 	tween.tween_callback(func():
-		print("Elevator: Returned to start. Force resetting rotation.")
-		rotation_degrees = Vector3.ZERO
+		print("Elevator: Returned to start.")
+		transform = target_transform # Ensure exact final state
 		is_at_top = false
 		is_moving = false
 	)

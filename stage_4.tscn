@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="10_qy2do"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="11_marble"]
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="12_ripple"]
-[ext_resource type="PackedScene" uid="uid://cftwhjua3qjji" path="res://OrangePlatform.tscn" id="13_platform"]
+[ext_resource type="PackedScene" uid="uid://cftwhjua3qjji" path="res://CascadePlatform.tscn" id="13_platform"]
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="13_xd32j"]
 [ext_resource type="PackedScene" uid="uid://elevator123" path="res://Elevator.tscn" id="15_elevator"]
 [ext_resource type="PackedScene" uid="uid://cvnsxsg5cd4ti" path="res://WaterSource.tscn" id="16_spring"]
