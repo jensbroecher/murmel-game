@@ -28,10 +28,9 @@ func _ready():
 		
 		# Play sequence
 		for frame_file in frames:
-			# Load image directly to avoid caching all textures in VRAM at once
-			var image = Image.load_from_file(folder_path + frame_file)
-			if image:
-				var texture = ImageTexture.create_from_image(image)
+			# Load texture via ResourceLoader to work in export and avoid caching
+			var texture = ResourceLoader.load(folder_path + frame_file, "Texture2D", ResourceLoader.CACHE_MODE_IGNORE)
+			if texture:
 				anim_layer.texture = texture
 				
 				# Wait for approximately 60 FPS (0.016s)
@@ -48,4 +47,3 @@ func _ready():
 	await tween.finished
 	
 	get_tree().change_scene_to_file("res://main_menu.tscn")
-

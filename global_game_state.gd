@@ -63,8 +63,8 @@ func get_elapsed_time() -> String:
 		
 	var current_time = Time.get_ticks_msec()
 	var elapsed = current_time - level_start_time
-	var seconds = (elapsed / 1000) % 60
-	var minutes = (elapsed / 1000) / 60
+	var seconds = int(elapsed / 1000.0) % 60
+	var minutes = int(elapsed / 1000.0 / 60.0)
 	return "%02d:%02d" % [minutes, seconds]
 
 func set_difficulty(new_difficulty: Difficulty):
