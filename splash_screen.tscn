@@ -1,6 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://dxbjt6kucjgth"]
+[gd_scene load_steps=3 format=3 uid="uid://dxbjt6kucjgth"]
 
 [ext_resource type="Script" uid="uid://d20dlu17wycsp" path="res://splash_screen.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://c6j2x6y7q8w4z" path="res://godot_logo_small_color_dark.svg" id="2_logo"]
+[ext_resource type="Shader" uid="uid://d3y44q17wycsp" path="res://iris_wipe.gdshader" id="3_iris"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_iris"]
+shader = ExtResource("3_iris")
+shader_parameter/radius = 1.5
+shader_parameter/center = Vector2(0.5, 0.5)
+shader_parameter/color = Color(0, 0, 0, 1)
 
 [node name="SplashScreen" type="Control"]
 layout_mode = 3
@@ -20,20 +28,43 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Label" type="Label" parent="."]
+[node name="AnimationLayer" type="TextureRect" parent="."]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -100.0
-offset_top = -20.0
-offset_right = 100.0
-offset_bottom = 20.0
+anchors_preset = -1
+anchor_left = 0.25
+anchor_top = 0.25
+anchor_right = 0.75
+anchor_bottom = 0.75
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 48
-text = "JABRO Interactive presents"
-horizontal_alignment = 1
-vertical_alignment = 1
+expand_mode = 1
+stretch_mode = 6
+
+[node name="GodotLogo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -100.0
+offset_top = -120.0
+offset_right = 100.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("2_logo")
+expand_mode = 1
+stretch_mode = 5
+modulate = Color(1, 1, 1, 0)
+
+
+[node name="Iris" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_iris")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)

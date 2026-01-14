@@ -18,11 +18,12 @@ var timer_active: bool = false
 var show_level_selection_on_load: bool = false
 var level_progress: Dictionary = {}
 var levels: Dictionary = {
-	0: { "name": "Tutorial", "path": "res://stage_0.tscn", "concept_by": "Klaus Bröcher" },
+	0: { "name": "Brick Breaker", "path": "res://stage_0.tscn", "concept_by": "Klaus Bröcher" },
 	1: { "name": "Loops & Cannons", "path": "res://stage_1.tscn", "concept_by": "Jens Bröcher" },
 	2: { "name": "Bumpy", "path": "res://stage_2.tscn", "concept_by": "Jens Bröcher" },
 	3: { "name": "Mechanisms", "path": "res://stage_3.tscn", "concept_by": "Jens Bröcher" },
-	4: { "name": "Cascade", "path": "res://stage_4.tscn", "concept_by": "Jens Bröcher" }
+	4: { "name": "Cascade", "path": "res://stage_4.tscn", "concept_by": "Jens Bröcher" },
+	5: { "name": "Spiral", "path": "res://stage_5.tscn", "concept_by": "Jens Bröcher" }
 }
 
 func _ready():

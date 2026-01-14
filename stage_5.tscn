@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dmp6gvc3rv7w1"]
+[gd_scene load_steps=30 format=3 uid="uid://dmp6gvc3rv7w1"]
 
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_u5vnb"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="2_8fbo4"]
@@ -13,6 +13,9 @@
 [ext_resource type="PackedScene" uid="uid://bgmn6gss2s6qd" path="res://futuristic island city 3d model.fbx" id="15_4urv6"]
 [ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="16_uugx4"]
 [ext_resource type="PackedScene" uid="uid://cuv5esd8iajl7" path="res://futuristic yacht 3d model.fbx" id="17_xgi4o"]
+[ext_resource type="Script" uid="uid://cxigqxkveu6ep" path="res://hill_generator.gd" id="18_hillgen"]
+[ext_resource type="Script" uid="uid://c67odheen13w5" path="res://tunnel.gd" id="19_tunnel"]
+[ext_resource type="Material" uid="uid://bvho4lhw6siqk" path="res://TunnelInterior.tres" id="20_blackmat"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("5_dhqj7")
@@ -26,14 +29,11 @@ sky = SubResource("Sky_env")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
-size = Vector3(4, 2, 4)
+[sub_resource type="BoxShape3D" id="BoxShape3D_tunnel"]
+size = Vector3(3, 3, 5)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
-size = Vector2(10000, 10000)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
-size = Vector3(10000, 1, 10000)
+[sub_resource type="BoxShape3D" id="BoxShape3D_suction"]
+size = Vector3(6, 6, 8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
 shading_mode = 0
@@ -49,6 +49,19 @@ radius = 0.06
 height = 0.12
 radial_segments = 8
 rings = 4
+
+[sub_resource type="Gradient" id="Gradient_wind"]
+offsets = PackedFloat32Array(0, 0.2, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.8, 0.9, 1, 0.5, 1, 1, 1, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 2, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
+size = Vector2(10000, 10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
+size = Vector3(10000, 1, 10000)
 
 [sub_resource type="Curve" id="Curve_particles"]
 _data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.8), 0.0, 0.0, 0, 0]
@@ -127,51 +140,124 @@ script = ExtResource("6_t0keu")
 [node name="LevelPivot" type="Node3D" parent="."]
 script = ExtResource("7_22jgc")
 
-[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot"]
-use_collision = true
-
-[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
-size = Vector3(24, 2, 24)
+[node name="HillGenerator" type="Node3D" parent="LevelPivot"]
+script = ExtResource("18_hillgen")
+track_width = 5.0
 material = ExtResource("9_0h0hi")
 
+[node name="TunnelSystem" type="Node3D" parent="LevelPivot" node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+script = ExtResource("19_tunnel")
+exit_location = NodePath("ExitTunnel/TunnelExit")
+entrance_area = NodePath("EntranceTunnel/EntranceArea")
+suction_area = NodePath("EntranceTunnel/SuctionArea")
+
+[node name="EntranceTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem"]
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -0.6776657, 1.0617328, 23.137363)
+use_collision = true
+
+[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
+depth = 6.0
+material = ExtResource("9_0h0hi")
+
+[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
+operation = 2
+radius = 2.0
+height = 6.0
+sides = 16
+material = ExtResource("20_blackmat")
+
+[node name="EntranceArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/EntranceArea"]
+shape = SubResource("BoxShape3D_tunnel")
+
+[node name="SuctionArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.49977303, 0, 5.21036)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea"]
+shape = SubResource("BoxShape3D_suction")
+
+[node name="WindParticles" type="CPUParticles3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea"]
+transform = Transform3D(0.99999976, 0, -1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999976, 0.6811447, 0, 4.051031)
+amount = 50
+mesh = SubResource("SphereMesh_particles")
+emission_shape = 3
+emission_box_extents = Vector3(2, 2, 2)
+direction = Vector3(0, 0, -1)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+scale_amount_min = 0.5
+scale_amount_max = 0.5
+color_ramp = SubResource("Gradient_wind")
+
+[node name="ExitTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem"]
+transform = Transform3D(0.96278614, 0, 0.2702645, 0.08919719, 0.9439681, -0.31775472, -0.25512108, 0.33003664, 0.9088394, -19.740211, 33.79289, -5.2681684)
+use_collision = true
+
+[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/ExitTunnel"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
+depth = 6.0
+material = ExtResource("9_0h0hi")
+
+[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/ExitTunnel"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
+operation = 2
+radius = 2.0
+height = 6.0
+sides = 16
+material = ExtResource("20_blackmat")
+
+[node name="TunnelExit" type="Marker3D" parent="LevelPivot/TunnelSystem/ExitTunnel"]
+
 [node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.39093, 0, -10.947969)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.961031, -1.156663, 22.39534)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
 shape = SubResource("BoxShape3D_trigger")
 
 [node name="Rocket" parent="LevelPivot" instance=ExtResource("10_we185")]
-transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -9.307762, -1.3467139, -11.086229)
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 26.961031, -3.2512026, 22.39534)
 
 [node name="Diamond1" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0159802, 3.8075898, -6.4731913)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.203947, 10.650981, 0)
 
 [node name="Diamond2" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5416873, 9.050717, 3.9328208)
-
-[node name="Diamond4" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.30723, 3.7793484, 14.273573)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.120985, 1.0391393, -2.0702143)
 
 [node name="Diamond3" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0053846, 13.943416, 12.310572)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8463955, 15.824844, 0)
+
+[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot"]
+use_collision = true
+
+[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+transform = Transform3D(0.9950917, 0, 0, 0, 1, 0, 0, 0, 1.5, 19.205063, -2.9412642, 12.562317)
+size = Vector3(24, 2, 20.661377)
+material = ExtResource("9_0h0hi")
 
 [node name="CameraRig" type="Node3D" parent="."]
 script = ExtResource("14_xs3eo")
 follow_speed = 5.0
 
 [node name="CameraPivot" type="Node3D" parent="CameraRig"]
-transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
 current = true
 
 [node name="futuristic island city 3d model" parent="." instance=ExtResource("15_4urv6")]
 transform = Transform3D(-99.09691, 0, 13.409005, 0, 100, 0, -13.409005, 0, -99.09691, 285.3485, 0.24855328, 0)
 
 [node name="WaterPlane" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.050785065, -20, 0.09239578)
 mesh = SubResource("PlaneMesh_water")
 surface_material_override/0 = ExtResource("16_uugx4")
 
@@ -181,7 +267,7 @@ surface_material_override/0 = ExtResource("16_uugx4")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.235104, 22.803675, 11.539152)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.875628, 2.5391464, 10.293862)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
 emitting = false
