@@ -473,8 +473,6 @@ func _on_button_pressed():
 func apply_shiny_materials():
 	make_node_shiny(spaceship)
 	make_node_shiny(space_girl)
-	make_node_shiny(robot_sphere)
-	make_node_shiny(space_station)
 
 func make_node_shiny(node: Node):
 	if not node:

@@ -1,25 +1,21 @@
-[gd_scene load_steps=28 format=3 uid="uid://cdo5led2nywun"]
+[gd_scene load_steps=24 format=3 uid="uid://dmp6gvc3rv7w1"]
 
-[ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_kwjo8"]
-[ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="4_dep4y"]
-[ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="5_xd32j"]
-[ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="6_bkemo"]
-[ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="9_sq2db"]
-[ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="10_qy2do"]
-[ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="11_marble"]
-[ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="12_ripple"]
-[ext_resource type="PackedScene" uid="uid://cftwhjua3qjji" path="res://CascadePlatform.tscn" id="13_platform"]
-[ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="13_xd32j"]
-[ext_resource type="PackedScene" uid="uid://bgmn6gss2s6qd" path="res://futuristic island city 3d model.fbx" id="14_bkemo"]
-[ext_resource type="PackedScene" uid="uid://elevator123" path="res://Elevator.tscn" id="15_elevator"]
-[ext_resource type="Material" uid="uid://jd7fjt1s5sa1" path="res://ElevatorMaterial.tres" id="17_elev_mat"]
-[ext_resource type="PackedScene" uid="uid://cuv5esd8iajl7" path="res://futuristic yacht 3d model.fbx" id="17_gcp6j"]
-[ext_resource type="AudioStream" uid="uid://b46wvlexhay8q" path="res://sounds/water-fountain-75681.mp3" id="17_sound"]
-[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="18_water_mat"]
-[ext_resource type="PackedScene" path="res://VolcanoFountain.tscn" id="19_volcano"]
+[ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_u5vnb"]
+[ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="2_8fbo4"]
+[ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="3_0juw4"]
+[ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="5_dhqj7"]
+[ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="6_t0keu"]
+[ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="7_22jgc"]
+[ext_resource type="Material" uid="uid://jd7fjt1s5sa1" path="res://ElevatorMaterial.tres" id="9_0h0hi"]
+[ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="10_we185"]
+[ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="13_1c2pv"]
+[ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="14_xs3eo"]
+[ext_resource type="PackedScene" uid="uid://bgmn6gss2s6qd" path="res://futuristic island city 3d model.fbx" id="15_4urv6"]
+[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="16_uugx4"]
+[ext_resource type="PackedScene" uid="uid://cuv5esd8iajl7" path="res://futuristic yacht 3d model.fbx" id="17_xgi4o"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
-panorama = ExtResource("4_dep4y")
+panorama = ExtResource("5_dhqj7")
 
 [sub_resource type="Sky" id="Sky_env"]
 sky_material = SubResource("PanoramaSkyMaterial_env")
@@ -63,14 +59,9 @@ offsets = PackedFloat32Array(0, 0.1, 1)
 colors = PackedColorArray(1, 1, 1, 0, 10, 10, 10, 1, 10, 10, 10, 1)
 
 [node name="Game" type="Node3D"]
-script = ExtResource("1_kwjo8")
-marble_scene = ExtResource("11_marble")
-ripple_scene = ExtResource("12_ripple")
-
-[node name="Elevator" parent="." instance=ExtResource("15_elevator")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.368402, -0.5, 10.480002)
-move_offset = Vector3(0, 30, 0)
-duration = 8.0
+script = ExtResource("1_u5vnb")
+marble_scene = ExtResource("2_8fbo4")
+ripple_scene = ExtResource("3_0juw4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_main")
@@ -131,16 +122,10 @@ text = "00:00"
 horizontal_alignment = 2
 
 [node name="SoundGenerator" type="Node" parent="."]
-script = ExtResource("5_xd32j")
+script = ExtResource("6_t0keu")
 
 [node name="LevelPivot" type="Node3D" parent="."]
-script = ExtResource("6_bkemo")
-
-[node name="FountainSound" type="AudioStreamPlayer3D" parent="LevelPivot"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.3849783, 0.47126603, -6.615167)
-stream = ExtResource("17_sound")
-autoplay = true
-parameters/looping = true
+script = ExtResource("7_22jgc")
 
 [node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot"]
 use_collision = true
@@ -148,7 +133,7 @@ use_collision = true
 [node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
-material = ExtResource("17_elev_mat")
+material = ExtResource("9_0h0hi")
 
 [node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.39093, 0, -10.947969)
@@ -156,38 +141,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.39093, 0, -10.947969)
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
 shape = SubResource("BoxShape3D_trigger")
 
-[node name="Rocket" parent="LevelPivot" instance=ExtResource("9_sq2db")]
+[node name="Rocket" parent="LevelPivot" instance=ExtResource("10_we185")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -9.307762, -1.3467139, -11.086229)
 
-[node name="VolcanoFountain" parent="LevelPivot" instance=ExtResource("19_volcano")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.7098293, 0, -6.325842)
-
-[node name="StartPlatform" parent="LevelPivot" instance=ExtResource("13_platform")]
-transform = Transform3D(1, 0, 0, 0, 0.9944652, -0.10506653, 0, 0.10506653, 0.9944652, -1.5412331, 7.022114, 4.701974)
-
-[node name="MidPlatform1" parent="LevelPivot" instance=ExtResource("13_platform")]
-transform = Transform3D(0.23117705, -0.10563929, -0.9671595, 0.024558797, 0.9944045, -0.10274495, 0.9726017, 0, 0.23247787, 9.722935, 18.065071, 10.929058)
-
-[node name="MidPlatform2" parent="LevelPivot" instance=ExtResource("13_platform")]
-transform = Transform3D(-0.95924985, 0, -0.28255916, 0.030148476, 0.9942915, -0.10234997, 0.28094617, -0.106697924, -0.953774, -1.9999151, 2.356408, 14.290678)
-
-[node name="MidPlatform3" parent="LevelPivot" instance=ExtResource("13_platform")]
-transform = Transform3D(-0.960206, 0, -0.27929288, 0.030328212, 0.9940867, -0.104268074, 0.27764133, -0.10858928, -0.954528, 0.97894096, 12.212257, 13.014733)
-
-[node name="Diamond1" parent="LevelPivot" instance=ExtResource("13_xd32j")]
+[node name="Diamond1" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0159802, 3.8075898, -6.4731913)
 
-[node name="Diamond2" parent="LevelPivot" instance=ExtResource("13_xd32j")]
+[node name="Diamond2" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.5416873, 9.050717, 3.9328208)
 
-[node name="Diamond4" parent="LevelPivot" instance=ExtResource("13_xd32j")]
+[node name="Diamond4" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.30723, 3.7793484, 14.273573)
 
-[node name="Diamond3" parent="LevelPivot" instance=ExtResource("13_xd32j")]
+[node name="Diamond3" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.0053846, 13.943416, 12.310572)
 
 [node name="CameraRig" type="Node3D" parent="."]
-script = ExtResource("10_qy2do")
+script = ExtResource("14_xs3eo")
 follow_speed = 5.0
 
 [node name="CameraPivot" type="Node3D" parent="CameraRig"]
@@ -197,13 +167,13 @@ transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
 current = true
 
-[node name="futuristic island city 3d model" parent="." instance=ExtResource("14_bkemo")]
+[node name="futuristic island city 3d model" parent="." instance=ExtResource("15_4urv6")]
 transform = Transform3D(-99.09691, 0, 13.409005, 0, 100, 0, -13.409005, 0, -99.09691, 285.3485, 0.24855328, 0)
 
 [node name="WaterPlane" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
 mesh = SubResource("PlaneMesh_water")
-surface_material_override/0 = ExtResource("18_water_mat")
+surface_material_override/0 = ExtResource("16_uugx4")
 
 [node name="WaterArea" type="Area3D" parent="WaterPlane"]
 
@@ -228,7 +198,7 @@ damping_max = 5.0
 scale_amount_curve = SubResource("Curve_particles")
 color_ramp = SubResource("Gradient_particles")
 
-[node name="futuristic yacht 3d model" parent="." instance=ExtResource("17_gcp6j")]
+[node name="futuristic yacht 3d model" parent="." instance=ExtResource("17_xgi4o")]
 transform = Transform3D(56.59823, 0, 19.915833, 0, 60, 0, -19.915833, 0, 56.59823, -110.53288, -12.65192, -7.387043)
 
 [connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]

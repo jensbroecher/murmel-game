@@ -42,6 +42,17 @@ func collect():
 	if get_tree().current_scene.has_method("collect_diamond"):
 		get_tree().current_scene.collect_diamond()
 	
-	# Wait for sound to finish before freeing
-	await audio_player.finished
+	# Calculate wait time: max of sound duration and particle lifetime
+	var stream_length = 0.0
+	if audio_player.stream:
+		stream_length = audio_player.stream.get_length()
+	
+	# Add a buffer to ensure no race conditions (e.g. particles fading out last frame)
+	var wait_time = max(stream_length, particles.lifetime) + 2.0
+	
+	# Disable collision immediately to prevent double collection
+	$CollisionShape3D.set_deferred("disabled", true)
+	
+	# Wait for the effects to finish before freeing
+	await get_tree().create_timer(wait_time).timeout
 	queue_free()

@@ -123,7 +123,7 @@ func set_dampened(dampened: bool):
 	print("SoundGenerator: Dampening set to ", dampened)
 
 func play_spawn():
-	spawn_player.volume_db = 0.0
+	spawn_player.volume_db = -15.0
 	spawn_player.play()
 	print("SoundGenerator: Playing Spawn Sound")
 

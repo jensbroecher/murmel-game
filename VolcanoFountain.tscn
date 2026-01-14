@@ -1,0 +1,42 @@
+[gd_scene load_steps=5 format=3 uid="uid://njo7rjv58od6"]
+
+[ext_resource type="Script" path="res://volcano_fountain.gd" id="1_script"]
+[ext_resource type="Material" uid="uid://glassmat123" path="res://GlassMaterial.tres" id="2_glass"]
+[ext_resource type="PackedScene" uid="uid://cvnsxsg5cd4ti" path="res://WaterSource.tscn" id="3_water"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_erupt"]
+height = 2.0
+radius = 0.5
+
+[node name="VolcanoFountain" type="CSGCombiner3D"]
+use_collision = true
+script = ExtResource("1_script")
+launch_force = 40.0
+
+[node name="BaseCone" type="CSGCylinder3D" parent="."]
+radius = 3.0
+height = 2.0
+sides = 4
+cone = true
+material = ExtResource("2_glass")
+
+[node name="TopCut" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+operation = 2
+size = Vector3(4, 1, 4)
+material = ExtResource("2_glass")
+
+[node name="CenterHole" type="CSGCylinder3D" parent="."]
+operation = 2
+radius = 0.6
+height = 3.0
+sides = 8
+material = ExtResource("2_glass")
+
+[node name="WaterSource" parent="." instance=ExtResource("3_water")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+
+[node name="EruptionArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EruptionArea"]
+shape = SubResource("CylinderShape3D_erupt")
