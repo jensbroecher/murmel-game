@@ -12,23 +12,34 @@ func _ready():
 	if resume_btn:
 		if not resume_btn.pressed.is_connected(resume):
 			resume_btn.pressed.connect(resume)
-		setup_button_sounds(resume_btn)
+		if not resume_btn.pressed.is_connected(resume):
+			resume_btn.pressed.connect(resume)
+		setup_button_signals(resume_btn)
 
 	if restart_btn:
 		if not restart_btn.pressed.is_connected(restart_level):
 			restart_btn.pressed.connect(restart_level)
-		setup_button_sounds(restart_btn)
+		if not restart_btn.pressed.is_connected(restart_level):
+			restart_btn.pressed.connect(restart_level)
+		setup_button_signals(restart_btn)
 
 	if menu_btn:
 		if not menu_btn.pressed.is_connected(go_to_menu):
 			menu_btn.pressed.connect(go_to_menu)
-		setup_button_sounds(menu_btn)
+	if menu_btn:
+		if not menu_btn.pressed.is_connected(go_to_menu):
+			menu_btn.pressed.connect(go_to_menu)
+		setup_button_signals(menu_btn)
 
-func setup_button_sounds(btn: Button):
+func setup_button_signals(btn: Button):
 	if not btn.mouse_entered.is_connected(_play_hover_sound):
 		btn.mouse_entered.connect(_play_hover_sound)
 	if not btn.pressed.is_connected(_play_click_sound):
 		btn.pressed.connect(_play_click_sound)
+	if not btn.focus_entered.is_connected(_on_button_focus_entered.bind(btn)):
+		btn.focus_entered.connect(_on_button_focus_entered.bind(btn))
+	if not btn.focus_exited.is_connected(_on_button_focus_exited.bind(btn)):
+		btn.focus_exited.connect(_on_button_focus_exited.bind(btn))
 
 func _play_hover_sound():
 	if SoundManager:
@@ -38,12 +49,49 @@ func _play_click_sound():
 	if SoundManager:
 		SoundManager.play_ui_click()
 
+var focus_tweens = {}
+var original_focus_styles = {}
+
+func _on_button_focus_entered(button: Button):
+	var style = button.get_theme_stylebox("focus")
+	if style:
+		original_focus_styles[button] = style
+		
+		var style_dup = style.duplicate()
+		button.add_theme_stylebox_override("focus", style_dup)
+		
+		var tween = create_tween().set_loops()
+		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tween.tween_property(style_dup, "border_color:a", 0.4, 0.8)
+		tween.tween_property(style_dup, "border_color:a", 1.0, 0.8)
+		
+		focus_tweens[button] = tween
+
+func _on_button_focus_exited(button: Button):
+	if focus_tweens.has(button):
+		var tween = focus_tweens[button]
+		if tween:
+			tween.kill()
+		focus_tweens.erase(button)
+	
+	if original_focus_styles.has(button):
+		var original = original_focus_styles[button]
+		button.add_theme_stylebox_override("focus", original)
+		original_focus_styles.erase(button)
+
 func _input(event):
 	if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and event.keycode == KEY_ESCAPE):
 		if visible:
 			resume()
 		else:
 			pause()
+	
+	# Lazy focus logic
+	if visible and (event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion) and not get_viewport().gui_get_focus_owner():
+		var resume_btn = $Control/CenterContainer/Card/ContentMargin/VBoxContainer/ResumeButton
+		if resume_btn:
+			resume_btn.grab_focus()
+			get_viewport().set_input_as_handled()
 
 func pause():
 	show()

@@ -63,26 +63,28 @@ func _ready():
 		btn_pressed_style = play_btn.get_theme_stylebox("pressed")
 		btn_focus_style = play_btn.get_theme_stylebox("focus")
 	
+	# Initial state: No focus until user interacts via keys/gamepad
+	
 	update_difficulty_display()
 	
 	# Resize checkbox icons
 	resize_checkbox_icons()
 	
-	# Setup sounds for main menu buttons
+	# Setup sounds and signals for main menu buttons
 	for child in main_menu.get_children():
 		if child is Button:
-			setup_button_sounds(child)
+			setup_button_signals(child)
 	
 	setup_level_buttons()
 	setup_controls_menu()
 	
 	# Setup sounds for other buttons
 	if level_back_btn:
-		setup_button_sounds(level_back_btn)
+		setup_button_signals(level_back_btn)
 	if change_difficulty_btn:
-		setup_button_sounds(change_difficulty_btn)
+		setup_button_signals(change_difficulty_btn)
 	if settings_back_btn:
-		setup_button_sounds(settings_back_btn)
+		setup_button_signals(settings_back_btn)
 	
 	# Apply shiny effect to 3D models
 	call_deferred("apply_shiny_materials")
@@ -241,10 +243,22 @@ func update_difficulty_display():
 func _on_levels_pressed():
 	main_menu.visible = false
 	fade_in_menu(level_select)
+	
+	# Focus the first level button if available, or back
+	# We rely on lazy focus logic or user navigation, OR we can focus here since user explicitly entered a menu
+	# User preference: "only pressing tab or up or down should start focusing"
+	# BUT, entering a submenu via keyboard usually implies continued keyboard use.
+	# If we clicked with mouse, we probably don't want focus.
+	# Let's check the last input device or just leave it unfocused until key press.
+	# For simplicity and adhering to "lazy focus", we'll leave it unfocused unless we know we are in "keyboard mode".
+	pass
 
 func _on_settings_pressed():
 	main_menu.visible = false
 	fade_in_menu(settings_container)
+	# Focus the first element (Music Check)
+	# Lazy focus: do nothing
+	pass
 
 func _on_back_pressed():
 	fade_out_menu(level_select)
@@ -252,12 +266,20 @@ func _on_back_pressed():
 	# Re-run animation when returning to main menu? 
 	# User said "zoom fade in the buttons when the main menu loads".
 	# If we just hide/show, it might be nice to re-animate.
-	animate_buttons_intro()
+	# animate_buttons_intro() 
+	
+	# Focus the levels button again? Only if we were using keys.
+	pass
 
 func _on_back_from_settings_pressed():
 	fade_out_menu(settings_container)
 	main_menu.visible = true
-	animate_buttons_intro()
+	# animate_buttons_intro()
+	
+	
+	var settings_btn = main_menu.get_node_or_null("SettingsButton")
+	# Lazy focus: do nothing
+	pass
 
 func fade_in_menu(menu_node: Control):
 	menu_node.visible = true
@@ -401,15 +423,126 @@ func setup_level_buttons():
 			btn.pressed.connect(func(): start_level(level_id))
 		
 		# setup_hover_anim(btn) # Disabled as requested
-		setup_button_sounds(btn)
+		setup_button_signals(btn)
 			
 		level_grid.add_child(btn)
 
-func setup_button_sounds(button: Button):
+var focus_tweens = {}
+
+func setup_button_signals(button: Button):
 	if not button.mouse_entered.is_connected(_on_button_mouse_entered_sound_only):
 		button.mouse_entered.connect(_on_button_mouse_entered_sound_only)
 	if not button.pressed.is_connected(_on_button_pressed):
 		button.pressed.connect(_on_button_pressed)
+	if not button.focus_entered.is_connected(_on_button_focus_entered.bind(button)):
+		button.focus_entered.connect(_on_button_focus_entered.bind(button))
+	if not button.focus_exited.is_connected(_on_button_focus_exited.bind(button)):
+		button.focus_exited.connect(_on_button_focus_exited.bind(button))
+
+func _input(event):
+	# Lazy Focus Logic
+	if (event is InputEventKey or event is InputEventJoypadButton or event is InputEventJoypadMotion) and not get_viewport().gui_get_focus_owner():
+		# Determine which menu is active and focus the appropriate element
+		if level_select.visible:
+			if level_grid.get_child_count() > 0:
+				level_grid.get_child(0).grab_focus()
+			elif level_back_btn:
+				level_back_btn.grab_focus()
+		elif settings_container.visible:
+			if music_check:
+				music_check.grab_focus()
+		elif main_menu.visible:
+			if play_btn:
+				play_btn.grab_focus()
+		
+		# Prevent this input from also acting as a navigation command
+		get_viewport().set_input_as_handled()
+	
+var original_focus_styles = {}
+
+func _on_button_focus_entered(button: Button):
+	# Get the SPECIFIC style for this button (handles both main menu and padded level buttons)
+	var style = button.get_theme_stylebox("focus")
+	
+	if style:
+		# Save the original style reference so we can restore it exactly
+		original_focus_styles[button] = style
+		
+		# Create a duplicate for the pulsing animation
+		var style_dup = style.duplicate()
+		button.add_theme_stylebox_override("focus", style_dup)
+		
+		# Animate the duplicate
+		var tween = create_tween().set_loops()
+		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		tween.tween_property(style_dup, "border_color:a", 0.4, 0.8)
+		tween.tween_property(style_dup, "border_color:a", 1.0, 0.8)
+		
+		focus_tweens[button] = tween
+		
+		# Manual scroll handling for level buttons to ensure outline visibility
+		# Only apply if button is in level grid
+		if button.get_parent() == level_grid:
+			ensure_level_button_visible(button)
+
+func _on_button_focus_exited(button: Button):
+	if focus_tweens.has(button):
+		var tween = focus_tweens[button]
+		if tween:
+			tween.kill()
+		focus_tweens.erase(button)
+	
+	# Restore the EXACT original style this button had
+	if original_focus_styles.has(button):
+		var original = original_focus_styles[button]
+		button.add_theme_stylebox_override("focus", original)
+		original_focus_styles.erase(button)
+
+func ensure_level_button_visible(button: Button):
+	# Calculate positions in global space to handle nesting correctly
+	# We want: LevelList (ScrollContainer)
+	# Hierarchy: ScrollContainer -> MarginContainer -> VBoxContainer (level_grid) -> Button
+	var scroll_container = level_grid.get_parent().get_parent() # LevelList
+	if not scroll_container or not (scroll_container is ScrollContainer):
+		return
+		
+	var button_global_top = button.global_position.y
+	var button_height = button.size.y
+	var button_global_bottom = button_global_top + button_height
+	
+	var scroll_global_top = scroll_container.global_position.y
+	var scroll_height = scroll_container.size.y
+	var scroll_global_bottom = scroll_global_top + scroll_height
+	
+	# "Safe zone" padding - space we want between button edge and scroll view edge
+	# This should be enough to show the focus outline (4px + expand margin)
+	var padding = 20.0 
+	
+	var current_scroll = scroll_container.scroll_vertical
+	var target_scroll = current_scroll
+	
+	# Check if top is cut off
+	if button_global_top < scroll_global_top + padding:
+		# Scroll UP (reduce scroll_vertical)
+		var diff = (scroll_global_top + padding) - button_global_top
+		target_scroll -= diff
+		
+	# Check if bottom is cut off
+	elif button_global_bottom > scroll_global_bottom - padding:
+		# Scroll DOWN (increase scroll_vertical)
+		var diff = button_global_bottom - (scroll_global_bottom - padding)
+		target_scroll += diff
+	
+	# Clamp target scroll (just in case)
+	target_scroll = max(0, target_scroll)
+	
+	if abs(target_scroll - current_scroll) > 1.0:
+		var tween = create_tween()
+		tween.tween_property(scroll_container, "scroll_vertical", int(target_scroll), 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func setup_button_sounds(button: Button):
+	# Deprecated, redirected to setup_button_signals
+	setup_button_signals(button)
 
 func _on_button_mouse_entered_sound_only():
 	var sound_manager = get_node_or_null("/root/SoundManager")
