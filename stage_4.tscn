@@ -16,7 +16,7 @@
 [ext_resource type="PackedScene" uid="uid://cuv5esd8iajl7" path="res://futuristic yacht 3d model.fbx" id="17_gcp6j"]
 [ext_resource type="AudioStream" uid="uid://b46wvlexhay8q" path="res://sounds/water-fountain-75681.mp3" id="17_sound"]
 [ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="18_water_mat"]
-[ext_resource type="PackedScene" path="res://VolcanoFountain.tscn" id="19_volcano"]
+[ext_resource type="PackedScene" uid="uid://njo7rjv58od6" path="res://VolcanoFountain.tscn" id="19_volcano"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("4_dep4y")
@@ -69,7 +69,7 @@ ripple_scene = ExtResource("12_ripple")
 
 [node name="Elevator" parent="." instance=ExtResource("15_elevator")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 22.368402, -0.5, 10.480002)
-move_offset = Vector3(0, 30, 0)
+move_offset = Vector3(0, 40, 0)
 duration = 8.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
