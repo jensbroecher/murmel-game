@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://c1hb87mjtirj0" path="res://images/toggle-switch.svg" id="13_toggle_on"]
 [ext_resource type="Texture2D" uid="uid://b08fhq2t6dfs3" path="res://images/toggle-switch-off.svg" id="14_toggle_off"]
 [ext_resource type="PackedScene" uid="uid://dt2voxw4x2ao7" path="res://space station.fbx" id="15_station"]
+[ext_resource type="Material" uid="uid://shiny_logo_material_123" path="res://shiny_logo_material.tres" id="16_shine"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("5_env")
@@ -73,7 +74,21 @@ corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_focus"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_focus"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(1, 0.8, 0, 1)
+corner_radius_top_left = 25
+corner_radius_top_right = 25
+corner_radius_bottom_right = 25
+corner_radius_bottom_left = 25
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_blur"]
 shader = ExtResource("10_blur")
@@ -178,28 +193,30 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.5, -1.5)
 transform = Transform3D(8.808496, 2.719106, 3.8751552, -0.2592659, 8.450671, -5.3403106, -4.7268543, 4.603542, 7.514269, -5.377059, -7.78135, -10.097701)
 
 [node name="Title" type="TextureRect" parent="."]
+material = ExtResource("16_shine")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -310.0
-offset_top = 168.0
+offset_top = 40.0
 offset_right = 390.0
-offset_bottom = 418.0
+offset_bottom = 290.0
 grow_horizontal = 2
 texture = ExtResource("5_title")
 expand_mode = 1
 stretch_mode = 5
 
 [node name="Subtitle" type="TextureRect" parent="."]
+material = ExtResource("16_shine")
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -270.0
-offset_top = 300.0
+offset_top = 170.0
 offset_right = 270.0
-offset_bottom = 440.0
+offset_bottom = 310.0
 grow_horizontal = 2
 texture = ExtResource("7_subtitle")
 expand_mode = 1
@@ -233,7 +250,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Play"
 
 [node name="LevelsButton" type="Button" parent="VBoxContainer"]
@@ -245,7 +262,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Levels"
 
 [node name="SettingsButton" type="Button" parent="VBoxContainer"]
@@ -257,7 +274,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Settings"
 
 [node name="QuitButton" type="Button" parent="VBoxContainer"]
@@ -269,7 +286,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Quit"
 
 [node name="LevelSelectContainer" type="VBoxContainer" parent="."]
@@ -289,7 +306,7 @@ theme_override_constants/separation = 20
 [node name="Content" type="PanelContainer" parent="LevelSelectContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/panel = SubResource("StyleBoxFlat_focus")
 
 [node name="Stack" type="MarginContainer" parent="LevelSelectContainer/Content"]
 layout_mode = 2
@@ -313,7 +330,7 @@ size_flags_vertical = 3
 custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/panel = SubResource("StyleBoxFlat_focus")
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 2
 
@@ -346,7 +363,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Back"
 
 [node name="SettingsContainer" type="VBoxContainer" parent="."]
@@ -368,7 +385,7 @@ theme_override_constants/separation = 20
 [node name="Content" type="PanelContainer" parent="SettingsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_styles/panel = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/panel = SubResource("StyleBoxFlat_focus")
 
 [node name="Stack" type="MarginContainer" parent="SettingsContainer/Content"]
 layout_mode = 2
@@ -435,7 +452,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Change"
 
 [node name="ControlsContainer" type="HBoxContainer" parent="SettingsContainer/Content/Stack/SettingsList"]
@@ -483,7 +500,7 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_btn")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_btn_pressed")
 theme_override_styles/hover = SubResource("StyleBoxFlat_btn_hover")
-theme_override_styles/focus = SubResource("StyleBoxEmpty_focus")
+theme_override_styles/focus = SubResource("StyleBoxFlat_focus")
 text = "Back"
 
 [node name="HoverSound" type="AudioStreamPlayer" parent="."]

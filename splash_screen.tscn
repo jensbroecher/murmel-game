@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxbjt6kucjgth"]
 
 [ext_resource type="Script" uid="uid://d20dlu17wycsp" path="res://splash_screen.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://c6j2x6y7q8w4z" path="res://godot_logo_small_color_dark.svg" id="2_logo"]
-[ext_resource type="Shader" uid="uid://d3y44q17wycsp" path="res://iris_wipe.gdshader" id="3_iris"]
+[ext_resource type="Texture2D" uid="uid://befcx4hai14hr" path="res://godot_logo_small_color_dark.svg" id="2_logo"]
+[ext_resource type="Shader" uid="uid://d2fpevmplugdp" path="res://iris_wipe.gdshader" id="3_iris"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_iris"]
 shader = ExtResource("3_iris")

@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://shiny_logo_material_123"]
+
+[ext_resource type="Shader" path="res://shiny_logo.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/shine_color = Color(1, 1, 1, 0.4)
+shader_parameter/shine_speed = 2.0
+shader_parameter/shine_size = 0.15
+shader_parameter/shine_interval = 2.5
