@@ -4,8 +4,9 @@ extends RigidBody3D
 @onready var start_position: Vector3 = global_position
 @onready var original_mass: float = mass
 
-var original_mesh_scale: Vector3
 var original_collision_scale: Vector3
+var visual_root: Node3D
+var original_visual_scale: Vector3
 
 var is_super_marble: bool = false
 var powerup_timer: Timer
@@ -21,17 +22,21 @@ func _ready() -> void:
 	# Store original values
 	original_mass = mass
 	
-	var mesh = get_node_or_null("MeshInstance3D")
-	if mesh:
-		original_mesh_scale = mesh.scale
+	visual_root = get_node_or_null("Model")
+	if not visual_root:
+		visual_root = get_node_or_null("MeshInstance3D")
+	if visual_root:
+		original_visual_scale = visual_root.scale
 	else:
-		original_mesh_scale = Vector3.ONE
+		original_visual_scale = Vector3.ONE
 		
 	var col = get_node_or_null("CollisionShape3D")
 	if col:
 		original_collision_scale = col.scale
 	else:
 		original_collision_scale = Vector3.ONE
+	
+	_align_and_scale_visual_to_collision()
 	
 	# Setup timer
 	powerup_timer = Timer.new()
@@ -78,13 +83,16 @@ func change_size_and_mass(size_multiplier: float, mass_multiplier: float, durati
 	# Apply changes
 	var tween = create_tween()
 	
-	var mesh = get_node_or_null("MeshInstance3D")
-	if mesh:
-		tween.parallel().tween_property(mesh, "scale", original_mesh_scale * size_multiplier, 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	var node_to_scale = visual_root
+	if node_to_scale:
+		tween.parallel().tween_property(node_to_scale, "scale", original_visual_scale * size_multiplier, 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 		
 		# Color change
 		# Use material_override if set, otherwise surface material
-		var mat = mesh.material_override if mesh.material_override else mesh.mesh.surface_get_material(0)
+		var first_mesh = _find_first_mesh_instance(node_to_scale)
+		var mat = null
+		if first_mesh:
+			mat = first_mesh.material_override if first_mesh.material_override else first_mesh.mesh.surface_get_material(0)
 		if mat:
 			tween.parallel().tween_property(mat, "albedo_color", Color(0, 1, 0), 0.5)
 
@@ -114,11 +122,14 @@ func _on_powerup_timer_timeout() -> void:
 	# Revert changes
 	var revert_tween = create_tween()
 	
-	var mesh = get_node_or_null("MeshInstance3D")
-	if mesh:
-		revert_tween.parallel().tween_property(mesh, "scale", original_mesh_scale, 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
+	var node_to_scale = visual_root
+	if node_to_scale:
+		revert_tween.parallel().tween_property(node_to_scale, "scale", original_visual_scale, 0.5).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)
 		
-		var mat = mesh.material_override if mesh.material_override else mesh.mesh.surface_get_material(0)
+		var first_mesh = _find_first_mesh_instance(node_to_scale)
+		var mat = null
+		if first_mesh:
+			mat = first_mesh.material_override if first_mesh.material_override else first_mesh.mesh.surface_get_material(0)
 		if mat:
 			# Revert to white (assuming original was white/default)
 			revert_tween.parallel().tween_property(mat, "albedo_color", Color(1, 1, 1), 0.5)
@@ -129,6 +140,36 @@ func _on_powerup_timer_timeout() -> void:
 
 	mass = original_mass
 	is_super_marble = false
+	
+func _find_first_mesh_instance(node: Node) -> MeshInstance3D:
+	if node is MeshInstance3D:
+		return node
+	for child in node.get_children():
+		var found = _find_first_mesh_instance(child)
+		if found:
+			return found
+	return null
+	
+func _align_and_scale_visual_to_collision() -> void:
+	var col = get_node_or_null("CollisionShape3D")
+	if not visual_root or not col:
+		return
+	var first_mesh = _find_first_mesh_instance(visual_root)
+	if not first_mesh:
+		return
+	var aabb = first_mesh.get_aabb()
+	var center = aabb.position + aabb.size * 0.5
+	visual_root.position -= center
+	var target_radius = 0.5
+	var shape = col.shape
+	if shape is SphereShape3D:
+		target_radius = shape.radius * col.scale.x
+	var current_radius = max(aabb.size.x, aabb.size.y, aabb.size.z) * 0.5
+	if current_radius <= 0.0:
+		return
+	var scale_factor = target_radius / current_radius
+	visual_root.scale = Vector3.ONE * scale_factor
+	original_visual_scale = visual_root.scale
 
 func reset_game() -> void:
 	# Reload the current scene

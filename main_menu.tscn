@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bts03palrs8oy" path="res://images/cosmos-1853491.jpg" id="4_sky"]
 [ext_resource type="Texture2D" uid="uid://hfxo2iqiwapd" path="res://kloofendal_48d_partly_cloudy_puresky_4k.hdr" id="5_env"]
 [ext_resource type="Texture2D" uid="uid://o3kvg5qmkmcm" path="res://images/hard tilt title.png" id="5_title"]
-[ext_resource type="PackedScene" uid="uid://cui0cy8hve2cg" path="res://robot sphere.fbx" id="6_robot"]
+[ext_resource type="PackedScene" path="res://blue+sci-fi+sphere+3d+model.fbx" id="6_robot"]
 [ext_resource type="Texture2D" uid="uid://c0sir83tsh6v2" path="res://images/marble_run_challenge.png" id="7_subtitle"]
 [ext_resource type="AudioStream" uid="uid://clw8vi228p1o3" path="res://sounds/click-buttons-ui-menu-sounds-effects-button-7-203601.mp3" id="8_hover"]
 [ext_resource type="AudioStream" uid="uid://bf457ofb3uh8y" path="res://sounds/beep-313342.mp3" id="9_click"]

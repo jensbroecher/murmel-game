@@ -161,7 +161,18 @@ func spawn_marble():
 		marble.freeze = true # Hold in place initially
 		
 		# Animate Marble Spawn (Transparent -> White Glow -> Metallic)
-		var mesh_instance = marble.get_node("MeshInstance3D")
+		var mesh_instance = marble.get_node_or_null("MeshInstance3D")
+		if not mesh_instance:
+			var model_root = marble.get_node_or_null("Model")
+			if model_root:
+				var stack: Array = [model_root]
+				while stack.size() > 0 and mesh_instance == null:
+					var n = stack.pop_back()
+					if n is MeshInstance3D:
+						mesh_instance = n
+						break
+					for child in n.get_children():
+						stack.append(child)
 		if mesh_instance:
 			# Duplicate material to modify it uniquely
 			var mat = mesh_instance.mesh.surface_get_material(0).duplicate()
