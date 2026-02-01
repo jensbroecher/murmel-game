@@ -1,0 +1,222 @@
+[gd_scene format=3 uid="uid://bxygo47qo0tn4"]
+
+[ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_j1gpi"]
+[ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="2_fgcns"]
+[ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="3_qy8xg"]
+[ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="4_2eec1"]
+[ext_resource type="Script" uid="uid://dv51koustvna3" path="res://sound_generator.gd" id="5_48e0h"]
+[ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="6_xtk1d"]
+[ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="7_08ow2"]
+[ext_resource type="PackedScene" path="res://bumper.tscn" id="8_sxidp"]
+[ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="9_ceu0t"]
+[ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="10_nwnde"]
+[ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="11_jsyr5"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
+panorama = ExtResource("4_2eec1")
+
+[sub_resource type="Sky" id="Sky_env"]
+sky_material = SubResource("PanoramaSkyMaterial_env")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_env")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
+albedo_color = Color(0.08033415, 0.5737961, 0.46489727, 1)
+metallic = 0.7
+roughness = 0.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 2, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
+size = Vector2(10000, 10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
+size = Vector3(10000, 1, 10000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+shading_mode = 0
+albedo_color = Color(0.5, 0.9, 1, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_particles"]
+material = SubResource("StandardMaterial3D_particles")
+radius = 0.06
+height = 0.12
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Curve" id="Curve_particles"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.2, 1), 0.0, 0.0, 0, 0, Vector2(1, 0.8), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="Gradient" id="Gradient_particles"]
+offsets = PackedFloat32Array(0, 0.1, 1)
+colors = PackedColorArray(1, 1, 1, 0, 10, 10, 10, 1, 10, 10, 10, 1)
+
+[node name="Game" type="Node3D" unique_id=748338584]
+script = ExtResource("1_j1gpi")
+marble_scene = ExtResource("2_fgcns")
+ripple_scene = ExtResource("3_qy8xg")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1832232413]
+environment = SubResource("Environment_main")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=563592775]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="HUD" type="Control" parent="." unique_id=1642581889]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LivesLabel" type="Label" parent="HUD" unique_id=557735371]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 400.0
+offset_bottom = 60.0
+theme_override_font_sizes/font_size = 32
+text = "Remaining Tries: 7"
+
+[node name="WinLabel" type="Label" parent="HUD" unique_id=125754499]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 64
+text = "STAGE CLEARED"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="HUD" unique_id=1419620161]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 60.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 32
+text = "00:00"
+horizontal_alignment = 2
+
+[node name="SoundGenerator" type="Node" parent="." unique_id=114844227]
+script = ExtResource("5_48e0h")
+
+[node name="LevelPivot" type="Node3D" parent="." unique_id=1595782917]
+script = ExtResource("6_xtk1d")
+
+[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot" unique_id=1816368003]
+use_collision = true
+
+[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1582605100]
+transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
+size = Vector3(24, 2, 24)
+material = SubResource("StandardMaterial3D_floor")
+
+[node name="Groove8" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=291748660]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -2.8776832, 0, 14.158872)
+operation = 2
+size = Vector3(3.8950195, 2, 7.4366455)
+
+[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1383145280]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.890961, 0, 5.658105)
+operation = 2
+size = Vector3(6.59021, 2, 2)
+
+[node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1075329792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.254326, 0, 15.296307)
+operation = 2
+size = Vector3(10.533936, 2, 2)
+
+[node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1390403949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.19343, 0, -3.288103)
+operation = 2
+size = Vector3(2, 2, 16)
+
+[node name="FinishTrigger" type="Area3D" parent="LevelPivot" unique_id=2051528255]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -1.5558624)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger" unique_id=458022098]
+shape = SubResource("BoxShape3D_trigger")
+
+[node name="Diamond1" parent="LevelPivot" unique_id=1007207908 instance=ExtResource("7_08ow2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 6.9865417, -4.9262695)
+
+[node name="Bumper" parent="LevelPivot" unique_id=1289907953 instance=ExtResource("8_sxidp")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, -0.5, 7)
+
+[node name="Bumper2" parent="LevelPivot" unique_id=1777927369 instance=ExtResource("8_sxidp")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -10.004, -0.5, 0.003)
+
+[node name="Bumper3" parent="LevelPivot" unique_id=1492437487 instance=ExtResource("8_sxidp")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -1.6383576, -0.5, -9.252398)
+
+[node name="Rocket" parent="LevelPivot" unique_id=1247172017 instance=ExtResource("9_ceu0t")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -1.6941223)
+
+[node name="CameraRig" type="Node3D" parent="." unique_id=636163931]
+script = ExtResource("10_nwnde")
+follow_speed = 5.0
+
+[node name="CameraPivot" type="Node3D" parent="CameraRig" unique_id=1503239216]
+transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot" unique_id=520086492]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
+current = true
+
+[node name="WaterPlane" type="MeshInstance3D" parent="." unique_id=2075769700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.054065704, -19.999992, 0.029541016)
+mesh = SubResource("PlaneMesh_water")
+surface_material_override/0 = ExtResource("11_jsyr5")
+
+[node name="WaterArea" type="Area3D" parent="WaterPlane" unique_id=1456750501]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlane/WaterArea" unique_id=501248528]
+shape = SubResource("BoxShape3D_water")
+
+[node name="StartPoint" type="Marker3D" parent="." unique_id=2003528615]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.926768, 7.682711, -4.4528756)
+
+[node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint" unique_id=1188600700]
+emitting = false
+amount = 800
+one_shot = true
+mesh = SubResource("SphereMesh_particles")
+emission_shape = 1
+emission_sphere_radius = 4.0
+gravity = Vector3(0, 0, 0)
+radial_accel_min = -10.0
+radial_accel_max = -10.0
+damping_min = 5.0
+damping_max = 5.0
+scale_amount_curve = SubResource("Curve_particles")
+color_ramp = SubResource("Gradient_particles")
+
+[connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]
+[connection signal="body_entered" from="WaterPlane/WaterArea" to="." method="_on_water_entered"]

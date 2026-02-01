@@ -8,12 +8,22 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="HardTilt - Marble Challenge"
 run/main_scene="res://splash_screen.tscn"
-config/features=PackedStringArray("4.5", "Mobile")
+config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+GlobalGameState="*res://global_game_state.gd"
+MusicManager="*res://music_manager.gd"
+SoundManager="*res://sound_manager.gd"
 
 [display]
 
@@ -21,12 +31,6 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
-
-[autoload]
-
-GlobalGameState="*res://global_game_state.gd"
-MusicManager="*res://music_manager.gd"
-SoundManager="*res://sound_manager.gd"
 
 [input_devices]
 

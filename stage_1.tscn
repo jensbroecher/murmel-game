@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://bwlhts28yc1r0"]
+[gd_scene format=3 uid="uid://bwlhts28yc1r0"]
 
 [ext_resource type="Script" uid="uid://dnwyx762ot6qk" path="res://level_controller.gd" id="1_level"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="2_camera"]
@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://cannon12345" path="res://cannon.tscn" id="8_cannon"]
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="11_diamond"]
 [ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="13_rocket"]
-[ext_resource type="Shader" uid="uid://5dfhax3ieboe" path="res://water.gdshader" id="14_water"]
 [ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="20_water_mat"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
@@ -24,7 +23,6 @@ background_mode = 2
 sky = SubResource("Sky_env")
 tonemap_mode = 2
 glow_enabled = true
-screen_space_aa = 1
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_floor"]
 albedo_color = Color(0.2, 0.5, 0.8, 1)
@@ -64,28 +62,6 @@ point_count = 3
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 size = Vector2(10000, 10000)
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_water"]
-noise_type = 3
-fractal_type = 2
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_water"]
-noise = SubResource("FastNoiseLite_water")
-seamless = true
-as_normal_map = true
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_water"]
-render_priority = 0
-shader = ExtResource("14_water")
-shader_parameter/albedo = Color(0, 0.2, 0.4, 0.8)
-shader_parameter/metallic = 0.8
-shader_parameter/roughness = 0.2
-shader_parameter/texture_normal = SubResource("NoiseTexture2D_water")
-shader_parameter/texture_normal2 = SubResource("NoiseTexture2D_water")
-shader_parameter/wave_direction = Vector2(2, 0)
-shader_parameter/wave_direction2 = Vector2(0, 1)
-shader_parameter/time_scale = 0.015
-shader_parameter/uv_scale = 125.0
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_water"]
 size = Vector3(10000, 1, 10000)
 
@@ -112,20 +88,20 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.1, 1)
 colors = PackedColorArray(1, 1, 1, 0, 10, 10, 10, 1, 10, 10, 10, 1)
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node3D" unique_id=2053280545]
 script = ExtResource("5_game")
 marble_scene = ExtResource("4_marble_scene")
 ripple_scene = ExtResource("7_ripple")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=455548964]
 environment = SubResource("Environment_main")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=761780896]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 light_energy = 0.5
 shadow_enabled = true
 
-[node name="HUD" type="Control" parent="."]
+[node name="HUD" type="Control" parent="." unique_id=1344487879]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -134,7 +110,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="LivesLabel" type="Label" parent="HUD"]
+[node name="LivesLabel" type="Label" parent="HUD" unique_id=628420061]
 layout_mode = 1
 offset_left = 20.0
 offset_top = 20.0
@@ -143,7 +119,7 @@ offset_bottom = 60.0
 theme_override_font_sizes/font_size = 32
 text = "Remaining Tries: 7"
 
-[node name="WinLabel" type="Label" parent="HUD"]
+[node name="WinLabel" type="Label" parent="HUD" unique_id=14741653]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -162,7 +138,7 @@ text = "STAGE CLEARED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TimeLabel" type="Label" parent="HUD"]
+[node name="TimeLabel" type="Label" parent="HUD" unique_id=1160497632]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -176,99 +152,99 @@ theme_override_font_sizes/font_size = 32
 text = "00:00"
 horizontal_alignment = 2
 
-[node name="SoundGenerator" type="Node" parent="."]
+[node name="SoundGenerator" type="Node" parent="." unique_id=1670350556]
 script = ExtResource("6_sound")
 
-[node name="LevelPivot" type="Node3D" parent="."]
+[node name="LevelPivot" type="Node3D" parent="." unique_id=1871239634]
 script = ExtResource("1_level")
 
-[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot"]
+[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot" unique_id=513989077]
 use_collision = true
 
-[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=315327656]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=97552625]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.93225, 0.023406982, 8.725693)
 operation = 2
 size = Vector3(2, 2, 16)
 
-[node name="Groove6" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Groove6" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1059012440]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.927301, 0, 11.322189)
 operation = 2
 size = Vector3(2, 2, 16)
 
-[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.3083496, 0, 8)
+[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1902594825]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9725952, 0, 8)
 operation = 2
-size = Vector3(13.383301, 2, 2)
+size = Vector3(12.711792, 2, 2)
 
-[node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1756831688]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.597122, 0, 15.729052)
 operation = 2
 size = Vector3(13.383301, 2, 2)
 
-[node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1318194369]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0327244, 0, 0)
 operation = 2
 size = Vector3(2, 2, 16)
 
-[node name="Groove4" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Groove4" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=785926116]
 transform = Transform3D(0.93671495, -0.35009295, 0, 0.35009295, 0.93671495, 0, 0, 0, 0.33785796, 5.1746025, 0.8677814, -4.153061)
 operation = 2
 size = Vector3(5.3654785, 2, 8.829956)
 
-[node name="StartArea" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="StartArea" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=530877130]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.137207, 0, 5.29183)
 operation = 2
 size = Vector3(4, 2, 4)
 
-[node name="Ramp" type="CSGPolygon3D" parent="LevelPivot/LevelGeometry"]
+[node name="Ramp" type="CSGPolygon3D" parent="LevelPivot/LevelGeometry" unique_id=647978533]
 transform = Transform3D(-1.2789634e-07, 0, -1.0401152, 0, 1.2583469, 0, 2.9259272, 0, -4.546488e-08, -5.231432, 0.12349653, -0.5162134)
 polygon = PackedVector2Array(0, 0, 4, 2, 4, 0)
 depth = 4.0
 material = SubResource("StandardMaterial3D_ramp")
 
-[node name="Groove5" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Groove5" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=760961366]
 transform = Transform3D(1.2378472, 0, 0, 0, 2.3053436, 0, 0, 0, 0.4934314, 7.0772924, -0.17113853, 0.40193462)
 operation = 2
 size = Vector3(5.3654785, 2, 8.829956)
 
-[node name="WallNorth" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="WallNorth" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=717068105]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -18.5)
 size = Vector3(38, 2, 1)
 material = SubResource("StandardMaterial3D_vn1b6")
 
-[node name="HalfPipe" type="CSGCombiner3D" parent="LevelPivot"]
+[node name="HalfPipe" type="CSGCombiner3D" parent="LevelPivot" unique_id=580149449]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.369038, -0.48743057, 6.942352)
 use_collision = true
 
-[node name="Base" type="CSGBox3D" parent="LevelPivot/HalfPipe"]
+[node name="Base" type="CSGBox3D" parent="LevelPivot/HalfPipe" unique_id=1765382166]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 size = Vector3(4, 3, 10)
 material = SubResource("StandardMaterial3D_ramp")
 
-[node name="Cutout" type="CSGCylinder3D" parent="LevelPivot/HalfPipe"]
+[node name="Cutout" type="CSGCylinder3D" parent="LevelPivot/HalfPipe" unique_id=1657807373]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.5, 0)
 operation = 2
 radius = 2.0
 height = 10.0
 sides = 32
 
-[node name="CurvedHalfPipe" type="CSGCombiner3D" parent="LevelPivot"]
+[node name="CurvedHalfPipe" type="CSGCombiner3D" parent="LevelPivot" unique_id=767013396]
 transform = Transform3D(0.9999001, 0, -0.014136683, 0, 1, 0, 0.014136683, 0, 0.9999001, 9.374516, -0.4842236, 1.9320288)
 use_collision = true
 
-[node name="Base" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe"]
+[node name="Base" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe" unique_id=1281377814]
 polygon = PackedVector2Array(4, -1, 8, -1, 8, 2, 4, 2)
 mode = 1
 spin_degrees = 90.0
 spin_sides = 32
 material = SubResource("StandardMaterial3D_ramp")
 
-[node name="Cutout" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe"]
+[node name="Cutout" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe" unique_id=1556492158]
 transform = Transform3D(0.999847, 0, -0.0174524, 0, 1, 0, 0.0174524, 0, 0.999847, 0, 0, 0)
 operation = 2
 polygon = PackedVector2Array(8, 2.5, 7.9616, 2.8902, 7.8478, 3.2654, 7.6629, 3.6111, 7.4142, 3.9142, 7.1111, 4.1629, 6.7654, 4.3478, 6.3902, 4.4616, 6, 4.5, 5.6098, 4.4616, 5.2346, 4.3478, 4.8889, 4.1629, 4.5858, 3.9142, 4.3371, 3.6111, 4.1522, 3.2654, 4.0384, 2.8902, 4, 2.5, 4.0384, 2.1098, 4.1522, 1.7346, 4.3371, 1.3889, 4.5858, 1.0858, 4.8889, 0.8371, 5.2346, 0.6522, 5.6098, 0.5384, 6, 0.5, 6.3902, 0.5384, 6.7654, 0.6522, 7.1111, 0.8371, 7.4142, 1.0858, 7.6629, 1.3889, 7.8478, 1.7346, 7.9616, 2.1098)
@@ -276,7 +252,7 @@ mode = 1
 spin_degrees = 92.0
 spin_sides = 32
 
-[node name="LoopDeLoop" type="CSGPolygon3D" parent="LevelPivot"]
+[node name="LoopDeLoop" type="CSGPolygon3D" parent="LevelPivot" unique_id=402708828]
 transform = Transform3D(-0.9998638, 0, 0.01651001, 0, 1, 0, -0.01651001, 0, -0.9998638, -13.337531, 0.7723458, -1.3302188)
 use_collision = true
 polygon = PackedVector2Array(-1, -0.2, 1, -0.2, 1, 0.5, 0.8, 0.5, 0.8, 0, -0.8, 0, -0.8, 0.5, -1, 0.5)
@@ -293,23 +269,23 @@ path_u_distance = 1.0
 path_joined = false
 material = SubResource("StandardMaterial3D_ramp")
 
-[node name="LoopBoost" type="Area3D" parent="LevelPivot/LoopDeLoop"]
+[node name="LoopBoost" type="Area3D" parent="LevelPivot/LoopDeLoop" unique_id=374654390]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 3)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/LoopDeLoop/LoopBoost"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/LoopDeLoop/LoopBoost" unique_id=1825239363]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("BoxShape3D_boost")
 
-[node name="Path3D" type="Path3D" parent="LevelPivot/LoopDeLoop"]
+[node name="Path3D" type="Path3D" parent="LevelPivot/LoopDeLoop" unique_id=1831631216]
 curve = SubResource("Curve3D_loop")
 
-[node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
+[node name="FinishTrigger" type="Area3D" parent="LevelPivot" unique_id=2018128537]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.416832, 0, -13.083199)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger" unique_id=1542426282]
 shape = SubResource("BoxShape3D_trigger")
 
-[node name="RampHump" type="CSGPolygon3D" parent="LevelPivot"]
+[node name="RampHump" type="CSGPolygon3D" parent="LevelPivot" unique_id=2105137733]
 transform = Transform3D(1, 0, 0, 0, 0.6569306, 0, 0, 0, 1.8913118, 7.31339, 0, 7.341564)
 use_collision = true
 polygon = PackedVector2Array(-1, -0.2, 1, -0.2, 1, 0.5, 0.8, 0.5, 0.8, 0, -0.8, 0, -0.8, 0.5, -1, 0.5)
@@ -327,60 +303,58 @@ path_joined = false
 smooth_faces = true
 material = SubResource("StandardMaterial3D_ramp")
 
-[node name="Path3D" type="Path3D" parent="LevelPivot/RampHump"]
+[node name="Path3D" type="Path3D" parent="LevelPivot/RampHump" unique_id=1855978882]
 curve = SubResource("Curve3D_ramp")
 
-[node name="Diamond1" parent="LevelPivot" instance=ExtResource("11_diamond")]
+[node name="Diamond1" parent="LevelPivot" unique_id=692907488 instance=ExtResource("11_diamond")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 1, -13.49066)
 
-[node name="Diamond2" parent="LevelPivot" instance=ExtResource("11_diamond")]
+[node name="Diamond2" parent="LevelPivot" unique_id=824926003 instance=ExtResource("11_diamond")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.059209, 1.6450925, 2.9810872)
 
-[node name="Diamond4" parent="LevelPivot" instance=ExtResource("11_diamond")]
+[node name="Diamond4" parent="LevelPivot" unique_id=2071658163 instance=ExtResource("11_diamond")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.301655, 0.085258484, 15.726624)
 
-[node name="Diamond6" parent="LevelPivot" instance=ExtResource("11_diamond")]
+[node name="Diamond6" parent="LevelPivot" unique_id=756993963 instance=ExtResource("11_diamond")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.220215, 1.1515226, 2.0191078)
 
-[node name="Diamond5" parent="LevelPivot" instance=ExtResource("11_diamond")]
+[node name="Diamond5" parent="LevelPivot" unique_id=546316689 instance=ExtResource("11_diamond")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.365658, 3.3134956, -0.9571953)
 
-[node name="Cannon" parent="LevelPivot" instance=ExtResource("8_cannon")]
+[node name="Cannon" parent="LevelPivot" unique_id=1963495425 instance=ExtResource("8_cannon")]
 transform = Transform3D(1, 0, 0, 0, 0.86014616, -0.5100476, 0, 0.5100476, 0.86014616, 2.0314484, 1.3882742, -8.1819)
 
-[node name="Cannon2" parent="LevelPivot" instance=ExtResource("8_cannon")]
+[node name="Cannon2" parent="LevelPivot" unique_id=1316384028 instance=ExtResource("8_cannon")]
 transform = Transform3D(-0.9999254, -1.18757434e-11, -0.012216893, 0.0011758187, 0.99535763, -0.09623814, 0.012160176, -0.09624534, -0.99528337, -12.242179, 1.2972696, -11.142807)
 
-[node name="Rocket" parent="LevelPivot" instance=ExtResource("13_rocket")]
+[node name="Rocket" parent="LevelPivot" unique_id=869585535 instance=ExtResource("13_rocket")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 13.5, -1.3467139, -13.393795)
 
-[node name="CameraRig" type="Node3D" parent="."]
+[node name="CameraRig" type="Node3D" parent="." unique_id=369976422]
 script = ExtResource("2_camera")
 follow_speed = 5.0
 
-[node name="CameraPivot" type="Node3D" parent="CameraRig"]
+[node name="CameraPivot" type="Node3D" parent="CameraRig" unique_id=79476836]
 transform = Transform3D(1, 0, 0, 0, 0.642788, 0.766044, 0, -0.766044, 0.642788, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot"]
+[node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot" unique_id=1747690877]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 35)
 current = true
 
-
-
-[node name="WaterPlane" type="MeshInstance3D" parent="."]
+[node name="WaterPlane" type="MeshInstance3D" parent="." unique_id=87956294]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
 mesh = SubResource("PlaneMesh_water")
 surface_material_override/0 = ExtResource("20_water_mat")
 
-[node name="WaterArea" type="Area3D" parent="WaterPlane"]
+[node name="WaterArea" type="Area3D" parent="WaterPlane" unique_id=530748772]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlane/WaterArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlane/WaterArea" unique_id=518422002]
 shape = SubResource("BoxShape3D_water")
 
-[node name="StartPoint" type="Marker3D" parent="."]
+[node name="StartPoint" type="Marker3D" parent="." unique_id=1615827550]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.194156, 7.682711, 10.20436)
 
-[node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
+[node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint" unique_id=2070097690]
 emitting = false
 amount = 800
 one_shot = true
