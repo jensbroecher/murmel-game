@@ -42,6 +42,11 @@ albedo_color = Color(0.08033415, 0.5737961, 0.46489727, 1)
 metallic = 0.7
 roughness = 0.2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_75v8w"]
+albedo_color = Color(0.078431375, 0.57254905, 0.46666667, 1)
+metallic = 0.7
+roughness = 0.2
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_dytaq"]
 size = Vector3(3, 3, 5)
 
@@ -66,6 +71,11 @@ rings = 4
 [sub_resource type="Gradient" id="Gradient_o8bq8"]
 offsets = PackedFloat32Array(0, 0.2, 1)
 colors = PackedColorArray(1, 1, 1, 0, 0.8, 0.9, 1, 0.5, 1, 1, 1, 0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7jf3"]
+albedo_color = Color(1, 0.5, 0, 1)
+metallic = 0.5
+roughness = 0.5
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(4, 2, 4)
@@ -176,52 +186,73 @@ transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="Groove8" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=291748660]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -2.8776832, 0, 14.158872)
+[node name="Groove1" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1390403949]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.868967, 0, -3.288103)
 operation = 2
-size = Vector3(3.8950195, 2, 7.4366455)
+size = Vector3(14.648926, 2, 16)
 
-[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1383145280]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8143926, 0, 6.0829706)
+[node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=142473373]
+transform = Transform3D(1, 0, 0, 0, 0.97555757, 0.21974404, 0, -0.21974404, 0.97555757, 1.868967, 0.45768738, 6.2323837)
 operation = 2
-size = Vector3(12.743347, 2, 2.8497314)
+size = Vector3(14.648926, 2, 4.3598633)
 
-[node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1075329792]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.254326, 0, 15.296307)
-operation = 2
-size = Vector3(10.533936, 2, 2)
+[node name="WallSouth" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=2063815200]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 18.5)
+size = Vector3(38, 2, 1)
+material = SubResource("StandardMaterial3D_75v8w")
 
-[node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1390403949]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4390354, 0, -3.288103)
-operation = 2
-size = Vector3(5.508789, 2, 16)
+[node name="WallWest" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=249187699]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 1, 0)
+size = Vector3(1, 2, 38)
+material = SubResource("StandardMaterial3D_75v8w")
 
 [node name="Diamond1" parent="LevelPivot" unique_id=1007207908 instance=ExtResource("7_08ow2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 6.9865417, -4.9262695)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.0242996, 10.899705, -4.9096756)
+
+[node name="Diamond2" parent="LevelPivot" unique_id=1898303527 instance=ExtResource("7_08ow2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.843083, 15.582558, 0.31322014)
+
+[node name="Diamond3" parent="LevelPivot" unique_id=1759592282 instance=ExtResource("7_08ow2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.69063985, -0.32771707, -4.174225)
+
+[node name="Diamond4" parent="LevelPivot" unique_id=2017697573 instance=ExtResource("7_08ow2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.210528, 0.8309059, -14.140495)
+
+[node name="Diamond5" parent="LevelPivot" unique_id=1353707320 instance=ExtResource("7_08ow2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.603106, 1.8691931, -1.2106402)
 
 [node name="Bumper" parent="LevelPivot" unique_id=1289907953 instance=ExtResource("8_sxidp")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, 0.38587427, 7)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, -0.51454306, -0.97280693)
+
+[node name="Bumper2" parent="LevelPivot" unique_id=1958809299 instance=ExtResource("8_sxidp")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, 4.2547584, -0.51454306, -6.3435917)
+
+[node name="Bumper3" parent="LevelPivot" unique_id=1025708818 instance=ExtResource("8_sxidp")]
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -2.0496278, -0.51454306, -8.1149235)
 
 [node name="HY_Ramp" parent="LevelPivot" unique_id=350520405 instance=ExtResource("9_fgcns")]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -9.24578, -0.033696055, -4.822692)
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -1.2078667, -1.052246, -30.599426)
 
 [node name="HY_Ramp_Left" parent="LevelPivot" unique_id=1024876286 instance=ExtResource("10_ceu0t")]
 transform = Transform3D(-8, 0, 6.993822e-07, 0, 8, 0, -6.993822e-07, 0, -8, 12.196301, 4.7683716e-07, -2.9283695)
 
-[node name="HY_180" parent="LevelPivot" unique_id=992728346 instance=ExtResource("11_nwnde")]
+[node name="HY_Serpentines" type="Node3D" parent="LevelPivot" unique_id=682735799]
+transform = Transform3D(1, 0, 0, 0, 0.9941434, 0.108068764, 0, -0.108068764, 0.9941434, 0, 0, 1.062129)
+
+[node name="HY_180" parent="LevelPivot/HY_Serpentines" unique_id=992728346 instance=ExtResource("11_nwnde")]
 transform = Transform3D(-2.6663946e-07, 0, -6.1, 0, 6.1, 0, 6.1, 0, -2.6663946e-07, -6.9913874, 14.424271, -2.8507452)
 
-[node name="HY_180_3" parent="LevelPivot" unique_id=827891325 instance=ExtResource("11_nwnde")]
+[node name="HY_180_3" parent="LevelPivot/HY_Serpentines" unique_id=827891325 instance=ExtResource("11_nwnde")]
 transform = Transform3D(-2.6663946e-07, 0, -6.1, 0, 6.1, 0, 6.1, 0, -2.6663946e-07, -6.9913874, 14.424271, 5.097358)
 
-[node name="HY_180_2" parent="LevelPivot" unique_id=1999172178 instance=ExtResource("11_nwnde")]
+[node name="HY_180_2" parent="LevelPivot/HY_Serpentines" unique_id=1999172178 instance=ExtResource("11_nwnde")]
 transform = Transform3D(-2.6663946e-07, 0, 6.1, 0, 6.1, 0, -6.1, 0, -2.6663946e-07, -2.9678338, 14.418253, 1.1665499)
 
-[node name="HY_180_4" parent="LevelPivot" unique_id=10098736 instance=ExtResource("11_nwnde")]
+[node name="HY_180_4" parent="LevelPivot/HY_Serpentines" unique_id=10098736 instance=ExtResource("11_nwnde")]
 transform = Transform3D(-2.6663946e-07, 0, 6.1, 0, 6.1, 0, -6.1, 0, -2.6663946e-07, -2.9678338, 14.423912, 9.118742)
 
 [node name="HY_Straight" parent="LevelPivot" unique_id=13560488 instance=ExtResource("12_jsyr5")]
-transform = Transform3D(7.7635803, 1.9304975, 0, -1.9304975, 7.7635803, 0, 0, 0, 8, 6.657791, 4.5778503, -13.9499855)
+transform = Transform3D(7.7635803, 1.9304975, 0, -1.9304975, 7.7635803, 0, 0, 0, 8, 3.113409, 6.255473, -44.74318)
 
 [node name="HY_Pipe_Left" parent="LevelPivot" unique_id=1478759150 instance=ExtResource("13_5qnjf")]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 13.329934, 3.040441, -3.9842653)
@@ -236,16 +267,16 @@ transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 8.983023, 5.4730787, -4.13467
 transform = Transform3D(-5.9999995, 0, -9.0597473e-07, 0, 6.000001, 0, 9.0597473e-07, 0, -5.9999995, 2.0318298, 5.4730787, -4.6344566)
 
 [node name="HY_Bridge" parent="LevelPivot" unique_id=1251019035 instance=ExtResource("15_y7jf3")]
-transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -10.928177, -0.2843969, 5.6500163)
+transform = Transform3D(-5.7202436e-07, 0, 8, 0, 6.0849423, 0, -13.086392, 0, -3.496911e-07, 16.563519, -0.17350006, -0.9955654)
 
 [node name="HY_Pipe_Exit" parent="LevelPivot" unique_id=464050269 instance=ExtResource("16_75v8w")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 12.969359, 0, 13.022185)
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 12.969359, 0, -40.180233)
 
 [node name="Funnel" parent="LevelPivot" unique_id=902575840 instance=ExtResource("17_jsyr5")]
 transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -3.0476441, 10.133443, -4.813713)
 
 [node name="StartPlatform" parent="LevelPivot" unique_id=576528660 instance=ExtResource("18_5qnjf")]
-transform = Transform3D(-4.371139e-08, 0.17192909, 0.9851093, 0, 0.9851093, -0.17192909, -1, -7.5152595e-09, -4.3060496e-08, -6.8877754, 16.537474, 10.948527)
+transform = Transform3D(-4.371139e-08, 0.17192909, 0.9851093, 0, 0.9851093, -0.17192909, -1, -7.5152595e-09, -4.3060496e-08, -6.8877754, 17.454243, 10.36273)
 
 [node name="TunnelSystem" type="Node3D" parent="LevelPivot" unique_id=2025623552 node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
@@ -255,7 +286,7 @@ entrance_area = NodePath("EntranceTunnel/EntranceArea")
 suction_area = NodePath("EntranceTunnel/SuctionArea")
 
 [node name="EntranceTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem" unique_id=503427953]
-transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -14.155797, 1.943141, 3.1319351)
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -32.28032, 1.4180365, 12.3617)
 use_collision = true
 
 [node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1506468764]
@@ -297,6 +328,60 @@ initial_velocity_max = 10.0
 scale_amount_min = 0.5
 scale_amount_max = 0.5
 color_ramp = SubResource("Gradient_o8bq8")
+
+[node name="HalfPipe" type="CSGCombiner3D" parent="LevelPivot" unique_id=605754372]
+transform = Transform3D(-0.6303642, 0, 0.77629954, 0, 1, 0, -0.77629954, 0, -0.6303642, -8.52902, -0.48743057, -13.267668)
+use_collision = true
+
+[node name="Base" type="CSGBox3D" parent="LevelPivot/HalfPipe" unique_id=133234448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+size = Vector3(4, 3, 10)
+material = SubResource("StandardMaterial3D_y7jf3")
+
+[node name="Cutout" type="CSGCylinder3D" parent="LevelPivot/HalfPipe" unique_id=1856994266]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 2.5, 0)
+operation = 2
+radius = 2.0
+height = 10.0
+sides = 32
+
+[node name="CurvedHalfPipe" type="CSGCombiner3D" parent="LevelPivot" unique_id=1943807062]
+transform = Transform3D(-0.61932695, 0, 0.78513324, 0, 1, 0, -0.78513324, 0, -0.61932695, -8.6398, -0.4842236, -5.4557953)
+use_collision = true
+
+[node name="Base" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe" unique_id=98336555]
+polygon = PackedVector2Array(4, -1, 8, -1, 8, 2, 4, 2)
+mode = 1
+spin_degrees = 90.0
+spin_sides = 32
+material = SubResource("StandardMaterial3D_y7jf3")
+
+[node name="Cutout" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe" unique_id=2116162902]
+transform = Transform3D(0.999847, 0, -0.0174524, 0, 1, 0, 0.0174524, 0, 0.999847, 0, 0, 0)
+operation = 2
+polygon = PackedVector2Array(8, 2.5, 7.9616, 2.8902, 7.8478, 3.2654, 7.6629, 3.6111, 7.4142, 3.9142, 7.1111, 4.1629, 6.7654, 4.3478, 6.3902, 4.4616, 6, 4.5, 5.6098, 4.4616, 5.2346, 4.3478, 4.8889, 4.1629, 4.5858, 3.9142, 4.3371, 3.6111, 4.1522, 3.2654, 4.0384, 2.8902, 4, 2.5, 4.0384, 2.1098, 4.1522, 1.7346, 4.3371, 1.3889, 4.5858, 1.0858, 4.8889, 0.8371, 5.2346, 0.6522, 5.6098, 0.5384, 6, 0.5, 6.3902, 0.5384, 6.7654, 0.6522, 7.1111, 0.8371, 7.4142, 1.0858, 7.6629, 1.3889, 7.8478, 1.7346, 7.9616, 2.1098)
+mode = 1
+spin_degrees = 92.0
+spin_sides = 32
+
+[node name="CurvedHalfPipe2" type="CSGCombiner3D" parent="LevelPivot" unique_id=1585183905]
+transform = Transform3D(0.77629954, 0, 0.6303641, 0, 1, 0, -0.6303641, 0, 0.77629954, -0.9034362, -0.4842236, -11.737812)
+use_collision = true
+
+[node name="Base" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe2" unique_id=1851308058]
+polygon = PackedVector2Array(4, -1, 8, -1, 8, 2, 4, 2)
+mode = 1
+spin_degrees = 90.0
+spin_sides = 32
+material = SubResource("StandardMaterial3D_y7jf3")
+
+[node name="Cutout" type="CSGPolygon3D" parent="LevelPivot/CurvedHalfPipe2" unique_id=791333017]
+transform = Transform3D(0.999847, 0, -0.0174524, 0, 1, 0, 0.0174524, 0, 0.999847, 0, 0, 0)
+operation = 2
+polygon = PackedVector2Array(8, 2.5, 7.9616, 2.8902, 7.8478, 3.2654, 7.6629, 3.6111, 7.4142, 3.9142, 7.1111, 4.1629, 6.7654, 4.3478, 6.3902, 4.4616, 6, 4.5, 5.6098, 4.4616, 5.2346, 4.3478, 4.8889, 4.1629, 4.5858, 3.9142, 4.3371, 3.6111, 4.1522, 3.2654, 4.0384, 2.8902, 4, 2.5, 4.0384, 2.1098, 4.1522, 1.7346, 4.3371, 1.3889, 4.5858, 1.0858, 4.8889, 0.8371, 5.2346, 0.6522, 5.6098, 0.5384, 6, 0.5, 6.3902, 0.5384, 6.7654, 0.6522, 7.1111, 0.8371, 7.4142, 1.0858, 7.6629, 1.3889, 7.8478, 1.7346, 7.9616, 2.1098)
+mode = 1
+spin_degrees = 92.0
+spin_sides = 32
 
 [node name="LevelPivot2" type="Node3D" parent="." unique_id=-1294967295]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -42.29808)
@@ -360,7 +445,7 @@ surface_material_override/0 = ExtResource("11_jsyr5")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="." unique_id=2003528615]
-transform = Transform3D(0.2512923, -0.96791124, 0, 0.96791124, 0.2512923, 0, 0, 0, 1, -6.988582, 20.152332, 10.965534)
+transform = Transform3D(0.2512923, -0.96791124, 0, 0.96791124, 0.2512923, 0, 0, 0, 1, -6.658835, 20.152332, 10.237749)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint" unique_id=1188600700]
 emitting = false

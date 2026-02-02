@@ -94,3 +94,42 @@ func set_active_pivot(index: int):
 func update_camera_target():
 	if camera_rig:
 		camera_rig.target_node = get_node_or_null("Marble")
+
+func _on_finish_trigger_body_entered(body):
+	if body.name == "Marble":
+		if collected_diamonds < total_diamonds:
+			show_message("Collect all diamonds first!")
+			return
+
+		win_label.visible = true
+		win_label.text = "STAGE CLEARED\nTime: " + GlobalGameState.get_elapsed_time()
+		if sound_gen:
+			sound_gen.play_win()
+		print("You Won!")
+		GlobalGameState.complete_level(GlobalGameState.current_level_index, GlobalGameState.get_elapsed_time(), GlobalGameState.lives)
+		
+		# Launch Rocket - Search in all pivots
+		var rocket = null
+		for pivot in level_pivots:
+			rocket = pivot.get_node_or_null("Rocket")
+			if rocket:
+				break
+		
+		# Also check direct children of the stage (just in case it's not in a pivot)
+		if not rocket:
+			rocket = get_node_or_null("Rocket")
+
+		if rocket and rocket.has_method("launch"):
+			rocket.launch(body)
+			return
+		
+		# Fallback if rocket not found (should not happen in Stage 6)
+		# We must avoid calling _play_despawn_effect in parent unless we override it too,
+		# because it looks for LevelPivot/FinishTrigger.
+		
+		# Simple fallback exit
+		await get_tree().create_timer(4.0).timeout
+		GlobalGameState.reset_lives()
+		GlobalGameState.clear_collected()
+		GlobalGameState.show_level_selection_on_load = true
+		get_tree().change_scene_to_file("res://main_menu.tscn")
