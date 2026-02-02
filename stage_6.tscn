@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b740shgdmnjss"]
 
-[ext_resource type="Script" path="res://stage_6_controller.gd" id="1_j1gpi"]
+[ext_resource type="Script" uid="uid://dh6u82w5y6i1m" path="res://stage_6_controller.gd" id="1_j1gpi"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="2_fgcns"]
 [ext_resource type="PackedScene" uid="uid://ripple12345" path="res://ripple.tscn" id="3_qy8xg"]
 [ext_resource type="Texture2D" uid="uid://cgre5s3111dp2" path="res://sunflowers_puresky_4k.hdr" id="4_2eec1"]
@@ -9,8 +9,21 @@
 [ext_resource type="PackedScene" uid="uid://8tvcwvkjyyg0" path="res://collectible_diamond.tscn" id="7_08ow2"]
 [ext_resource type="PackedScene" path="res://bumper.tscn" id="8_sxidp"]
 [ext_resource type="PackedScene" uid="uid://rocket12345" path="res://rocket.tscn" id="9_ceu0t"]
+[ext_resource type="PackedScene" uid="uid://b4pgt63jusa6b" path="res://hunyuan/solid ramp.glb" id="9_fgcns"]
+[ext_resource type="PackedScene" uid="uid://c815sxqn8m28a" path="res://hunyuan/ramp left turn.glb" id="10_ceu0t"]
 [ext_resource type="Script" uid="uid://67m44jl6k2ki" path="res://camera_controller.gd" id="10_nwnde"]
 [ext_resource type="Material" uid="uid://watermat123" path="res://WaterMaterial.tres" id="11_jsyr5"]
+[ext_resource type="PackedScene" uid="uid://cxxvh8lo0tn0e" path="res://hunyuan/180turn.glb" id="11_nwnde"]
+[ext_resource type="PackedScene" uid="uid://b478unmyjo1d0" path="res://hunyuan/straight.glb" id="12_jsyr5"]
+[ext_resource type="PackedScene" uid="uid://c7bp66fdylv6k" path="res://hunyuan/left turn pipe.glb" id="13_5qnjf"]
+[ext_resource type="PackedScene" uid="uid://dks2ji7kadnis" path="res://hunyuan/pipe.glb" id="14_63no2"]
+[ext_resource type="PackedScene" uid="uid://bspqdgwy1l845" path="res://hunyuan/bridge.glb" id="15_y7jf3"]
+[ext_resource type="PackedScene" uid="uid://bv8i4t2s54dij" path="res://hunyuan/pipe exit.glb" id="16_75v8w"]
+[ext_resource type="PackedScene" uid="uid://dfyqdks5j2x8h" path="res://funnel.tscn" id="17_jsyr5"]
+[ext_resource type="PackedScene" uid="uid://cvtgevofbu6n1" path="res://start_platform.tscn" id="18_5qnjf"]
+[ext_resource type="Script" uid="uid://c67odheen13w5" path="res://tunnel.gd" id="19_y7jf3"]
+[ext_resource type="Material" uid="uid://jd7fjt1s5sa1" path="res://ElevatorMaterial.tres" id="20_75v8w"]
+[ext_resource type="Material" uid="uid://bvho4lhw6siqk" path="res://TunnelInterior.tres" id="21_qh6rn"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("4_2eec1")
@@ -29,14 +42,11 @@ albedo_color = Color(0.08033415, 0.5737961, 0.46489727, 1)
 metallic = 0.7
 roughness = 0.2
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
-size = Vector3(4, 2, 4)
+[sub_resource type="BoxShape3D" id="BoxShape3D_dytaq"]
+size = Vector3(3, 3, 5)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
-size = Vector2(10000, 10000)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
-size = Vector3(10000, 1, 10000)
+[sub_resource type="BoxShape3D" id="BoxShape3D_qe1xp"]
+size = Vector3(6, 6, 8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
 shading_mode = 0
@@ -46,8 +56,36 @@ particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
 
-[sub_resource type="SphereMesh" id="SphereMesh_particles"]
+[sub_resource type="SphereMesh" id="SphereMesh_nqlsm"]
 material = SubResource("StandardMaterial3D_particles")
+radius = 0.06
+height = 0.12
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Gradient" id="Gradient_o8bq8"]
+offsets = PackedFloat32Array(0, 0.2, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.8, 0.9, 1, 0.5, 1, 1, 1, 0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
+size = Vector3(4, 2, 4)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
+size = Vector2(10000, 10000)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_water"]
+size = Vector3(10000, 1, 10000)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5mrj7"]
+shading_mode = 0
+albedo_color = Color(0.5, 0.9, 1, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_particles"]
+material = SubResource("StandardMaterial3D_5mrj7")
 radius = 0.06
 height = 0.12
 radial_segments = 8
@@ -138,20 +176,15 @@ transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
 
-[node name="Bridge" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=500000001]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -18)
-size = Vector3(4, 2, 14)
-material = SubResource("StandardMaterial3D_floor")
-
 [node name="Groove8" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=291748660]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.5760625, -2.8776832, 0, 14.158872)
 operation = 2
 size = Vector3(3.8950195, 2, 7.4366455)
 
 [node name="Groove2" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1383145280]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.890961, 0, 5.658105)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.8143926, 0, 6.0829706)
 operation = 2
-size = Vector3(6.59021, 2, 2)
+size = Vector3(12.743347, 2, 2.8497314)
 
 [node name="Groove7" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1075329792]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.254326, 0, 15.296307)
@@ -159,30 +192,120 @@ operation = 2
 size = Vector3(10.533936, 2, 2)
 
 [node name="Groove3" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=1390403949]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.19343, 0, -3.288103)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.4390354, 0, -3.288103)
 operation = 2
-size = Vector3(2, 2, 16)
+size = Vector3(5.508789, 2, 16)
 
 [node name="Diamond1" parent="LevelPivot" unique_id=1007207908 instance=ExtResource("7_08ow2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.9447312, 6.9865417, -4.9262695)
 
 [node name="Bumper" parent="LevelPivot" unique_id=1289907953 instance=ExtResource("8_sxidp")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, -0.5, 7)
+transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -0.368, 0.38587427, 7)
 
-[node name="Bumper2" parent="LevelPivot" unique_id=1777927369 instance=ExtResource("8_sxidp")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -10.004, -0.5, 0.003)
+[node name="HY_Ramp" parent="LevelPivot" unique_id=350520405 instance=ExtResource("9_fgcns")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -9.24578, -0.033696055, -4.822692)
 
-[node name="Bumper3" parent="LevelPivot" unique_id=1492437487 instance=ExtResource("8_sxidp")]
-transform = Transform3D(1.5, 0, 0, 0, 1.5, 0, 0, 0, 1.5, -1.6383576, -0.5, -9.252398)
+[node name="HY_Ramp_Left" parent="LevelPivot" unique_id=1024876286 instance=ExtResource("10_ceu0t")]
+transform = Transform3D(-8, 0, 6.993822e-07, 0, 8, 0, -6.993822e-07, 0, -8, 12.196301, 4.7683716e-07, -2.9283695)
 
-[node name="LevelPivot2" type="Node3D" parent="." unique_id=3000000001]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -36)
-script = ExtResource("6_xtk1d")
+[node name="HY_180" parent="LevelPivot" unique_id=992728346 instance=ExtResource("11_nwnde")]
+transform = Transform3D(-2.6663946e-07, 0, -6.1, 0, 6.1, 0, 6.1, 0, -2.6663946e-07, -6.9913874, 14.424271, -2.8507452)
 
-[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot2" unique_id=3000000002]
+[node name="HY_180_3" parent="LevelPivot" unique_id=827891325 instance=ExtResource("11_nwnde")]
+transform = Transform3D(-2.6663946e-07, 0, -6.1, 0, 6.1, 0, 6.1, 0, -2.6663946e-07, -6.9913874, 14.424271, 5.097358)
+
+[node name="HY_180_2" parent="LevelPivot" unique_id=1999172178 instance=ExtResource("11_nwnde")]
+transform = Transform3D(-2.6663946e-07, 0, 6.1, 0, 6.1, 0, -6.1, 0, -2.6663946e-07, -2.9678338, 14.418253, 1.1665499)
+
+[node name="HY_180_4" parent="LevelPivot" unique_id=10098736 instance=ExtResource("11_nwnde")]
+transform = Transform3D(-2.6663946e-07, 0, 6.1, 0, 6.1, 0, -6.1, 0, -2.6663946e-07, -2.9678338, 14.423912, 9.118742)
+
+[node name="HY_Straight" parent="LevelPivot" unique_id=13560488 instance=ExtResource("12_jsyr5")]
+transform = Transform3D(7.7635803, 1.9304975, 0, -1.9304975, 7.7635803, 0, 0, 0, 8, 6.657791, 4.5778503, -13.9499855)
+
+[node name="HY_Pipe_Left" parent="LevelPivot" unique_id=1478759150 instance=ExtResource("13_5qnjf")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 13.329934, 3.040441, -3.9842653)
+
+[node name="HY_Pipe_Left2" parent="LevelPivot" unique_id=918184696 instance=ExtResource("13_5qnjf")]
+transform = Transform3D(2.1855695e-07, -5, -7.54979e-07, -5, -2.1855695e-07, -3.2470066e-21, -3.3001176e-14, 7.54979e-07, -5, 0.16923141, 7.3027406, -4.856895)
+
+[node name="HY_Pipe_Straight" parent="LevelPivot" unique_id=690456995 instance=ExtResource("14_63no2")]
+transform = Transform3D(6, 0, 0, 0, 6, 0, 0, 0, 6, 8.983023, 5.4730787, -4.1346793)
+
+[node name="HY_Pipe_Straight2" parent="LevelPivot" unique_id=303387571 instance=ExtResource("14_63no2")]
+transform = Transform3D(-5.9999995, 0, -9.0597473e-07, 0, 6.000001, 0, 9.0597473e-07, 0, -5.9999995, 2.0318298, 5.4730787, -4.6344566)
+
+[node name="HY_Bridge" parent="LevelPivot" unique_id=1251019035 instance=ExtResource("15_y7jf3")]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, -10.928177, -0.2843969, 5.6500163)
+
+[node name="HY_Pipe_Exit" parent="LevelPivot" unique_id=464050269 instance=ExtResource("16_75v8w")]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 12.969359, 0, 13.022185)
+
+[node name="Funnel" parent="LevelPivot" unique_id=902575840 instance=ExtResource("17_jsyr5")]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, -3.0476441, 10.133443, -4.813713)
+
+[node name="StartPlatform" parent="LevelPivot" unique_id=576528660 instance=ExtResource("18_5qnjf")]
+transform = Transform3D(-4.371139e-08, 0.17192909, 0.9851093, 0, 0.9851093, -0.17192909, -1, -7.5152595e-09, -4.3060496e-08, -6.8877754, 16.537474, 10.948527)
+
+[node name="TunnelSystem" type="Node3D" parent="LevelPivot" unique_id=2025623552 node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
+script = ExtResource("19_y7jf3")
+exit_location = NodePath("../../LevelPivot2/ExitTunnel/TunnelExit")
+entrance_area = NodePath("EntranceTunnel/EntranceArea")
+suction_area = NodePath("EntranceTunnel/SuctionArea")
+
+[node name="EntranceTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem" unique_id=503427953]
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -14.155797, 1.943141, 3.1319351)
 use_collision = true
 
-[node name="Floor" type="CSGBox3D" parent="LevelPivot2/LevelGeometry" unique_id=3000000003]
+[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1506468764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
+depth = 6.0
+material = ExtResource("20_75v8w")
+
+[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=171862613]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
+operation = 2
+radius = 2.0
+height = 6.0
+sides = 16
+material = ExtResource("21_qh6rn")
+
+[node name="EntranceArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=235204259]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/EntranceArea" unique_id=341558170]
+shape = SubResource("BoxShape3D_dytaq")
+
+[node name="SuctionArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=404239627]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.49977303, 0, 5.21036)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea" unique_id=1820261117]
+shape = SubResource("BoxShape3D_qe1xp")
+
+[node name="WindParticles" type="CPUParticles3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea" unique_id=1484382250]
+transform = Transform3D(0.99999976, 0, -1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999976, 0.6811447, 0, 4.051031)
+amount = 50
+mesh = SubResource("SphereMesh_nqlsm")
+emission_shape = 3
+emission_box_extents = Vector3(2, 2, 2)
+direction = Vector3(0, 0, -1)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+scale_amount_min = 0.5
+scale_amount_max = 0.5
+color_ramp = SubResource("Gradient_o8bq8")
+
+[node name="LevelPivot2" type="Node3D" parent="." unique_id=-1294967295]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -42.29808)
+script = ExtResource("6_xtk1d")
+
+[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot2" unique_id=-1294967294]
+use_collision = true
+
+[node name="Floor" type="CSGBox3D" parent="LevelPivot2/LevelGeometry" unique_id=-1294967293]
 transform = Transform3D(1.5, 0, 0, 0, 1, 0, 0, 0, 1.5, 0, -1, 0)
 size = Vector3(24, 2, 24)
 material = SubResource("StandardMaterial3D_floor")
@@ -190,11 +313,30 @@ material = SubResource("StandardMaterial3D_floor")
 [node name="Rocket" parent="LevelPivot2" unique_id=1247172017 instance=ExtResource("9_ceu0t")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 0, -1.3, 0)
 
-[node name="FinishTrigger" type="Area3D" parent="LevelPivot2" unique_id=3000000004]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+[node name="FinishTrigger" type="Area3D" parent="LevelPivot2" unique_id=-1294967292]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot2/FinishTrigger" unique_id=3000000005]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot2/FinishTrigger" unique_id=-1294967291]
 shape = SubResource("BoxShape3D_trigger")
+
+[node name="ExitTunnel" type="CSGCombiner3D" parent="LevelPivot2" unique_id=1643208203]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.179874, 1.3202987, -8.4268875)
+use_collision = true
+
+[node name="Mound" type="CSGPolygon3D" parent="LevelPivot2/ExitTunnel" unique_id=995363110]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
+depth = 6.0
+material = ExtResource("20_75v8w")
+
+[node name="Hole" type="CSGCylinder3D" parent="LevelPivot2/ExitTunnel" unique_id=197110870]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
+operation = 2
+radius = 2.0
+height = 6.0
+sides = 16
+material = ExtResource("21_qh6rn")
+
+[node name="TunnelExit" type="Marker3D" parent="LevelPivot2/ExitTunnel" unique_id=1517491375]
 
 [node name="CameraRig" type="Node3D" parent="." unique_id=636163931]
 script = ExtResource("10_nwnde")
@@ -218,7 +360,7 @@ surface_material_override/0 = ExtResource("11_jsyr5")
 shape = SubResource("BoxShape3D_water")
 
 [node name="StartPoint" type="Marker3D" parent="." unique_id=2003528615]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14.926768, 7.682711, -4.4528756)
+transform = Transform3D(0.2512923, -0.96791124, 0, 0.96791124, 0.2512923, 0, 0, 0, 1, -6.988582, 20.152332, 10.965534)
 
 [node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint" unique_id=1188600700]
 emitting = false

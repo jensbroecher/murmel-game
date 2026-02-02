@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://dmp6gvc3rv7w1"]
+[gd_scene format=3 uid="uid://dmp6gvc3rv7w1"]
 
 [ext_resource type="Script" uid="uid://cnedem1lvrcr6" path="res://game_manager.gd" id="1_u5vnb"]
 [ext_resource type="PackedScene" uid="uid://marble12345" path="res://marble.tscn" id="2_8fbo4"]
@@ -71,19 +71,19 @@ point_count = 3
 offsets = PackedFloat32Array(0, 0.1, 1)
 colors = PackedColorArray(1, 1, 1, 0, 10, 10, 10, 1, 10, 10, 10, 1)
 
-[node name="Game" type="Node3D"]
+[node name="Game" type="Node3D" unique_id=986461567]
 script = ExtResource("1_u5vnb")
 marble_scene = ExtResource("2_8fbo4")
 ripple_scene = ExtResource("3_0juw4")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=506481456]
 environment = SubResource("Environment_main")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1723245193]
 transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
 shadow_enabled = true
 
-[node name="HUD" type="Control" parent="."]
+[node name="HUD" type="Control" parent="." unique_id=1733673126]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -92,7 +92,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="LivesLabel" type="Label" parent="HUD"]
+[node name="LivesLabel" type="Label" parent="HUD" unique_id=520267611]
 layout_mode = 1
 offset_left = 20.0
 offset_top = 20.0
@@ -101,7 +101,7 @@ offset_bottom = 60.0
 theme_override_font_sizes/font_size = 32
 text = "Remaining Tries: 7"
 
-[node name="WinLabel" type="Label" parent="HUD"]
+[node name="WinLabel" type="Label" parent="HUD" unique_id=1098652397]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -120,7 +120,7 @@ text = "STAGE CLEARED"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TimeLabel" type="Label" parent="HUD"]
+[node name="TimeLabel" type="Label" parent="HUD" unique_id=2036672663]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0
@@ -134,35 +134,35 @@ theme_override_font_sizes/font_size = 32
 text = "00:00"
 horizontal_alignment = 2
 
-[node name="SoundGenerator" type="Node" parent="."]
+[node name="SoundGenerator" type="Node" parent="." unique_id=1518314542]
 script = ExtResource("6_t0keu")
 
-[node name="LevelPivot" type="Node3D" parent="."]
+[node name="LevelPivot" type="Node3D" parent="." unique_id=505514669]
 script = ExtResource("7_22jgc")
 
-[node name="HillGenerator" type="Node3D" parent="LevelPivot"]
+[node name="Spiral" type="Node3D" parent="LevelPivot" unique_id=608999365]
 script = ExtResource("18_hillgen")
 track_width = 5.0
 material = ExtResource("9_0h0hi")
 
-[node name="TunnelSystem" type="Node3D" parent="LevelPivot" node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area")]
+[node name="TunnelSystem" type="Node3D" parent="LevelPivot" unique_id=2116207111 node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
 script = ExtResource("19_tunnel")
 exit_location = NodePath("ExitTunnel/TunnelExit")
 entrance_area = NodePath("EntranceTunnel/EntranceArea")
 suction_area = NodePath("EntranceTunnel/SuctionArea")
 
-[node name="EntranceTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem"]
+[node name="EntranceTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem" unique_id=2010131217]
 transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -0.6776657, 1.0617328, 23.137363)
 use_collision = true
 
-[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1566009851]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
 depth = 6.0
 material = ExtResource("9_0h0hi")
 
-[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1572784585]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
 operation = 2
 radius = 2.0
@@ -170,18 +170,18 @@ height = 6.0
 sides = 16
 material = ExtResource("20_blackmat")
 
-[node name="EntranceArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+[node name="EntranceArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1041119131]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/EntranceArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/EntranceArea" unique_id=814612674]
 shape = SubResource("BoxShape3D_tunnel")
 
-[node name="SuctionArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel"]
+[node name="SuctionArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1031706552]
 transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.49977303, 0, 5.21036)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea" unique_id=1247500081]
 shape = SubResource("BoxShape3D_suction")
 
-[node name="WindParticles" type="CPUParticles3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea"]
+[node name="WindParticles" type="CPUParticles3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea" unique_id=1084400410]
 transform = Transform3D(0.99999976, 0, -1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999976, 0.6811447, 0, 4.051031)
 amount = 50
 mesh = SubResource("SphereMesh_particles")
@@ -196,17 +196,17 @@ scale_amount_min = 0.5
 scale_amount_max = 0.5
 color_ramp = SubResource("Gradient_wind")
 
-[node name="ExitTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem"]
+[node name="ExitTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem" unique_id=1984115633]
 transform = Transform3D(0.96278614, 0, 0.2702645, 0.08919719, 0.9439681, -0.31775472, -0.25512108, 0.33003664, 0.9088394, -19.740211, 33.79289, -5.2681684)
 use_collision = true
 
-[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/ExitTunnel"]
+[node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/ExitTunnel" unique_id=1180871169]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
 polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
 depth = 6.0
 material = ExtResource("9_0h0hi")
 
-[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/ExitTunnel"]
+[node name="Hole" type="CSGCylinder3D" parent="LevelPivot/TunnelSystem/ExitTunnel" unique_id=1469395115]
 transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
 operation = 2
 radius = 2.0
@@ -214,62 +214,62 @@ height = 6.0
 sides = 16
 material = ExtResource("20_blackmat")
 
-[node name="TunnelExit" type="Marker3D" parent="LevelPivot/TunnelSystem/ExitTunnel"]
+[node name="TunnelExit" type="Marker3D" parent="LevelPivot/TunnelSystem/ExitTunnel" unique_id=261297094]
 
-[node name="FinishTrigger" type="Area3D" parent="LevelPivot"]
+[node name="FinishTrigger" type="Area3D" parent="LevelPivot" unique_id=495832421]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 26.961031, -1.156663, 22.39534)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/FinishTrigger" unique_id=489361722]
 shape = SubResource("BoxShape3D_trigger")
 
-[node name="Rocket" parent="LevelPivot" instance=ExtResource("10_we185")]
+[node name="Rocket" parent="LevelPivot" unique_id=531786223 instance=ExtResource("10_we185")]
 transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 26.961031, -3.2512026, 22.39534)
 
-[node name="Diamond1" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
+[node name="Diamond1" parent="LevelPivot" unique_id=1127895249 instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.203947, 10.650981, 0)
 
-[node name="Diamond2" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
+[node name="Diamond2" parent="LevelPivot" unique_id=689340706 instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.120985, 1.0391393, -2.0702143)
 
-[node name="Diamond3" parent="LevelPivot" instance=ExtResource("13_1c2pv")]
+[node name="Diamond3" parent="LevelPivot" unique_id=1062101722 instance=ExtResource("13_1c2pv")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.8463955, 15.824844, 0)
 
-[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot"]
+[node name="LevelGeometry" type="CSGCombiner3D" parent="LevelPivot" unique_id=846874368]
 use_collision = true
 
-[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry"]
+[node name="Floor" type="CSGBox3D" parent="LevelPivot/LevelGeometry" unique_id=539991411]
 transform = Transform3D(0.9950917, 0, 0, 0, 1, 0, 0, 0, 1.5, 19.205063, -2.9412642, 12.562317)
 size = Vector3(24, 2, 20.661377)
 material = ExtResource("9_0h0hi")
 
-[node name="CameraRig" type="Node3D" parent="."]
+[node name="CameraRig" type="Node3D" parent="." unique_id=1488616268]
 script = ExtResource("14_xs3eo")
 follow_speed = 5.0
 
-[node name="CameraPivot" type="Node3D" parent="CameraRig"]
+[node name="CameraPivot" type="Node3D" parent="CameraRig" unique_id=296909216]
 transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 0, 0)
 
-[node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot"]
+[node name="Camera3D" type="Camera3D" parent="CameraRig/CameraPivot" unique_id=654211614]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 40)
 current = true
 
-[node name="futuristic island city 3d model" parent="." instance=ExtResource("15_4urv6")]
+[node name="futuristic island city 3d model" parent="." unique_id=795939971 instance=ExtResource("15_4urv6")]
 transform = Transform3D(-99.09691, 0, 13.409005, 0, 100, 0, -13.409005, 0, -99.09691, 285.3485, 0.24855328, 0)
 
-[node name="WaterPlane" type="MeshInstance3D" parent="."]
+[node name="WaterPlane" type="MeshInstance3D" parent="." unique_id=741863828]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.050785065, -20, 0.09239578)
 mesh = SubResource("PlaneMesh_water")
 surface_material_override/0 = ExtResource("16_uugx4")
 
-[node name="WaterArea" type="Area3D" parent="WaterPlane"]
+[node name="WaterArea" type="Area3D" parent="WaterPlane" unique_id=992725683]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlane/WaterArea"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlane/WaterArea" unique_id=1266993688]
 shape = SubResource("BoxShape3D_water")
 
-[node name="StartPoint" type="Marker3D" parent="."]
+[node name="StartPoint" type="Marker3D" parent="." unique_id=746147854]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.875628, 2.5391464, 10.293862)
 
-[node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint"]
+[node name="SpawnParticles" type="CPUParticles3D" parent="StartPoint" unique_id=1445967724]
 emitting = false
 amount = 800
 one_shot = true
@@ -284,7 +284,7 @@ damping_max = 5.0
 scale_amount_curve = SubResource("Curve_particles")
 color_ramp = SubResource("Gradient_particles")
 
-[node name="futuristic yacht 3d model" parent="." instance=ExtResource("17_xgi4o")]
+[node name="futuristic yacht 3d model" parent="." unique_id=1964108743 instance=ExtResource("17_xgi4o")]
 transform = Transform3D(56.59823, 0, 19.915833, 0, 60, 0, -19.915833, 0, 56.59823, -110.53288, -12.65192, -7.387043)
 
 [connection signal="body_entered" from="LevelPivot/FinishTrigger" to="." method="_on_finish_trigger_body_entered"]

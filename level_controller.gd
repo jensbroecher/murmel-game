@@ -14,6 +14,33 @@ var camera_rig: Node3D
 var _target_rotation_x: float = 0.0
 var _target_rotation_z: float = 0.0
 
+func _ready() -> void:
+	generate_collisions_for_hy_objects()
+
+func generate_collisions_for_hy_objects() -> void:
+	print("LevelController: Scanning for HY_ objects to generate collisions...")
+	var count = 0
+	for child in get_children():
+		if child.name.begins_with("HY_"):
+			_generate_collision_recursive(child)
+			count += 1
+	print("LevelController: Generated collisions for %d HY_ objects." % count)
+
+func _generate_collision_recursive(node: Node) -> void:
+	if node is MeshInstance3D:
+		# check if it already has a static body child, if so, skip
+		var has_static_body = false
+		for child in node.get_children():
+			if child is StaticBody3D:
+				has_static_body = true
+				break
+		
+		if not has_static_body:
+			node.create_trimesh_collision()
+	
+	for child in node.get_children():
+		_generate_collision_recursive(child)
+
 func set_marble(body: RigidBody3D) -> void:
 	marble = body
 
