@@ -6,6 +6,7 @@ var roll_player: AudioStreamPlayer
 var ambient_player: AudioStreamPlayer
 var hit_player: AudioStreamPlayer
 var splash_player: AudioStreamPlayer
+var tunnel_player: AudioStreamPlayer
 
 var marble_body: RigidBody3D
 var is_dampened: bool = false
@@ -30,6 +31,9 @@ func _ready():
 	
 	splash_player = AudioStreamPlayer.new()
 	add_child(splash_player)
+
+	tunnel_player = AudioStreamPlayer.new()
+	add_child(tunnel_player)
 	
 	# Generate sounds
 	var spawn_sound = load("res://sounds/teleport-whoosh-453276.mp3")
@@ -55,6 +59,10 @@ func _ready():
 	hit_player.stream = generate_hit_sound()
 	
 	splash_player.stream = load("res://sounds/water-splash-02-352021.mp3")
+
+	var tunnel_sound = load("res://sounds/transitional-swipe-211688.mp3")
+	if tunnel_sound:
+		tunnel_player.stream = tunnel_sound
 	
 	# Start sounds
 	roll_player.volume_db = -35.0
@@ -145,6 +153,12 @@ func play_splash():
 		splash_player.pitch_scale = randf_range(0.9, 1.1)
 		splash_player.play()
 		print("SoundGenerator: Playing Splash Sound")
+
+func play_tunnel_enter():
+	if tunnel_player.stream:
+		tunnel_player.volume_db = -5.0
+		tunnel_player.play()
+		print("SoundGenerator: Playing Tunnel Enter Sound")
 
 func generate_hit_sound():
 	var sample_rate = 44100

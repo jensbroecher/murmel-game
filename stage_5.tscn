@@ -16,6 +16,7 @@
 [ext_resource type="Script" uid="uid://cxigqxkveu6ep" path="res://hill_generator.gd" id="18_hillgen"]
 [ext_resource type="Script" uid="uid://c67odheen13w5" path="res://tunnel.gd" id="19_tunnel"]
 [ext_resource type="Material" uid="uid://bvho4lhw6siqk" path="res://TunnelInterior.tres" id="20_blackmat"]
+[ext_resource type="PackedScene" uid="uid://forcefield123" path="res://ForceFieldPlane.tscn" id="21_forcefield"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_env"]
 panorama = ExtResource("5_dhqj7")
@@ -36,12 +37,15 @@ size = Vector3(3, 3, 5)
 size = Vector3(6, 6, 8)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+transparency = 1
 shading_mode = 0
+vertex_color_use_as_albedo = true
 albedo_color = Color(0.5, 0.9, 1, 1)
 billboard_mode = 3
 particles_anim_h_frames = 1
 particles_anim_v_frames = 1
 particles_anim_loop = false
+
 
 [sub_resource type="SphereMesh" id="SphereMesh_particles"]
 material = SubResource("StandardMaterial3D_particles")
@@ -51,8 +55,9 @@ radial_segments = 8
 rings = 4
 
 [sub_resource type="Gradient" id="Gradient_wind"]
-offsets = PackedFloat32Array(0, 0.2, 1)
-colors = PackedColorArray(1, 1, 1, 0, 0.8, 0.9, 1, 0.5, 1, 1, 1, 0)
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.8, 0.9, 1, 0.25, 1, 1, 1, 0)
+
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_trigger"]
 size = Vector3(4, 2, 4)
@@ -145,12 +150,14 @@ script = ExtResource("18_hillgen")
 track_width = 5.0
 material = ExtResource("9_0h0hi")
 
-[node name="TunnelSystem" type="Node3D" parent="LevelPivot" unique_id=2116207111 node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area")]
+[node name="TunnelSystem" type="Node3D" parent="LevelPivot" unique_id=2116207111 node_paths=PackedStringArray("exit_location", "entrance_area", "suction_area", "entrance_force_field", "exit_force_field")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 0, 0)
 script = ExtResource("19_tunnel")
 exit_location = NodePath("ExitTunnel/TunnelExit")
 entrance_area = NodePath("EntranceTunnel/EntranceArea")
 suction_area = NodePath("EntranceTunnel/SuctionArea")
+entrance_force_field = NodePath("EntranceTunnel/ForceField")
+exit_force_field = NodePath("ExitTunnel/ForceField")
 
 [node name="EntranceTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem" unique_id=2010131217]
 transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, -0.6776657, 1.0617328, 23.137363)
@@ -170,6 +177,9 @@ height = 6.0
 sides = 16
 material = ExtResource("20_blackmat")
 
+[node name="ForceField" parent="LevelPivot/TunnelSystem/EntranceTunnel" instance=ExtResource("21_forcefield")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0)
+
 [node name="EntranceArea" type="Area3D" parent="LevelPivot/TunnelSystem/EntranceTunnel" unique_id=1041119131]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/EntranceArea" unique_id=814612674]
@@ -184,9 +194,10 @@ shape = SubResource("BoxShape3D_suction")
 [node name="WindParticles" type="CPUParticles3D" parent="LevelPivot/TunnelSystem/EntranceTunnel/SuctionArea" unique_id=1084400410]
 transform = Transform3D(0.99999976, 0, -1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999976, 0.6811447, 0, 4.051031)
 amount = 50
+local_coords = true
 mesh = SubResource("SphereMesh_particles")
 emission_shape = 3
-emission_box_extents = Vector3(2, 2, 2)
+emission_box_extents = Vector3(1.2, 1.2, 2)
 direction = Vector3(0, 0, -1)
 spread = 0.0
 gravity = Vector3(0, 0, 0)
@@ -213,6 +224,9 @@ radius = 2.0
 height = 6.0
 sides = 16
 material = ExtResource("20_blackmat")
+
+[node name="ForceField" parent="LevelPivot/TunnelSystem/ExitTunnel" instance=ExtResource("21_forcefield")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.0)
 
 [node name="TunnelExit" type="Marker3D" parent="LevelPivot/TunnelSystem/ExitTunnel" unique_id=261297094]
 

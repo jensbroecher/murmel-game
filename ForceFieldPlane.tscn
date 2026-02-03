@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://btdgsdk4056cc"]
+
+[ext_resource type="Material" path="res://ForceFieldMaterial.tres" id="1_material"]
+[ext_resource type="Script" path="res://force_field.gd" id="1_script"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_field"]
+material = ExtResource("1_material")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 0.1
+radial_segments = 32
+rings = 1
+cap_bottom = false
+
+[node name="ForceFieldPlane" type="Node3D"]
+script = ExtResource("1_script")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0)
+mesh = SubResource("CylinderMesh_field")

@@ -9,6 +9,8 @@ extends Node3D
 @export var suction_force: float = 500.0
 @export var centering_force: float = 600.0
 @export var side_damping: float = 20.0
+@export var entrance_force_field: Node3D
+@export var exit_force_field: Node3D
 
 var marble_in_suction: RigidBody3D = null
 
@@ -24,6 +26,7 @@ func _ready():
 func _on_suction_entered(body):
 	if body is RigidBody3D and body.name == "Marble":
 		print("Tunnel: Marble entered suction area")
+		# Pulse removed from here, moved to inner trigger
 		marble_in_suction = body
 
 func _on_suction_exited(body):
@@ -67,6 +70,8 @@ func _on_body_entered(body):
 	print("Tunnel: Body entered transport trigger: ", body.name)
 	# Require marble to be "in suction" (entering from front) to trigger transport
 	if body is RigidBody3D and body.name == "Marble" and body == marble_in_suction:
+		if entrance_force_field and entrance_force_field.has_method("pulse"):
+			entrance_force_field.pulse()
 		_teleport_marble(body)
 
 func _teleport_marble(marble: RigidBody3D):
@@ -75,6 +80,10 @@ func _teleport_marble(marble: RigidBody3D):
 	marble.visible = false
 	
 	print("Tunnel: Teleporting marble...")
+
+	var sound_gen = get_tree().root.find_child("SoundGenerator", true, false)
+	if sound_gen:
+		sound_gen.play_tunnel_enter()
 	
 	# Wait for transport
 	await get_tree().create_timer(transport_duration).timeout
@@ -90,6 +99,9 @@ func _teleport_marble(marble: RigidBody3D):
 	await get_tree().create_timer(camera_catchup_delay).timeout
 	
 	print("Tunnel: Ejection!")
+	
+	if exit_force_field and exit_force_field.has_method("pulse"):
+		exit_force_field.pulse()
 	
 	# Apply forward push 
 	if exit_location:
