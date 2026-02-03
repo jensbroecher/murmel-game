@@ -197,7 +197,7 @@ scale_amount_max = 0.5
 color_ramp = SubResource("Gradient_wind")
 
 [node name="ExitTunnel" type="CSGCombiner3D" parent="LevelPivot/TunnelSystem" unique_id=1984115633]
-transform = Transform3D(0.96278614, 0, 0.2702645, 0.08919719, 0.9439681, -0.31775472, -0.25512108, 0.33003664, 0.9088394, -19.740211, 33.79289, -5.2681684)
+transform = Transform3D(0.9902219, -0.12808791, 0.05526515, 0.13949905, 0.90670854, -0.39801994, 0.0008721752, 0.4018374, 0.9157107, -17.809849, 32.90148, -1.0740995)
 use_collision = true
 
 [node name="Mound" type="CSGPolygon3D" parent="LevelPivot/TunnelSystem/ExitTunnel" unique_id=1180871169]
