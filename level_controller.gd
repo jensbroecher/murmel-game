@@ -53,6 +53,14 @@ func set_input_enabled(enabled: bool) -> void:
 	if not enabled:
 		pass
 
+func neutralize_and_lock() -> void:
+	set_input_enabled(false)
+	_target_rotation_x = 0.0
+	_target_rotation_z = 0.0
+
+func unlock() -> void:
+	set_input_enabled(true)
+
 func _physics_process(delta: float) -> void:
 	if input_enabled:
 		var joypads = Input.get_connected_joypads()

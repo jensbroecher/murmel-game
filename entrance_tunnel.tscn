@@ -1,0 +1,79 @@
+[gd_scene format=3 uid="uid://bss5vhq3lngrp"]
+
+[ext_resource type="Material" uid="uid://jd7fjt1s5sa1" path="res://ElevatorMaterial.tres" id="1_musk6"]
+[ext_resource type="Material" uid="uid://bvho4lhw6siqk" path="res://TunnelInterior.tres" id="2_owxqm"]
+[ext_resource type="PackedScene" path="res://ForceFieldPlane.tscn" id="3_oeph5"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tunnel"]
+size = Vector3(3, 3, 5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_suction"]
+size = Vector3(6, 6, 8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_particles"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.5, 0.9, 1, 1)
+billboard_mode = 3
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="SphereMesh" id="SphereMesh_particles"]
+material = SubResource("StandardMaterial3D_particles")
+radius = 0.06
+height = 0.12
+radial_segments = 8
+rings = 4
+
+[sub_resource type="Gradient" id="Gradient_wind"]
+offsets = PackedFloat32Array(0, 0.6, 1)
+colors = PackedColorArray(1, 1, 1, 0, 0.8, 0.9, 1, 0.25, 1, 1, 1, 0)
+
+[node name="EntranceTunnel" type="CSGCombiner3D" unique_id=188058355]
+transform = Transform3D(-0.99999994, 0, -8.742277e-08, 0, 1, 0, 8.742277e-08, 0, -0.99999994, 0, 0, 0)
+use_collision = true
+
+[node name="Mound" type="CSGPolygon3D" parent="." unique_id=399746918]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
+depth = 6.0
+material = ExtResource("1_musk6")
+
+[node name="Hole" type="CSGCylinder3D" parent="." unique_id=1442907785]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
+operation = 2
+radius = 2.0
+height = 6.0
+sides = 16
+material = ExtResource("2_owxqm")
+
+[node name="ForceField" parent="." unique_id=1867522111 instance=ExtResource("3_oeph5")]
+
+[node name="EntranceArea" type="Area3D" parent="." unique_id=911163445]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntranceArea" unique_id=1959260603]
+shape = SubResource("BoxShape3D_tunnel")
+
+[node name="SuctionArea" type="Area3D" parent="." unique_id=219324793]
+transform = Transform3D(1.0000001, 0, 0, 0, 1, 0, 0, 0, 1.0000001, -0.49977303, 0, 5.21036)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SuctionArea" unique_id=1302643710]
+shape = SubResource("BoxShape3D_suction")
+
+[node name="WindParticles" type="CPUParticles3D" parent="SuctionArea" unique_id=1002696708]
+transform = Transform3D(0.99999976, 0, -1.4901161e-08, 0, 1, 0, 1.4901161e-08, 0, 0.99999976, 0.6811447, 0, 4.051031)
+amount = 50
+local_coords = true
+mesh = SubResource("SphereMesh_particles")
+emission_shape = 3
+emission_box_extents = Vector3(1.2, 1.2, 2)
+direction = Vector3(0, 0, -1)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 10.0
+initial_velocity_max = 10.0
+scale_amount_min = 0.5
+scale_amount_max = 0.5
+color_ramp = SubResource("Gradient_wind")

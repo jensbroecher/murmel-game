@@ -1,12 +1,12 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://c0bw31w8ni8x4"]
 
-[ext_resource type="Script" path="res://turnstyle.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://0yggu30l20d4" path="res://turnstyle.gd" id="1_script"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_arm"]
-size = Vector3(4.0, 0.5, 0.5)
+size = Vector3(4, 2, 0.5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_arm2"]
-size = Vector3(0.5, 0.5, 4.0)
+size = Vector3(0.5, 2, 4)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
 albedo_color = Color(1, 0.5, 0, 1)
@@ -18,24 +18,38 @@ emission_energy_multiplier = 0.5
 
 [sub_resource type="BoxMesh" id="BoxMesh_arm"]
 material = SubResource("StandardMaterial3D_orange")
-size = Vector3(4.0, 0.5, 0.5)
+size = Vector3(4, 2, 0.5)
 
 [sub_resource type="BoxMesh" id="BoxMesh_arm2"]
 material = SubResource("StandardMaterial3D_orange")
-size = Vector3(0.5, 0.5, 4.0)
+size = Vector3(0.5, 2, 4)
 
-[node name="Turnstyle" type="AnimatableBody3D"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_shiny"]
+albedo_color = Color(0.8, 0.8, 0.8, 1)
+metallic = 1.0
+roughness = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_shiny"]
+material = SubResource("StandardMaterial3D_shiny")
+radius = 0.75
+height = 1.5
+
+[node name="Turnstyle" type="AnimatableBody3D" unique_id=1901523200]
 script = ExtResource("1_script")
 rotation_speed = 1.5
 
-[node name="CollisionShape1" type="CollisionShape3D" parent="."]
+[node name="CollisionShape1" type="CollisionShape3D" parent="." unique_id=1115081526]
 shape = SubResource("BoxShape3D_arm")
 
-[node name="CollisionShape2" type="CollisionShape3D" parent="."]
+[node name="CollisionShape2" type="CollisionShape3D" parent="." unique_id=2004757153]
 shape = SubResource("BoxShape3D_arm2")
 
-[node name="MeshInstance1" type="MeshInstance3D" parent="."]
+[node name="MeshInstance1" type="MeshInstance3D" parent="." unique_id=1198109606]
 mesh = SubResource("BoxMesh_arm")
 
-[node name="MeshInstance2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance2" type="MeshInstance3D" parent="." unique_id=258923501]
 mesh = SubResource("BoxMesh_arm2")
+
+[node name="ShinySphere" type="MeshInstance3D" parent="." unique_id=1693789928]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0.87613845, 0)
+mesh = SubResource("SphereMesh_shiny")

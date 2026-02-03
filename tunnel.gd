@@ -19,6 +19,13 @@ var marble_in_suction: RigidBody3D = null
 func _ready():
 	if entrance_area:
 		entrance_area.body_entered.connect(_on_body_entered)
+	
+	print("Tunnel: Ready. Exit Location: ", exit_location)
+	if exit_location:
+		print("Tunnel: Exit Global Pos: ", exit_location.global_position)
+	else:
+		print("Tunnel: ERROR - Exit Location is NULL")
+
 	if suction_area:
 		suction_area.body_entered.connect(_on_suction_entered)
 		suction_area.body_exited.connect(_on_suction_exited)
@@ -81,6 +88,15 @@ func _teleport_marble(marble: RigidBody3D):
 	
 	print("Tunnel: Teleporting marble...")
 
+	# Reset pivot and lock
+	# Try to find LevelController parent
+	var level_controller = get_node_or_null("../../") # Usually LevelPivot is parent of TunnelSystem, but script is on LevelPivot?
+	# Wait, in scene: LevelPivot (LevelController script) -> TunnelSystem (Tunnel script)
+	# So get_parent() should be LevelController
+	if get_parent() and get_parent().has_method("neutralize_and_lock"):
+		get_parent().neutralize_and_lock()
+		print("Tunnel: Pivot neutralized and locked")
+
 	var sound_gen = get_tree().root.find_child("SoundGenerator", true, false)
 	if sound_gen:
 		sound_gen.play_tunnel_enter()
@@ -88,11 +104,20 @@ func _teleport_marble(marble: RigidBody3D):
 	# Wait for transport
 	await get_tree().create_timer(transport_duration).timeout
 	
+	# Wait for level to return to neutral (approximate)
+	if get_parent() and "rotation" in get_parent():
+		var parent = get_parent()
+		while abs(parent.rotation.x) > 0.01 or abs(parent.rotation.z) > 0.01:
+			await get_tree().process_frame
+	
 	# Teleport (set position, but keep hidden/disabled)
 	if exit_location:
+		print("Tunnel: Teleporting to ", exit_location.global_position)
 		marble.global_position = exit_location.global_position
 		marble.linear_velocity = Vector3.ZERO
 		marble.angular_velocity = Vector3.ZERO
+	else:
+		print("Tunnel: FAIL - Cannot teleport, exit_location is null")
 	
 	print("Tunnel: Marble at top. Waiting for camera...")
 	# Wait for camera to catch up
@@ -110,3 +135,7 @@ func _teleport_marble(marble: RigidBody3D):
 	# Re-enable
 	marble.visible = true
 	marble.process_mode = Node.PROCESS_MODE_PAUSABLE
+	
+	# Unlock input
+	if get_parent() and get_parent().has_method("unlock"):
+		get_parent().unlock()

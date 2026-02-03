@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://bedsu5rr0icun"]
+
+[ext_resource type="Material" uid="uid://jd7fjt1s5sa1" path="res://ElevatorMaterial.tres" id="1_wo38n"]
+[ext_resource type="Material" uid="uid://bvho4lhw6siqk" path="res://TunnelInterior.tres" id="2_ocq8b"]
+[ext_resource type="PackedScene" path="res://ForceFieldPlane.tscn" id="3_hkob5"]
+
+[node name="ExitTunnel" type="CSGCombiner3D" unique_id=980971241]
+transform = Transform3D(0.9902219, -0.12808791, 0.05526515, 0.13949905, 0.90670854, -0.39801994, 0.0008721752, 0.4018374, 0.9157107, 0, 0, 0)
+use_collision = true
+
+[node name="Mound" type="CSGPolygon3D" parent="." unique_id=1379381038]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3)
+polygon = PackedVector2Array(-2, 3, 2, 3, 2.7, 2.7, 3, 2, 3, -2, 2.7, -2.7, 2, -3, -2, -3, -2.7, -2.7, -3, -2, -3, 2, -2.7, 2.7)
+depth = 6.0
+material = ExtResource("1_wo38n")
+
+[node name="Hole" type="CSGCylinder3D" parent="." unique_id=1127691096]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 2)
+operation = 2
+radius = 2.0
+height = 6.0
+sides = 16
+material = ExtResource("2_ocq8b")
+
+[node name="ForceField" parent="." unique_id=1415803845 instance=ExtResource("3_hkob5")]
+
+[node name="TunnelExit" type="Marker3D" parent="." unique_id=1535141940]
