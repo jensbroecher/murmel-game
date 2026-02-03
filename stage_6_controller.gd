@@ -69,6 +69,16 @@ func _physics_process(delta):
 		# Just checking closest is fine for now, or add a buffer.
 		if closest_index != -1 and closest_index != active_pivot_index:
 			set_active_pivot(closest_index)
+	
+	# Enforce locks (inactive pivots should stay locked even if tunnel unlocks them)
+	for i in range(level_pivots.size()):
+		if i != active_pivot_index:
+			var pivot = level_pivots[i]
+			if "input_enabled" in pivot and pivot.input_enabled:
+				if pivot.has_method("neutralize_and_lock"):
+					pivot.neutralize_and_lock()
+				elif pivot.has_method("set_input_enabled"):
+					pivot.set_input_enabled(false)
 
 func set_active_pivot(index: int):
 	if index < 0 or index >= level_pivots.size():
@@ -80,14 +90,16 @@ func set_active_pivot(index: int):
 	for i in range(level_pivots.size()):
 		var pivot = level_pivots[i]
 		if i == index:
-			if pivot.has_method("set_input_enabled"):
+			if pivot.has_method("unlock"):
+				pivot.unlock()
+			# Also ensure input is enabled if unlock doesn't do it (fallback)
+			elif pivot.has_method("set_input_enabled"):
 				pivot.set_input_enabled(true)
 		else:
-			if pivot.has_method("set_input_enabled"):
+			if pivot.has_method("neutralize_and_lock"):
+				pivot.neutralize_and_lock()
+			elif pivot.has_method("set_input_enabled"):
 				pivot.set_input_enabled(false)
-				# Optional: Smoothly return inactive pivots to neutral rotation? 
-				# If we don't, they stay tilted, which might look weird or be cool.
-				# Let's leave them for now.
 	
 	update_camera_target()
 
