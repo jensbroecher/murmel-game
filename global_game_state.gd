@@ -1,6 +1,6 @@
 extends Node
 
-enum Difficulty { NORMAL, HARD, EASY }
+enum Difficulty { NORMAL, HARD, EASY, INSANE }
 
 const SAVE_FILE_PATH = "user://savegame.save"
 
@@ -24,7 +24,7 @@ var levels: Dictionary = {
 	3: { "name": "Mechanisms", "path": "res://stage_3.tscn", "concept_by": "Jens Bröcher" },
 	4: { "name": "Cascade", "path": "res://stage_4.tscn", "concept_by": "Jens Bröcher" },
 	5: { "name": "Spiral", "path": "res://stage_5.tscn", "concept_by": "Jens Bröcher" },
-	6: { "name": "Pivot", "path": "res://stage_6.tscn", "concept_by": "Jens Bröcher" }
+	6: { "name": "Back and Forth", "path": "res://stage_6.tscn", "concept_by": "Jens Bröcher" }
 }
 
 func _ready():
@@ -41,7 +41,11 @@ func clear_collected():
 	collected_diamond_ids.clear()
 
 func reset_lives():
-	lives = 7
+	match difficulty:
+		Difficulty.EASY: lives = 7 # Visual only, effectively infinite
+		Difficulty.NORMAL: lives = 7
+		Difficulty.HARD: lives = 3
+		Difficulty.INSANE: lives = 1
 
 func lose_life() -> bool:
 	if difficulty == Difficulty.EASY:
@@ -91,13 +95,15 @@ func get_difficulty_name() -> String:
 		Difficulty.EASY: return "Easy"
 		Difficulty.NORMAL: return "Normal"
 		Difficulty.HARD: return "Hard"
+		Difficulty.INSANE: return "Insane"
 	return "Normal"
 
 func get_difficulty_description() -> String:
 	match difficulty:
 		Difficulty.EASY: return "Unlimited Tries"
 		Difficulty.NORMAL: return "7 Tries"
-		Difficulty.HARD: return "7 Tries + Reset on Fail"
+		Difficulty.HARD: return "3 Tries + Reset on Fail"
+		Difficulty.INSANE: return "1 Try + Reset on Fail"
 	return ""
 
 func complete_level(level_id: int, time_str: String, lives_left: int):
@@ -137,6 +143,8 @@ func get_best_completed_difficulty(level_id: int) -> int:
 	if not level_progress.has(level_id):
 		return -1
 	
+	if level_progress[level_id].has(Difficulty.INSANE):
+		return Difficulty.INSANE
 	if level_progress[level_id].has(Difficulty.HARD):
 		return Difficulty.HARD
 	if level_progress[level_id].has(Difficulty.NORMAL):
@@ -156,6 +164,7 @@ func get_difficulty_label(diff: int) -> String:
 		Difficulty.EASY: return "Easy"
 		Difficulty.NORMAL: return "Normal"
 		Difficulty.HARD: return "Hard"
+		Difficulty.INSANE: return "Insane"
 	return "Unknown"
 
 func save_game():

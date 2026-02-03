@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://turnstyle.gd" id="1_script"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_arm"]
+size = Vector3(4.0, 0.5, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_arm2"]
+size = Vector3(0.5, 0.5, 4.0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_orange"]
+albedo_color = Color(1, 0.5, 0, 1)
+metallic = 0.5
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.8, 0.4, 0, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_arm"]
+material = SubResource("StandardMaterial3D_orange")
+size = Vector3(4.0, 0.5, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_arm2"]
+material = SubResource("StandardMaterial3D_orange")
+size = Vector3(0.5, 0.5, 4.0)
+
+[node name="Turnstyle" type="AnimatableBody3D"]
+script = ExtResource("1_script")
+rotation_speed = 1.5
+
+[node name="CollisionShape1" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_arm")
+
+[node name="CollisionShape2" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_arm2")
+
+[node name="MeshInstance1" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_arm")
+
+[node name="MeshInstance2" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_arm2")

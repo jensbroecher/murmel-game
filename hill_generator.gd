@@ -88,10 +88,16 @@ func _generate_hill():
 	csg_poly.path_interval_type = CSGPolygon3D.PATH_INTERVAL_DISTANCE
 	csg_poly.path_interval = 0.5
 	csg_poly.path_simplify_angle = 2.0
-	csg_poly.path_rotation = CSGPolygon3D.PATH_ROTATION_PATH # Try PATH to respect direct Up vector better? Or PATH_FOLLOW
-	# Use standard path follow but rely on the flat 2D profile + flat curve points.
 	csg_poly.path_rotation = CSGPolygon3D.PATH_ROTATION_PATH
+	# Ensure the path is treated as local (points relative to the CSGPolygon origin)
+	csg_poly.path_local = true 
 	csg_poly.use_collision = true
+	
+	# Add to tree BEFORE setting path_node to ensure get_path_to works
+	add_child(csg_poly)
+	
+	# Use relative path for robustness
+	csg_poly.path_node = csg_poly.get_path_to(path_3d)
 	
 	# Create the U-shape profile (2D polygon)
 	# Center is at (0,0). Width extends -2 to +2.
@@ -113,5 +119,3 @@ func _generate_hill():
 	
 	if material:
 		csg_poly.material = material
-		
-	add_child(csg_poly)

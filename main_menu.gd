@@ -229,6 +229,8 @@ func _on_difficulty_toggle_pressed():
 		GlobalGameState.Difficulty.NORMAL:
 			new_diff = GlobalGameState.Difficulty.HARD
 		GlobalGameState.Difficulty.HARD:
+			new_diff = GlobalGameState.Difficulty.INSANE
+		GlobalGameState.Difficulty.INSANE:
 			new_diff = GlobalGameState.Difficulty.EASY
 	
 	GlobalGameState.set_difficulty(new_diff)

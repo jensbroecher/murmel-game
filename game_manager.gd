@@ -359,8 +359,8 @@ func _on_water_entered(body):
 			handle_respawn()
 
 func handle_respawn():
-	# In Hard Mode, diamonds reset on respawn
-	if GlobalGameState.difficulty == GlobalGameState.Difficulty.HARD:
+	# In Hard & Insane Mode, diamonds reset on respawn
+	if GlobalGameState.difficulty == GlobalGameState.Difficulty.HARD or GlobalGameState.difficulty == GlobalGameState.Difficulty.INSANE:
 		GlobalGameState.clear_collected()
 
 	if GlobalGameState.lose_life():
